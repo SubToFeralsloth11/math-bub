@@ -1,0 +1,13 @@
+{
+  "threshold": 0,
+  "reporters": ["console"],
+  "path": ["src", "tests/e2e"],
+  "gitignore": true,
+  "ignore": [
+    "**/node_modules/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/content/**"
+  ],
+  "absolute": true
+}

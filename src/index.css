@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/*
+ * MathBub design system.
+ *
+ * The aesthetic is a warm "bubble arcade": a cream canvas, deep-plum ink, chunky
+ * rounded cards with soft layered shadows, a rounded display face (Fredoka)
+ * paired with a reading-optimised body face (Lexend), and per-track accent
+ * colours. Tokens here are the single source of truth and are mirrored for
+ * non-CSS use in src/theme/tokens.ts.
+ */
+
+@theme {
+  --font-display:
+    "Fredoka", ui-rounded, "Segoe UI Rounded", system-ui, sans-serif;
+  --font-body: "Lexend", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #fbf4ea;
+  --color-cream-deep: #f3e8d6;
+  --color-card: #ffffff;
+  --color-ink: #2a2342;
+  --color-muted: #6b6480;
+  --color-hairline: #ece3d6;
+
+  --color-brand: #6d4aff;
+  --color-brand-deep: #5436d6;
+  --color-brand-soft: #efeaff;
+
+  --color-xp: #ffb020;
+  --color-xp-soft: #fff3d6;
+  --color-success: #1fa971;
+  --color-success-soft: #e2f6ec;
+  --color-warn: #f2545b;
+  --color-warn-soft: #fdeaea;
+
+  --color-algebra: #6d4aff;
+  --color-geometry: #0fb6a8;
+  --color-time: #ff7a4d;
+
+  --radius-bub: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-bub:
+    0 1px 0 0 rgb(42 35 66 / 0.04), 0 12px 28px -12px rgb(42 35 66 / 0.22);
+  --shadow-bub-lg:
+    0 2px 0 0 rgb(42 35 66 / 0.05), 0 28px 60px -24px rgb(42 35 66 / 0.32);
+
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--color-cream);
+    /* Soft bubble field: faint coloured orbs scattered behind the content. */
+    background-image:
+      radial-gradient(
+        38rem 38rem at 12% -8%,
+        color-mix(in srgb, var(--color-brand) 12%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        32rem 32rem at 105% 8%,
+        color-mix(in srgb, var(--color-geometry) 14%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        30rem 30rem at 88% 102%,
+        color-mix(in srgb, var(--color-time) 12%, transparent),
+        transparent 62%
+      );
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  /* A single, consistent focus ring for keyboard users across the app. */
+  :focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Honour reduced-motion preferences for all decorative animation. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Staggered entrance used for lists of cards and map nodes. */
+  @keyframes bub-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-bub-rise {
+    animation: bub-rise 0.5s var(--ease-bounce) both;
+  }
+
+  @keyframes bub-pop {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animate-bub-pop {
+    animation: bub-pop 0.45s var(--ease-bounce) both;
+  }
+}
