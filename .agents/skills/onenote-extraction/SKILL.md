@@ -115,6 +115,20 @@ apply a post-processing pass with similar patterns.
 - Non-subject pages (e.g. "Connect" pages with wellbeing factsheets).
 - The "Welcome" section — its pages are almost always empty templates.
 
+### Step 3b: Examine extracted images
+
+Before proceeding to content generation, examine every image extracted to
+`/tmp/onenote-extraction/`. Text extraction alone misses curriculum structure
+and worked examples that exist only as images.
+
+1. List all PNG files in `/tmp/onenote-extraction/`.
+2. Open each one (use the read tool or `open`) and describe what it shows.
+3. Record each image's source page and the topic it relates to.
+4. Copy any content-carrying images to `public/figures/` now, so they are
+   available when writing track files.
+5. Note images that are OneNote UI chrome (toolbar icons, navigation
+   buttons) — these can be discarded.
+
 ### Step 4: Generate comprehensive content (the expansion step)
 
 This is the core step. **Do not convert OneNote content verbatim.** The
@@ -145,6 +159,11 @@ Before writing any content, inventory the extracted pages:
    already covered.
 4. Cross-reference the curriculum-plan topics against existing tracks.
 5. Identify uncovered topics and decide how to group them into new tracks.
+6. **Examine every extracted image.** List each PNG in
+   `/tmp/onenote-extraction/` alongside the page it came from. For each
+   image, describe what it shows and note which topic it relates to. Images
+   that are curriculum planners, diagrams, worked examples, or exercise
+   layouts must be incorporated into the generated content as Figures.
 
 #### Content expansion principles
 
@@ -212,6 +231,39 @@ ratio of difficulty levels to generate.
 | Curriculum-plan topic line | Lesson | One lesson per topic; use exercise number as title prefix |
 | Exercise-table row | Difficulty guide | Calibrate question count and difficulty per lesson |
 | Embedded image in page | Figure | Copy PNG to `public/figures/`, reference by filename stem |
+
+#### Image examination and figure usage
+
+Every image extracted from OneNote must be examined and either used or
+explicitly discarded with a reason. This is not optional — images carry
+curriculum structure, worked examples, and exercise layouts that inform
+content generation.
+
+**Examination process:**
+
+1. Open each PNG in `/tmp/onenote-extraction/` (use `open` or the read tool
+   to view it).
+2. Record: page source, what the image shows, which topic it relates to.
+3. Classify each image:
+   - **curriculum-planner** — term/week overview tables. Use as a Figure in
+     the first learnCard of the track's first lesson so the learner can see
+     the curriculum roadmap.
+   - **worked-example** — handwritten or typeset solution steps. Incorporate
+     into a learnCard as a Figure alongside the generated worked example.
+   - **diagram** — geometry shapes, number lines, graphs. Use as a Figure in
+     practice or mastery questions that reference the diagram.
+   - **exercise-layout** — formatted exercise tables or question lists.
+     Reference these when calibrating question difficulty and volume.
+   - **ui-chrome** — OneNote toolbar icons, navigation buttons. Discard.
+4. For each kept image, copy the PNG to `public/figures/` and create a
+   `Figure` object with a descriptive `alt` and `textFallback`.
+5. Wire the Figure into at least one learnCard or question.
+
+**Images that must not be silently ignored:**
+- The Term Maths Planner (curriculum roadmap).
+- Any image containing worked solutions or step-by-step reasoning.
+- Diagrams of geometric shapes, number lines, or graphs.
+- Exercise tables with difficulty columns.
 
 #### Lesson structure
 
@@ -332,6 +384,10 @@ export const trackNameTrack: Track = {
 - SVG images are filtered out (they are WOPI UI elements, not content).
 - Cross-page deduplication removes UI chrome that appears on every page.
 - Output: PNG files in `/tmp/onenote-extraction/` named `{section}__{page}__img{NNN}.png`.
+- **Every extracted PNG must be examined** as part of the pre-generation
+  inventory (see Step 4, "Image examination and figure usage"). Do not skip
+  image examination — images carry curriculum structure and worked examples
+  that text extraction alone misses.
 
 ## Key constraints and limitations
 

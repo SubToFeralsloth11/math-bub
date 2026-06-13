@@ -23,6 +23,11 @@ Before writing any content, inventory the extracted pages:
    already covered.
 4. Cross-reference the curriculum-plan topics against existing tracks.
 5. Identify uncovered topics and decide how to group them into new tracks.
+6. **Examine every extracted image.** List each PNG in
+   `/tmp/onenote-extraction/` alongside the page it came from. For each
+   image, describe what it shows and note which topic it relates to. Images
+   that are curriculum planners, diagrams, worked examples, or exercise
+   layouts must be incorporated into the generated content as Figures.
 
 **Do not write a separate generation script.** Create the track files directly
 in `src/content/tracks/` following the content model contract. This is simpler
@@ -203,12 +208,32 @@ The `sourceRef` should reference the curriculum planner (e.g.
 
 ## Figure handling
 
-For each extracted image:
+Every image extracted from OneNote must be examined and either used or
+explicitly discarded with a reason. Images carry curriculum structure, worked
+examples, and exercise layouts that text extraction alone misses.
+
+**Examination process:**
+
+1. Open each PNG in `/tmp/onenote-extraction/` to view it.
+2. Record: page source, what the image shows, which topic it relates to.
+3. Classify each image:
+   - **curriculum-planner** — term/week overview tables. Use as a Figure in
+     the first learnCard of the track's first lesson.
+   - **worked-example** — handwritten or typeset solution steps. Incorporate
+     into a learnCard as a Figure.
+   - **diagram** — geometry shapes, number lines, graphs. Use as a Figure in
+     practice or mastery questions.
+   - **exercise-layout** — formatted exercise tables. Reference for
+     difficulty calibration, not as a Figure.
+   - **ui-chrome** — OneNote toolbar icons. Discard.
+
+For each kept image:
 
 1. Copy the PNG from `/tmp/onenote-extraction/` to `public/figures/`
 2. Use the filename stem (without extension) as the `Figure.id`
-3. Use the `alt` text from the extraction JSON, or generate a description
-4. The `textFallback` should describe what the image shows in plain text
+3. Write a descriptive `alt` text
+4. Write a `textFallback` that describes what the image shows in plain text
+5. Wire the Figure into at least one learnCard or question
 
 ```typescript
 {
