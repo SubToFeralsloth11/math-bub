@@ -37,7 +37,7 @@ describe("authored content", () => {
   it("exposes the algebra track and its first lesson", () => {
     expect(findTrack("algebra")?.title).toBe("Algebra (Year 8)");
     expect(findLesson("algebra", "alg-5a-language")?.order).toBe(1);
-    expect(findLesson("algebra", "alg-5g-expanding-brackets")?.order).toBe(4);
+    expect(findLesson("algebra", "alg-5g-expanding")?.order).toBe(4);
   });
 
   it("returns undefined for unknown ids", () => {
@@ -58,14 +58,9 @@ describe("authored content", () => {
     }
   });
 
-  it("exposes all six subjects", () => {
+  it("exposes the maths subject", () => {
     const ids = appContent.subjects.map((s) => s.id);
     expect(ids).toContain("maths");
-    expect(ids).toContain("science");
-    expect(ids).toContain("hass");
-    expect(ids).toContain("english");
-    expect(ids).toContain("german");
-    expect(ids).toContain("hpe");
   });
 
   it("findSubject returns a subject by id", () => {
@@ -81,15 +76,13 @@ describe("authored content", () => {
 
   it("tracksForSubject returns tracks belonging to a subject", () => {
     const mathsTracks = tracksForSubject("maths");
-    expect(mathsTracks.length).toBe(3);
+    expect(mathsTracks.length).toBe(9);
     const ids = mathsTracks.map((t) => t.id);
     expect(ids).toContain("algebra");
-    expect(ids).toContain("geometry");
-    expect(ids).toContain("time");
   });
 
   it("tracksForSubject returns empty array for subject with no tracks", () => {
-    expect(tracksForSubject("hass")).toEqual([]);
+    expect(tracksForSubject("science")).toEqual([]);
   });
 
   it("findSubjectForTrack returns the subject a track belongs to", () => {

@@ -116,6 +116,13 @@ async function main() {
   const sections = [
     "Welcome",
     "_Content Library",
+    "General",
+    "Questions",
+    "Term 1",
+    "Term 2",
+    "Term 3",
+    "Term 4",
+    "Connect",
     "GRIMES, Thomas (tgrim43)",
   ];
   console.log(`\nSections: ${sections.join(", ")}`);

@@ -11,11 +11,14 @@
 
 import { badges } from "./badges";
 import { mathsSubject } from "./subjects/maths";
+import { algebraTrack } from "./tracks/algebra";
 import { decimalsTrack } from "./tracks/decimals";
+import { geometryTrack } from "./tracks/geometry";
 import { integerOperationsTrack } from "./tracks/integerOperations";
 import { perimeterAndAreaTrack } from "./tracks/perimeterAndArea";
 import { pythagorasTrack } from "./tracks/pythagoras";
 import { quadrilateralsTrack } from "./tracks/quadrilaterals";
+import { timeTrack } from "./tracks/time";
 import { volumeTrack } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
 
@@ -32,11 +35,14 @@ import type {
 export const appContent: AppContent = {
   subjects: [mathsSubject],
   tracks: [
+    algebraTrack,
     decimalsTrack,
+    geometryTrack,
     integerOperationsTrack,
     perimeterAndAreaTrack,
     pythagorasTrack,
     quadrilateralsTrack,
+    timeTrack,
     volumeTrack,
   ],
   badges,

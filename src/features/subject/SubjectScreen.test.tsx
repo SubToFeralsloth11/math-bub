@@ -24,7 +24,7 @@ describe("SubjectScreen", () => {
       screen.getByRole("link", { name: /Geometry \(Year 10\)/i }),
     ).toHaveAttribute("href", "/subject/maths/track/geometry");
     expect(
-      screen.getByRole("link", { name: /Time \(Year 4\)/i }),
+      screen.getByRole("link", { name: /Time \(Year 8\)/i }),
     ).toHaveAttribute("href", "/subject/maths/track/time");
   });
 
