@@ -1,9 +1,13 @@
-# Mapping OneNote to StudyBub Content Model
+# Generating StudyBub Content from OneNote Blueprints
 
-Map the extracted OneNote JSON (`extracted.json`) into `AppContent` conforming
-to `src/contracts/contentModel.md`.
+Use the extracted OneNote JSON (`extracted.json`) as a curriculum blueprint to
+generate comprehensive StudyBub content. Never copy OneNote text verbatim — the
+notebook tells you what to teach, at what difficulty, and in what sequence. You
+must generate fresh content that thoroughly covers and exercises each topic.
 
-## Pre-mapping inventory (always do first)
+The content model contract is at `src/contracts/contentModel.md`.
+
+## Pre-generation inventory (always do first)
 
 Before writing any content, inventory the extracted pages:
 
@@ -20,36 +24,65 @@ Before writing any content, inventory the extracted pages:
 4. Cross-reference the curriculum-plan topics against existing tracks.
 5. Identify uncovered topics and decide how to group them into new tracks.
 
-**Do not write a separate mapping script.** Create the track files directly
+**Do not write a separate generation script.** Create the track files directly
 in `src/content/tracks/` following the content model contract. This is simpler
 and avoids an indirection layer that would need maintenance.
 
-## Content quality decision
+## Content expansion principles
 
-Extracted notebooks rarely contain actual question text — they reference
-textbook exercises by number. You have two options for each uncovered topic:
+For every topic you generate content for, follow these rules:
 
-1. **Author real questions (preferred).** Write proper learnCards, practice,
-   and mastery questions based on the topic. Mark with `aiProvenance`. This
-   produces a usable app immediately.
-2. **Create placeholder questions.** Use when time is limited or the content
-   is planned for hand-authoring later. Each placeholder references the
-   textbook exercise and has a sentinel accepted answer.
+1. **Never copy OneNote text verbatim.** Use it only to understand the topic
+   scope, difficulty level, and exercise structure.
+2. **Author at least 3 learnCards per lesson.** Include: (a) a key idea card
+   with conceptual explanation, (b) a worked example with step-by-step
+   solution, and (c) a common-mistake or extension card.
+3. **Author at least 8 practice questions per lesson.** Spread them across:
+   - 3–4 fluency/drill questions (straightforward, build confidence).
+   - 2–3 problem-solving questions (multi-step, apply concepts).
+   - 1–2 enrichment/extension questions (non-routine, deepen understanding).
+4. **Author at least 3 mastery questions per lesson.** Each should test a
+   different aspect of the topic so a pass means genuine competence, not
+   memorisation of one pattern.
+5. **Vary question types.** Use numeric, expression, mcq, shortText,
+   fillInTheBlank, and matching types across the lesson. Do not default to
+   all numeric. At least 40% of questions should be non-numeric types.
+6. **Every question must have a thorough explanation.** Show the reasoning, not
+   just the answer. The explanation is what the learner sees on wrong answers.
+7. **Write real questions, never placeholders.** The `accepted` array must
+   contain correct answers. Placeholder questions (with sentinel values like
+   "(answer to be filled)") are not acceptable — every question must be fully
+   answerable.
 
-The mapping rules below describe both approaches.
+## Using the exercise-table as a difficulty guide
+
+The exercise-table pages show question numbers organised by difficulty columns
+(Fluency, Problem Solving, Enrichment). The notebook rarely contains actual
+question text — it references textbook exercises by number. Use this to
+calibrate your generated questions:
+
+- **Fluency column** → your simplest practice questions. Single-step,
+  straightforward application of the concept. 10–15 XP each.
+- **Problem Solving column** → your intermediate practice questions.
+  Multi-step, requires connecting ideas. 15–20 XP each.
+- **Enrichment column** → your hardest practice questions and some mastery
+  questions. Non-routine, deep thinking required. 20–25 XP each.
+
+The number of exercise references in each column tells you the approximate
+ratio of difficulty levels to generate. Generate fresh questions at each
+difficulty level — do not attempt to recreate the textbook exercises.
 
 ## Structural mapping
 
-| OneNote concept | StudyBub type | Notes |
-|-----------------|---------------|-------|
+| OneNote concept | StudyBub type | How to use it |
+|-----------------|---------------|---------------|
 | Notebook (e.g. "2026 - Year 8 Maths") | Subject | One Subject per notebook |
-| Section (e.g. "Term 1") | Track | One Track per section with lesson pages |
-| Page with lesson content | Lesson | learnCards from explanatory text, practice from worksheets |
-| Page with exercise lists | Lesson | practice/mastery arrays built from question rows |
-| Page with boss challenge | BossChallenge | Full-page challenge with mixed question types |
+| Section (e.g. "Term 1") | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
+| Curriculum-plan topic line | Lesson | One lesson per topic; use exercise number as title prefix |
+| Exercise-table row | Difficulty guide | Calibrate question count and difficulty per lesson |
 | Embedded image in page | Figure | Copy PNG to `public/figures/`, reference by filename stem |
 
-## Subject mapping
+## Subject generation
 
 Each Class Notebook maps to a Subject:
 
@@ -66,7 +99,7 @@ Each Class Notebook maps to a Subject:
 The notebook title includes the year level and subject. Extract these to
 populate the Subject.
 
-## Track mapping
+## Track generation
 
 **The OneNote section structure is NOT a track structure.** OneNote sections
 (Welcome, _Content Library, student section) are navigation artefacts. The
@@ -99,11 +132,11 @@ Each track:
 
 Year level comes from the notebook title. If existing tracks have incorrect
 year labels (e.g. the notebook teaches them in Year 8 but the track says
-"Year 10"), correct them during mapping.
+"Year 10"), correct them during generation.
 
-## Lesson mapping
+## Lesson generation
 
-Each topic line from a curriculum-plan page maps to a Lesson. The exercise
+Each topic line from a curriculum-plan page generates a Lesson. The exercise
 number becomes the title prefix; the description becomes the title.
 
 ### From curriculum-plan page
@@ -121,9 +154,15 @@ Parse lines like `1E/1F Adding and subtracting negative integers` into:
     sources: ["2026 - Year 8 Maths Class Notebook"],
     role: "generated",
   },
-  learnCards: [...],
-  practice: [...],
-  mastery: [...],
+  learnCards: [
+    // At least 3: key idea, worked example, common-mistake/extension
+  ],
+  practice: [
+    // At least 8: mix of fluency, problem-solving, enrichment
+  ],
+  mastery: [
+    // At least 3: each tests a different aspect
+  ],
 }
 ```
 
@@ -131,60 +170,38 @@ The `sourceRef` field should reference the originating worksheet or textbook
 reference, not the OneNote page name. For the planner-context source, use the
 notebook title and the term/week the topic appears in.
 
-### From exercise-table page
+Every question must carry `aiProvenance` markers (at the lesson level) and a
+`sourceRef` that traces back to the originating worksheet, not the OneNote page.
 
-When only exercise numbers are available (no question text), you can either
-author real questions (preferred) or create placeholders (see Exercise table
-parsing section below).
+## Question type selection
 
-### Exercise table parsing
+Do not default to all numeric questions. Vary question types across the lesson:
 
-The "Questions" page renders as (tab-separated):
+| Question type | When to use |
+|--------------|-------------|
+| `numeric` | Calculations with a single numeric answer |
+| `expression` | Algebraic expressions where equivalence matters (use mathjs) |
+| `mcq` | Conceptual understanding, identifying correct methods, avoiding common mistakes |
+| `shortText` | Word answers, explanations, describing properties |
+| `fillInTheBlank` | Partial answers, completing steps in a worked solution |
+| `matching` | Connecting related concepts (e.g. shape to formula, term to definition) |
 
-```
-Term 1 Questions
-Exercise  Fluency  Problem Solving  Enrichment
-1E        1, 3, 4  7, 9, 10         15
-1F        2, 4     7, 8, 10         15
-...
-```
+At least 40% of questions across a lesson should be non-numeric types.
 
-Parse each row into question IDs (e.g. `term-1-1e-q1`, `term-1-1e-q3`,
-`term-1-1e-q4`). Each question references the source textbook exercise:
+## BossChallenge generation
 
-```typescript
-{
-  type: "numeric",
-  id: "term-1-1e-q1",
-  prompt: [t("Exercise 1E, Question 1 (Fluency)")],
-  explanation: [t("See worked solution in textbook.")],
-  xp: 10,
-  accepted: ["(answer to be filled)"],
-  sourceRef: "Cambridge Maths Year 8, Exercise 1E Q1",
-}
-```
+Create a synthetic BossChallenge for each track that draws on the hardest
+concepts from across the track's lessons. Use the exercise-table enrichment
+column to identify the most challenging topics. Format:
 
-**Important:** When the exercise questions are not authored into the notebook
-(only exercise numbers are listed), the questions serve as placeholders — OR
-you can author real questions directly. When creating placeholders, the
-`accepted` array and `explanation` must be filled by a content author. Mark
-these with `aiProvenance.role: "generated"` and a TODO comment in the
-generated file.
+- 2 questions of medium difficulty (20 XP each).
+- 2 questions of high difficulty (25 XP each).
+- 1 conceptual/multiple-choice question (20 XP).
 
-## Question type detection
+The `sourceRef` should reference the curriculum planner (e.g.
+"2026 T1 Yr 8 Maths Planner — Term 1, Week 2").
 
-When actual question text is present on a page, detect the type:
-
-| Pattern | Question type |
-|---------|--------------|
-| Multiple choice options (A/B/C/D with labels) | `mcq` |
-| "Find the value of x", "Solve for …", equation present | `expression` or `numeric` |
-| "Calculate …", numeric answer expected | `numeric` |
-| "Explain …", "Describe …", "What is …" | `shortText` |
-| Fill-in-the-blank with `___` marker | `fillInTheBlank` |
-| Matching pairs (two-column layout) | `matching` |
-
-## Figure mapping
+## Figure handling
 
 For each extracted image:
 
@@ -200,18 +217,6 @@ For each extracted image:
   textFallback: "A table showing the weekly maths topics for Term 1: Week 1 — 1A/1B Integers, Week 2 — 1E/1F Adding and subtracting fractions, …",
 }
 ```
-
-## BossChallenge mapping
-
-Create a synthetic BossChallenge for each track from the hardest questions
-across the track's lessons. Use a 5-question format:
-
-- 2 questions of medium difficulty (20 XP each).
-- 2 questions of high difficulty (25 XP each).
-- 1 conceptual/multiple-choice question (20 XP).
-
-The `sourceRef` should reference the curriculum planner (e.g.
-"2026 T1 Yr 8 Maths Planner — Term 1, Week 2").
 
 ## Integration checklist (after creating content)
 
@@ -229,7 +234,7 @@ After creating new track files, complete these steps:
    year labels, correct them now.
 6. **TypeScript check** — run `npx tsc --noEmit` to confirm no type errors.
 
-## Content file structure
+## Content file template
 
 Each track file in `src/content/tracks/` should follow this pattern:
 

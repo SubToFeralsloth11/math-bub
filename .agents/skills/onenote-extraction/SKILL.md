@@ -1,12 +1,18 @@
 ---
 name: onenote-extraction
-description: Extract educational content from OneNote Class Notebooks (login via agent-browser + Playwright DOM scraping or Graph API) and convert it into StudyBub content model format (Subjects, Tracks, Lessons, Questions). Use when the user asks to extract OneNote content, pull pages from OneNote, convert OneNote to StudyBub, scrape a Class Notebook, or map OneNote pages to lessons. Trigger keywords include OneNote, Class Notebook, extract pages, content extraction, StudyBub format, OneNote to StudyBub.
+description: Extract educational content from OneNote Class Notebooks (login via agent-browser + Playwright DOM scraping or Graph API) and use it as a seed to generate comprehensive StudyBub content (Subjects, Tracks, Lessons, Questions). The OneNote content is a curriculum blueprint, not a direct source — expand each topic into thorough learnCards, varied practice, and mastery questions. Use when the user asks to extract OneNote content, pull pages from OneNote, convert OneNote to StudyBub, scrape a Class Notebook, or generate StudyBub content from a Class Notebook. Trigger keywords include OneNote, Class Notebook, extract pages, content extraction, StudyBub format, OneNote to StudyBub.
 ---
 
-# OneNote → StudyBub Content Extraction
+# OneNote → StudyBub Content Generation
 
-Extract text and images from OneNote Class Notebooks and convert them into the
-StudyBub content model (`src/contracts/contentModel.md`).
+Extract curriculum structure and topic exemplars from OneNote Class Notebooks,
+then use them as a seed to generate comprehensive StudyBub content. Never copy
+OneNote content verbatim — the notebook is a blueprint that tells you what
+topics to teach, at what difficulty, and in what sequence. You must expand each
+topic into thorough learnCards, varied practice questions, and mastery checks
+that exercise every dimension of the content area.
+
+The content model contract is at `src/contracts/contentModel.md`.
 
 ## Quick start
 
@@ -22,8 +28,8 @@ agent-browser open https://onenote.cloud.microsoft/notebooks --session-name onen
 bun run .agents/skills/onenote-extraction/scripts/extractPages.ts
 # Output: /tmp/onenote-extraction/extracted.json + image PNGs
 
-# 3. Map to StudyBub format (write a mapping script per mapping.md rules)
-# Output: src/content/oneNoteContent.ts  (an AppContent export)
+# 3. Generate comprehensive StudyBub content (see Expansion workflow below)
+# Output: src/content/tracks/<trackName>.ts files
 ```
 
 ## Two extraction approaches
@@ -33,26 +39,31 @@ bun run .agents/skills/onenote-extraction/scripts/extractPages.ts
 No Azure AD app required. Works with existing 1Password credentials and
 agent-browser session. Extracts rendered text + images from the WOPI iframe.
 
-**When to use:** Quick extraction, no Azure portal access, only need text + images.
+**When to use:** Quick extraction, no Azure portal access, only need curriculum
+structure and topic exemplars (not verbatim content).
 
 **Script:** `scripts/extractPages.ts`
 
 **Limitations:** Extracts text as plain strings (no maths notation preserved,
 no question-type detection). Images extracted as PNGs to `/tmp/onenote-extraction/`.
-Content limited to what OneNote Online renders in the browser.
+Content limited to what OneNote Online renders in the browser. This is fine —
+we do not need perfect extraction because we are generating new content, not
+copying.
 
 **What it typically captures from a well-organised Class Notebook:**
 - **Curriculum-plan pages** (e.g. "Term 1", "Term 2"): week-by-week topic lists
   with textbook exercise references. These provide the track/lesson structure.
 - **Exercise-table pages** (e.g. "Questions"): exercise numbers organised by
-  difficulty columns (Fluency, Problem Solving, Enrichment).
+  difficulty columns (Fluency, Problem Solving, Enrichment). These tell you the
+  scope and difficulty gradient.
 - **Empty template pages** (e.g. "Class Notes", "Handouts", "Homework",
-  "Quizzes"): navigation chrome only — no real content. Skip these during mapping.
+  "Quizzes"): navigation chrome only — no real content. Skip these.
 - **Planner images** (e.g. the Term Maths Planner): screenshots of the
   curriculum overview. Useful as reference but not as lesson content.
 
 The actual teaching content (explanations, worked examples, question text) is
 rarely in OneNote — it is typically in the textbook the exercises reference.
+This is why we use OneNote as a blueprint, not a content source.
 
 ### Approach B: Microsoft Graph API (preferred for production)
 
@@ -109,7 +120,7 @@ The raw page text includes OneNote navigation chrome that must be stripped:
 Use the regex patterns in `extractPages.ts` (`getPageContent` function) or
 apply a post-processing pass with similar patterns.
 
-**Pages to skip during mapping:**
+**Pages to skip:**
 
 - Pages with < 100 chars of cleaned content (empty templates).
 - Duplicate sections: the student section (e.g. "GRIMES, Thomas") often mirrors
@@ -117,31 +128,214 @@ apply a post-processing pass with similar patterns.
 - Non-subject pages (e.g. "Connect" pages with wellbeing factsheets).
 - The "Welcome" section — its pages are almost always empty templates.
 
-### Step 4: Map to StudyBub format
+### Step 4: Generate comprehensive content (the expansion step)
 
-**Do not write a separate mapping script.** The preferred workflow is:
+This is the core step. **Do not convert OneNote content verbatim.** The
+notebook tells you what topics to teach and at what difficulty — you must
+generate fresh, comprehensive content that thoroughly covers each topic.
 
-1. Read the extracted JSON.
-2. Read the existing `src/content/tracks/*.ts` files to understand what topics
-   are already covered.
-3. Cross-reference the curriculum-plan pages against existing tracks.
-4. Identify uncovered topics and create new track files directly in
-   `src/content/tracks/`.
-5. Create new badge entries in `src/content/badges.ts` for each new track.
-6. Wire everything into `src/content/index.ts`.
-7. Run the TypeScript compiler and `validateContent` to confirm correctness.
+Use the curriculum-plan pages as your blueprint. Each topic line (e.g.
+"1E/1F Adding and subtracting negative integers") becomes a lesson. But
+instead of extracting whatever sparse text might exist on that OneNote page,
+you must author full lesson content from scratch.
 
-**Topic-to-track grouping:** Do not create one track per OneNote section.
-Group related topics into sensible tracks:
+**Do not write a separate generation script.** Create the track files directly
+in `src/content/tracks/` following the content model contract.
 
-- Number topics (negative integers, order of operations, decimals) → one track.
-- Measurement topics (perimeter, circumference, area) → one track.
-- Geometry topics (Pythagoras) → one track.
-- Spatial topics (volume, capacity) → one track.
-- Shape topics (congruency, similarity, quadrilaterals) → one track.
+#### Pre-generation inventory (always do first)
 
-See `references/mapping.md` for the detailed mapping rules, content model
-contract, and the inventory-first workflow.
+Before writing any content, inventory the extracted pages:
+
+1. Read the extracted JSON and list every page with its cleaned content.
+2. Classify each page:
+   - **curriculum-plan** — contains "Week N" headings and topic lines with
+     exercise numbers (e.g. "1E/1F Adding and subtracting negative integers").
+   - **exercise-table** — tab-separated exercise numbers in Fluency / Problem
+     Solving / Enrichment columns.
+   - **empty-template** — < 100 chars of cleaned content; skip.
+   - **non-maths** — wellbeing factsheets, admin pages; skip.
+3. Read all existing `src/content/tracks/*.ts` files and note which topics are
+   already covered.
+4. Cross-reference the curriculum-plan topics against existing tracks.
+5. Identify uncovered topics and decide how to group them into new tracks.
+
+#### Content expansion principles
+
+For every topic you generate content for, follow these rules:
+
+1. **Never copy OneNote text verbatim.** Use it only to understand the topic
+   scope, difficulty level, and exercise structure.
+2. **Author at least 3 learnCards per lesson.** Include: (a) a key idea card
+   with conceptual explanation, (b) a worked example with step-by-step
+   solution, and (c) a common-mistake or extension card.
+3. **Author at least 8 practice questions per lesson.** Spread them across:
+   - 3–4 fluency/drill questions (straightforward, build confidence).
+   - 2–3 problem-solving questions (multi-step, apply concepts).
+   - 1–2 enrichment/extension questions (non-routine, deepen understanding).
+4. **Author at least 3 mastery questions per lesson.** Each should test a
+   different aspect of the topic so a pass means genuine competence, not
+   memorisation of one pattern.
+5. **Vary question types.** Use numeric, expression, mcq, shortText,
+   fillInTheBlank, and matching types across the lesson. Do not default to
+   all numeric. At least 40% of questions should be non-numeric types.
+6. **Every question must have a thorough explanation.** Show the reasoning, not
+   just the answer. The explanation is what the learner sees on wrong answers.
+7. **Write real questions, never placeholders.** The `accepted` array must
+   contain correct answers. Placeholder questions (with sentinel values like
+   "(answer to be filled)") are not acceptable — every question must be fully
+   answerable.
+
+#### Topic-to-track grouping
+
+Do not create one track per OneNote section. Group related topics into
+sensible tracks based on subject area:
+
+| Topics | Suggested track id |
+|--------|-------------------|
+| 1E/1F, 1G, 1H (negative integers, order of operations) | `integer-operations` |
+| 4A, 4B, 4C, 4E, 4F (perimeter, circumference, area) | `perimeter-and-area` |
+| 4K, 4L, 4M (Pythagoras) | `pythagoras` |
+| 4H, 4I (volume, capacity) | `volume` |
+| 3F (decimals) | `decimals` |
+| 2D (quadrilaterals) | `quadrilaterals` |
+| 10D, 10E, 10H, 10I (congruency, similarity) | `geometry` |
+
+#### Using the exercise-table as a difficulty guide
+
+The exercise-table pages show question numbers organised by difficulty columns
+(Fluency, Problem Solving, Enrichment). Use this to calibrate your generated
+questions:
+
+- **Fluency column** → your simplest practice questions. Single-step,
+  straightforward application of the concept. 10–15 XP each.
+- **Problem Solving column** → your intermediate practice questions.
+  Multi-step, requires connecting ideas. 15–20 XP each.
+- **Enrichment column** → your hardest practice questions and some mastery
+  questions. Non-routine, deep thinking required. 20–25 XP each.
+
+The number of exercise references in each column tells you the approximate
+ratio of difficulty levels to generate.
+
+#### Structural mapping
+
+| OneNote concept | StudyBub type | How to use it |
+|-----------------|---------------|---------------|
+| Notebook (e.g. "2026 - Year 8 Maths") | Subject | One Subject per notebook |
+| Section (e.g. "Term 1") | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
+| Curriculum-plan topic line | Lesson | One lesson per topic; use exercise number as title prefix |
+| Exercise-table row | Difficulty guide | Calibrate question count and difficulty per lesson |
+| Embedded image in page | Figure | Copy PNG to `public/figures/`, reference by filename stem |
+
+#### Lesson structure
+
+Each topic line from a curriculum-plan page generates a Lesson. Parse lines
+like `1E/1F Adding and subtracting negative integers` into:
+
+```typescript
+{
+  id: "int-1e-adding-subtracting",   // track-prefix + exercise + short-slug
+  order: 1,                            // Contiguous within track
+  title: "1E/1F Adding and subtracting negative integers",
+  sourceRef: "1E/1F",
+  aiProvenance: {
+    tool: "Claude",
+    sources: ["2026 - Year 8 Maths Class Notebook"],
+    role: "generated",
+  },
+  learnCards: [
+    // At least 3: key idea, worked example, common-mistake/extension
+  ],
+  practice: [
+    // At least 8: mix of fluency, problem-solving, enrichment
+  ],
+  mastery: [
+    // At least 3: each tests a different aspect
+  ],
+}
+```
+
+The `sourceRef` field should reference the originating worksheet or textbook
+reference, not the OneNote page name. For the planner-context source, use the
+notebook title and the term/week the topic appears in.
+
+#### BossChallenge generation
+
+Create a synthetic BossChallenge for each track that draws on the hardest
+concepts from across the track's lessons. Use the exercise-table enrichment
+column to identify the most challenging topics. Format:
+
+- 2 questions of medium difficulty (20 XP each).
+- 2 questions of high difficulty (25 XP each).
+- 1 conceptual/multiple-choice question (20 XP).
+
+The `sourceRef` should reference the curriculum planner (e.g.
+"2026 T1 Yr 8 Maths Planner — Term 1, Week 2").
+
+#### Year-level corrections
+
+The OneNote shows what year level each topic is taught in this class. If
+existing tracks have incorrect year labels (e.g. geometry marked "Year 10"
+but the OneNote teaches it in Year 8), correct them during this workflow.
+
+#### Integration checklist (after creating content)
+
+After creating new track files, complete these steps:
+
+1. **Add badges** — add a `track-complete:<id>` and `boss-pass:<id>` badge
+   to `src/content/badges.ts` for each new track.
+2. **Wire imports** — import each new track in `src/content/index.ts` and add
+   it to the `tracks` array.
+3. **Run validation** — execute `validateContent(appContent)` and confirm zero
+   issues.
+4. **Check references** — verify every `subjectId`, `passBadgeId`, and badge
+   `criterion` resolves to a real entity.
+5. **Fix existing labels** — if the notebook shows existing tracks have wrong
+   year labels, correct them now.
+6. **TypeScript check** — run `npx tsc --noEmit` to confirm no type errors.
+
+#### Content file template
+
+Each track file in `src/content/tracks/` should follow this pattern:
+
+```typescript
+/**
+ * TrackName track content (Year 8, chapter X).
+ *
+ * Covers ... — based on the 2026 Year 8 Maths Class Notebook
+ * curriculum plan (Term N, Week M).
+ *
+ * @author John Grimes
+ * @module content/tracks/trackName
+ */
+
+import { m, t } from "../blocks";
+import type { Lesson, Track, Question } from "../../domain/content/types";
+
+// Lesson definitions as exported consts...
+// Challenge questions array...
+
+/** The TrackName track. */
+export const trackNameTrack: Track = {
+  id: "track-name",
+  subjectId: "maths",
+  title: "Track Name (Year 8)",
+  description: "Short description.",
+  lessons: [...],
+  challenge: {
+    id: "track-name-boss",
+    title: "Boss challenge: Track name",
+    sourceRef: "2026 TN Yr 8 Maths Planner — Term N, Week M",
+    questions: challengeQuestions,
+    bonusXp: 120,
+    passBadgeId: "boss-track-name",
+    aiProvenance: {
+      tool: "Claude",
+      sources: ["2026 - Year 8 Maths Class Notebook"],
+      role: "generated",
+    },
+  },
+};
+```
 
 ## Image extraction notes
 
@@ -171,8 +365,8 @@ dynamic discovery for reliability.
 
 ### Curriculum-plan page structure
 
-The most valuable pages for mapping are the curriculum-plan pages (e.g.
-"Term 1", "Term 2"). Their structure is predictable:
+The most valuable pages for content generation are the curriculum-plan pages
+(e.g. "Term 1", "Term 2"). Their structure is predictable:
 
 - A "Week N" heading.
 - Topic lines under each week: exercise number, then topic name.
@@ -192,13 +386,6 @@ Week 3
 
 Parse these to build the track lesson list. Each topic line becomes a lesson.
 Group consecutive weeks that cover related topics into the same track.
-
-### Year-level corrections
-
-The OneNote shows what year level each topic is taught in this class. If
-existing tracks have incorrect year labels (e.g. geometry marked "Year 10"
-but the OneNote teaches it in Year 8), correct them during the mapping
-workflow.
 
 ### IRM encryption
 `.one` files downloaded from SharePoint are encrypted at rest by Information
