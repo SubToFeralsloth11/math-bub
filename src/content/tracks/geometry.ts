@@ -1,5 +1,5 @@
 /**
- * Authored Geometry track content (Year 10, chapter 10).
+ * Authored Geometry track content (Year 8, chapter 10).
  *
  * Re-authored from the `source/` worksheets: congruent figures and triangles,
  * similar figures, and (extension) similar triangles. Figures reference image
@@ -466,7 +466,7 @@ const similarTriangles: Lesson = {
 export const geometryTrack: Track = {
   id: "geometry",
   subjectId: "maths",
-  title: "Geometry (Year 10)",
+  title: "Geometry (Year 8)",
   description:
     "Congruence, similarity, and the triangle tests that prove them.",
   lessons: [
