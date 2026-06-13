@@ -16,8 +16,9 @@ function escapeRegExp(value: string): string {
 
 /**
  * Normalises raw answer input for tolerant comparison: Unicode-normalises,
- * trims, collapses internal whitespace, case-folds, converts a Unicode minus to
- * a hyphen, and strips a trailing unit when one is supplied.
+ * trims, collapses internal whitespace, case-folds, converts common Unicode
+ * math symbols (minus, multiplication, division) to ASCII, and strips a
+ * trailing unit when one is supplied.
  *
  * @param raw - The raw input string.
  * @param unit - An optional unit to strip from the end (e.g. "cm").
@@ -27,6 +28,8 @@ export function normalise(raw: string, unit?: string): string {
   let value = raw
     .normalize("NFKC")
     .replaceAll("−", "-")
+    .replaceAll("×", "*")
+    .replaceAll("÷", "/")
     .trim()
     .toLowerCase()
     .replaceAll(/\s+/g, " ");

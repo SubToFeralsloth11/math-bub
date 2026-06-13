@@ -31,4 +31,12 @@ describe("normalise", () => {
   it("returns an empty string for whitespace-only input", () => {
     expect(normalise("   ")).toBe("");
   });
+
+  it("converts a multiplication sign to asterisk", () => {
+    expect(normalise("3×4")).toBe("3*4");
+  });
+
+  it("converts a division sign to slash", () => {
+    expect(normalise("10÷2")).toBe("10/2");
+  });
 });

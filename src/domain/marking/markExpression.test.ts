@@ -51,4 +51,27 @@ describe("markExpression", () => {
     expect(() => markExpression(expanding, "@@@")).not.toThrow();
     expect(() => markExpression(expanding, "1/")).not.toThrow();
   });
+
+  it("handles input containing = by using the right-hand side", () => {
+    // Learner types "x=5" when the target is "5"
+    const five = expression("5", []);
+    expect(markExpression(five, "x=5")).toEqual({ status: "correct" });
+    // Learner types expansion with = sign
+    expect(markExpression(expanding, "2(a+b)=2a+2b")).toEqual({
+      status: "correct",
+    });
+    expect(markExpression(expanding, "=2a+2b")).toEqual({ status: "correct" });
+    expect(markExpression(expanding, "x=2a+3b")).toEqual({
+      status: "incorrect",
+    });
+  });
+
+  it("handles Unicode math symbols in expression input", () => {
+    // Fullwidth plus via NFKC, superscript via convertSuperscripts
+    const squared = expression("x^2+2x+1", ["x"]);
+    expect(markExpression(squared, "x²＋2x＋1")).toEqual({ status: "correct" });
+    // Multiplication sign
+    const product = expression("6*a*b", ["a", "b"]);
+    expect(markExpression(product, "6×a×b")).toEqual({ status: "correct" });
+  });
 });
