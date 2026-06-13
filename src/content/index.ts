@@ -10,21 +10,12 @@
  */
 
 import { badges } from "./badges";
-import { englishSubject } from "./subjects/english";
-import { germanSubject } from "./subjects/german";
-import { hassSubject } from "./subjects/hass";
-import { hpeSubject } from "./subjects/hpe";
 import { mathsSubject } from "./subjects/maths";
-import { scienceSubject } from "./subjects/science";
-import { algebraTrack } from "./tracks/algebra";
 import { decimalsTrack } from "./tracks/decimals";
-import { geometryTrack } from "./tracks/geometry";
 import { integerOperationsTrack } from "./tracks/integerOperations";
 import { perimeterAndAreaTrack } from "./tracks/perimeterAndArea";
 import { pythagorasTrack } from "./tracks/pythagoras";
 import { quadrilateralsTrack } from "./tracks/quadrilaterals";
-import { scienceDemoTrack } from "./tracks/science-demo";
-import { timeTrack } from "./tracks/time";
 import { volumeTrack } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
 
@@ -39,24 +30,13 @@ import type {
 
 /** The complete authored content shipped with the app. */
 export const appContent: AppContent = {
-  subjects: [
-    mathsSubject,
-    scienceSubject,
-    hassSubject,
-    englishSubject,
-    germanSubject,
-    hpeSubject,
-  ],
+  subjects: [mathsSubject],
   tracks: [
-    algebraTrack,
     decimalsTrack,
-    geometryTrack,
     integerOperationsTrack,
     perimeterAndAreaTrack,
     pythagorasTrack,
     quadrilateralsTrack,
-    scienceDemoTrack,
-    timeTrack,
     volumeTrack,
   ],
   badges,
