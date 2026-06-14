@@ -10,7 +10,7 @@
  * @param value - The raw string to escape.
  * @returns The string with regex metacharacters escaped.
  */
-function escapeRegExp(value: string): string {
+export function escapeRegExp(value: string): string {
   return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 

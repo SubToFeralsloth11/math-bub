@@ -341,6 +341,160 @@ describe("validateContent - shortText question validation", () => {
   });
 });
 
+describe("validateContent - shortText numeric-only accepted lists", () => {
+  it("flags when all accepted values look numeric (integers)", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "How many?" }],
+      explanation: [{ kind: "text", text: "Four." }],
+      xp: 10,
+      accepted: ["4", "8", "12"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    const issues = validateContent(content);
+    expect(issues.join("\n")).toMatch(/numeric/);
+  });
+
+  it("flags decimals with leading digits", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Size?" }],
+      explanation: [{ kind: "text", text: "0.5 mm." }],
+      xp: 10,
+      accepted: ["0.5", "0.5 mm", ".5"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    const issues = validateContent(content);
+    expect(issues.join("\n")).toMatch(/numeric/);
+  });
+
+  it("flags numbers with unit suffixes", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Area?" }],
+      explanation: [{ kind: "text", text: "46 m." }],
+      xp: 10,
+      accepted: ["46 m", "46m"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    const issues = validateContent(content);
+    expect(issues.join("\n")).toMatch(/numeric/);
+  });
+
+  it("flags numbers with 'x' suffix", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Magnification?" }],
+      explanation: [{ kind: "text", text: "1000x." }],
+      xp: 10,
+      accepted: ["1000x"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    const issues = validateContent(content);
+    expect(issues.join("\n")).toMatch(/numeric/);
+  });
+
+  it("does not flag mixed text-and-numeric lists", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Experiment?" }],
+      explanation: [{ kind: "text", text: "Tests." }],
+      xp: 10,
+      accepted: ["experiment", "experiments"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    expect(validateContent(content)).toEqual([]);
+  });
+
+  it("does not flag mixed text-and-numeric like ['4', '4 times', 'four']", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "How many times?" }],
+      explanation: [{ kind: "text", text: "Four times." }],
+      xp: 10,
+      accepted: ["4", "4 times", "four"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    expect(validateContent(content)).toEqual([]);
+  });
+});
+
+describe("validateContent - shortText long accepted list", () => {
+  it("flags when accepted list has more than 8 items", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Name European capitals." }],
+      explanation: [{ kind: "text", text: "Many." }],
+      xp: 10,
+      accepted: [
+        "Paris",
+        "Berlin",
+        "London",
+        "Madrid",
+        "Rome",
+        "Vienna",
+        "Prague",
+        "Warsaw",
+        "Lisbon",
+      ],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    const issues = validateContent(content);
+    expect(issues.join("\n")).toMatch(/9 accepted items/);
+  });
+
+  it("does not flag accepted list with exactly 8 items", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "Name capitals." }],
+      explanation: [{ kind: "text", text: "Eight." }],
+      xp: 10,
+      accepted: [
+        "Paris",
+        "Berlin",
+        "London",
+        "Madrid",
+        "Rome",
+        "Vienna",
+        "Prague",
+        "Warsaw",
+      ],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    expect(validateContent(content)).toEqual([]);
+  });
+
+  it("does not flag accepted list with fewer than 8 items", () => {
+    const content = validContent();
+    const shortText: Question = {
+      id: "s1",
+      type: "shortText",
+      prompt: [{ kind: "text", text: "What organism?" }],
+      explanation: [{ kind: "text", text: "Things." }],
+      xp: 10,
+      accepted: ["experiment", "experiments"],
+    };
+    content.tracks[0].lessons[0].practice = [shortText];
+    expect(validateContent(content)).toEqual([]);
+  });
+});
+
 describe("validateContent - fillInTheBlank question validation", () => {
   it("flags a fillInTheBlank question with no ___ in template", () => {
     const content = validContent();

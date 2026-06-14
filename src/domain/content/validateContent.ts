@@ -162,6 +162,32 @@ function validateQuestion(
           `${where}: shortText "${question.id}" has no non-empty accepted answers.`,
         );
       }
+      // Flag accepted lists where every value looks numeric (integer,
+      // decimal, or number with a unit suffix). These likely belong on
+      // a numeric question type.
+      // A value "looks numeric" when it is an integer or decimal
+      // optionally followed by a measurement-unit suffix. The suffix
+      // must start with a letter (e.g. "m", "cm", "mm", "x") and
+      // may include trailing digits/^ for exponents ("m2", "cm^2").
+      // This avoids flagging time formats like "14:30" or expression
+      // fragments like "2*pi".
+      if (
+        meaningful.length > 0 &&
+        meaningful.every((value) =>
+          /^\d*\.?\d+(?:\s*[a-zA-Z][a-zA-Z\d^]*)?$/.test(value),
+        )
+      ) {
+        issues.push(
+          `${where}: shortText "${question.id}" accepted list contains only numeric values — consider using "numeric" question type.`,
+        );
+      }
+      // Flag overly long accepted lists, which are a keyword-list smell
+      // under substring matching.
+      if (meaningful.length > 8) {
+        issues.push(
+          `${where}: shortText "${question.id}" has ${meaningful.length} accepted items — consider trimming to 8 or fewer.`,
+        );
+      }
       break;
     }
     case "fillInTheBlank": {
