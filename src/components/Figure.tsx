@@ -78,7 +78,7 @@ export function Figure({ figure }: Readonly<FigureProps>) {
   };
 
   const ext = triedWebp ? ".png" : ".webp";
-  const src = `/figures/${figure.id}${ext}`;
+  const src = `${import.meta.env.BASE_URL}figures/${figure.id}${ext}`;
 
   return (
     <>
