@@ -91,11 +91,17 @@ describe("SettingsScreen", () => {
   });
 
   it("does not save when fields are partially filled (FR-005)", async () => {
-    // Pre-condition: no saved config.
+    // Pre-condition: no saved config. Env vars may pre-populate fields,
+    // so we must clear them to ensure only one field is filled.
     const user = userEvent.setup();
     renderApp(<SettingsScreen />, { path: "/settings", route: "/settings" });
 
-    // Fill only the base URL field.
+    // Clear all fields (env vars may fill them).
+    await user.clear(screen.getByLabelText(/api base url/i));
+    await user.clear(screen.getByLabelText(/api key/i));
+    await user.clear(screen.getByLabelText(/model/i));
+
+    // Fill only the base URL field, leaving the others empty.
     await user.type(
       screen.getByLabelText(/api base url/i),
       "https://example.com/v1",
