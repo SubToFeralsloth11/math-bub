@@ -18,7 +18,7 @@ createRoot(rootElement).render(
   <StrictMode>
     <ErrorBoundary>
       <ProgressProvider content={appContent}>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <App />
         </BrowserRouter>
       </ProgressProvider>
