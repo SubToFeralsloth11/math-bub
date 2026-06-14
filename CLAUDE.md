@@ -34,7 +34,7 @@ Every lesson and boss challenge MUST carry a `sourceRef` that links back to the 
 
 #### Principle VI: Automated quality gates
 
-Every push and pull request to `main` MUST pass all automated quality gates before it can merge. These gates run in the CI workflow (`.github/workflows/quality-and-deploy.yml`) and consist of:
+Every change MUST pass all automated quality gates before it can be considered complete. These gates consist of:
 
 - **Static analysis:** ESLint (lint), Prettier (formatting), jscpd (copy-paste duplication).
 - **Unit tests:** Vitest with v8 coverage at or above the 80% thresholds for lines, functions, branches, and statements.
