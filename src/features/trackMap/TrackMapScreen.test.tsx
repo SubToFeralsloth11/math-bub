@@ -45,7 +45,11 @@ const mathsSubject: Subject = {
   accent: "#6D4AFF",
 };
 
-const content: AppContent = { subjects: [mathsSubject], tracks: [track], badges: [] };
+const content: AppContent = {
+  subjects: [mathsSubject],
+  tracks: [track],
+  badges: [],
+};
 
 function renderMap() {
   return renderApp(<TrackMapScreen />, {

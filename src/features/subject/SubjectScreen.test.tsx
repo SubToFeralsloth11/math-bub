@@ -16,7 +16,9 @@ describe("SubjectScreen", () => {
     });
 
     expect(screen.getByRole("heading", { name: /Maths/i })).toBeInTheDocument();
-    expect(screen.getByText(/Algebra, geometry, and more/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Algebra, geometry, and more/i),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Algebra \(Year 8\)/i }),
     ).toHaveAttribute("href", "/subject/maths/track/algebra");

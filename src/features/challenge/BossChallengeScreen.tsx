@@ -61,7 +61,8 @@ function ChallengeRunner({ track, challenge }: Readonly<ChallengeRunnerProps>) {
 
   function handleSubmit(matchInput?: string) {
     if (!hasAnswer && !matchInput) return;
-    const input = matchInput ?? (question.type === "mcq" ? (selectedId ?? "") : value);
+    const input =
+      matchInput ?? (question.type === "mcq" ? (selectedId ?? "") : value);
     const correct = markAnswer(question, input).status === "correct";
     const newScore = score + (correct ? 1 : 0);
     setScore(newScore);

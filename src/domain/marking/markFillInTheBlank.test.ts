@@ -50,9 +50,7 @@ describe("markFillInTheBlank", () => {
   });
 
   it("matches any accepted answer", () => {
-    expect(
-      markFillInTheBlank(fitb(["water", "H2O"]), "H2O"),
-    ).toEqual({
+    expect(markFillInTheBlank(fitb(["water", "H2O"]), "H2O")).toEqual({
       status: "correct",
     });
   });

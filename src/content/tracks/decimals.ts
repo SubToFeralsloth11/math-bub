@@ -104,7 +104,7 @@ const terminatingRecurringRounding: Lesson = {
       prompt: [t("Write"), m(String.raw`\frac{3}{4}`), t("as a decimal.")],
       explanation: [
         t("Divide the numerator by the denominator:"),
-        m("3 \\div 4 = 0.75"),
+        m(String.raw`3 \div 4 = 0.75`),
         t(
           ". The division terminates because 4 = 2² has only the prime factor 2. The result is a terminating decimal with two decimal places.",
         ),
@@ -118,7 +118,7 @@ const terminatingRecurringRounding: Lesson = {
       prompt: [t("Write"), m(String.raw`\frac{7}{8}`), t("as a decimal.")],
       explanation: [
         t("Divide 7 by 8:"),
-        m("7 \\div 8 = 0.875"),
+        m(String.raw`7 \div 8 = 0.875`),
         t(
           ". The denominator 8 = 2³ contains only the prime factor 2, so the decimal terminates. The result is 0.875 (eight hundred and seventy-five thousandths).",
         ),
@@ -131,13 +131,13 @@ const terminatingRecurringRounding: Lesson = {
       type: "mcq",
       prompt: [t("Which of these fractions gives a recurring decimal?")],
       explanation: [
-        m("\\frac{3}{4}"),
+        m(String.raw`\frac{3}{4}`),
         t("→ 0.75 (terminating — denominator 4 = 2²)."),
-        m("\\frac{1}{5}"),
+        m(String.raw`\frac{1}{5}`),
         t("→ 0.2 (terminating — denominator 5)."),
-        m("\\frac{2}{3}"),
+        m(String.raw`\frac{2}{3}`),
         t("→ 0.666... (recurring — denominator 3 is not 2 or 5)."),
-        m("\\frac{7}{10}"),
+        m(String.raw`\frac{7}{10}`),
         t("→ 0.7 (terminating — denominator 10 = 2 × 5)."),
       ],
       xp: 10,
@@ -249,7 +249,7 @@ const terminatingRecurringRounding: Lesson = {
         t(
           "First, check: 7/12 is already in simplest form. The denominator 12 = 2² × 3 includes the prime factor 3, which is not 2 or 5. Therefore 7/12 produces a recurring decimal.",
         ),
-        m("7 \\div 12 = 0.58333\\ldots = 0.58\\bar{3}"),
+        m(String.raw`7 \div 12 = 0.58333\ldots = 0.58\bar{3}`),
         t(
           ". The denominator's prime factors are 2 and 3 — the 3 causes the recurrence.",
         ),
@@ -287,7 +287,7 @@ const terminatingRecurringRounding: Lesson = {
       ],
       explanation: [
         t("First, divide 1 by 6:"),
-        m("1 \\div 6 = 0.16666\\ldots"),
+        m(String.raw`1 \div 6 = 0.16666\ldots`),
         t(
           ". Now round to 3 d.p.: the 3rd decimal digit is 6, and the 4th decimal digit is also 6. Since the 4th digit is ≥ 5, we round the 6 up to 7:",
         ),
@@ -311,11 +311,11 @@ const terminatingRecurringRounding: Lesson = {
       ],
       explanation: [
         t("Both fractions are in simplest form."),
-        m("\\frac{1}{4}"),
+        m(String.raw`\frac{1}{4}`),
         t(
           "has denominator 4 = 2². Since 4's only prime factor is 2, the decimal terminates.",
         ),
-        m("\\frac{1}{7}"),
+        m(String.raw`\frac{1}{7}`),
         t(
           "has denominator 7, which is a prime number that is neither 2 nor 5. Any denominator containing a prime factor other than 2 or 5 will cause the decimal to recur. In this case, the six-digit block 142857 repeats forever.",
         ),
@@ -340,7 +340,7 @@ const terminatingRecurringRounding: Lesson = {
       prompt: [t("Write"), m(String.raw`\frac{5}{8}`), t("as a decimal.")],
       explanation: [
         t("Divide 5 by 8:"),
-        m("5 \\div 8 = 0.625"),
+        m(String.raw`5 \div 8 = 0.625`),
         t(
           ". Since 8 = 2³ has only the prime factor 2, the decimal terminates cleanly after three decimal places.",
         ),
@@ -353,13 +353,13 @@ const terminatingRecurringRounding: Lesson = {
       type: "mcq",
       prompt: [t("Which fraction gives a terminating decimal?")],
       explanation: [
-        m("\\frac{1}{3}"),
+        m(String.raw`\frac{1}{3}`),
         t("→ recurring (denominator 3 is not 2 or 5)."),
-        m("\\frac{1}{6}"),
+        m(String.raw`\frac{1}{6}`),
         t("→ recurring (6 = 2 × 3, factor 3 causes recurrence)."),
-        m("\\frac{3}{8}"),
+        m(String.raw`\frac{3}{8}`),
         t("→ terminating (8 = 2³, only factor 2)."),
-        m("\\frac{2}{9}"),
+        m(String.raw`\frac{2}{9}`),
         t("→ recurring (9 = 3², factor 3 causes recurrence)."),
         t(
           "The key is to check the prime factors of the simplified denominator: only 2 and 5 produce terminating decimals.",
@@ -413,7 +413,7 @@ const terminatingRecurringRounding: Lesson = {
       ],
       explanation: [
         t("First, divide 3 by 11:"),
-        m("3 \\div 11 = 0.272727\\ldots"),
+        m(String.raw`3 \div 11 = 0.272727\ldots`),
         t(
           ". The block 27 repeats forever. Now round to 3 d.p.: the 3rd decimal digit is 2, and the 4th decimal digit is 7. Since 7 ≥ 5, round the 2 up to 3. Result:",
         ),
@@ -924,7 +924,7 @@ const fractionConversion: Lesson = {
       prompt: [t("Write"), m(String.raw`\frac{3}{8}`), t("as a decimal.")],
       explanation: [
         t("Divide 3 by 8:"),
-        m("3 \\div 8 = 0.375"),
+        m(String.raw`3 \div 8 = 0.375`),
         t(
           ". Since 8 = 2³, the decimal terminates after three places. This is a clean conversion with no repeating block.",
         ),
@@ -942,11 +942,11 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("0.6 has one decimal place, so write it with denominator 10:"),
-        m("\\frac{6}{10}"),
+        m(String.raw`\frac{6}{10}`),
         t(
           ". Simplify by dividing both numerator and denominator by their highest common factor, 2:",
         ),
-        m("\\frac{6}{10} = \\frac{3}{5}"),
+        m(String.raw`\frac{6}{10} = \frac{3}{5}`),
         t("."),
       ],
       xp: 10,
@@ -958,7 +958,7 @@ const fractionConversion: Lesson = {
       prompt: [t("What is"), m(String.raw`\frac{7}{20}`), t("as a decimal?")],
       explanation: [
         t("Divide 7 by 20:"),
-        m("7 \\div 20 = 0.35"),
+        m(String.raw`7 \div 20 = 0.35`),
         t(
           ". Since 20 = 2² × 5, the decimal terminates. The other options could come from common mistakes: 0.7 would be 14/20, 0.28 would be 5.6/20, and 3.5 would be 70/20.",
         ),
@@ -1001,11 +1001,11 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("0.125 has three decimal places, so write it with denominator 1000:"),
-        m("\\frac{125}{1000}"),
+        m(String.raw`\frac{125}{1000}`),
         t(
           ". Find the highest common factor of 125 and 1000, which is 125. Divide both by 125:",
         ),
-        m("\\frac{125 \\div 125}{1000 \\div 125} = \\frac{1}{8}"),
+        m(String.raw`\frac{125 \div 125}{1000 \div 125} = \frac{1}{8}`),
         t(". So 0.125 = 1/8."),
       ],
       xp: 10,
@@ -1021,7 +1021,7 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("Divide 5 by 6:"),
-        m("5 \\div 6 = 0.83333\\ldots"),
+        m(String.raw`5 \div 6 = 0.83333\ldots`),
         t(". The exact value is"),
         m(String.raw`0.8\bar{3}`),
         t(
@@ -1103,15 +1103,15 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("Let"),
-        m("x = 0.444\\ldots"),
+        m(String.raw`x = 0.444\ldots`),
         t(". Multiply by 10:"),
-        m("10x = 4.444\\ldots"),
+        m(String.raw`10x = 4.444\ldots`),
         t(". Subtract:"),
-        m("10x - x = 4.444\\ldots - 0.444\\ldots"),
+        m(String.raw`10x - x = 4.444\ldots - 0.444\ldots`),
         t("→"),
         m("9x = 4"),
         t(", so"),
-        m("x = \\frac{4}{9}"),
+        m(String.raw`x = \frac{4}{9}`),
         t(
           ". The fraction is already simplified because 4 and 9 share no common factors.",
         ),
@@ -1138,7 +1138,7 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("Divide 7 by 12:"),
-        m("7 \\div 12 = 0.58333\\ldots"),
+        m(String.raw`7 \div 12 = 0.58333\ldots`),
         t(
           ". To round to 3 d.p., look at the 4th decimal digit (3). Since 3 < 5, the 3rd digit (3) stays. Result: 0.583. The exact form is",
         ),
@@ -1156,7 +1156,7 @@ const fractionConversion: Lesson = {
       prompt: [t("Write"), m(String.raw`\frac{11}{20}`), t("as a decimal.")],
       explanation: [
         t("Divide 11 by 20:"),
-        m("11 \\div 20 = 0.55"),
+        m(String.raw`11 \div 20 = 0.55`),
         t(
           ". Since 20 = 2² × 5, the decimal terminates exactly. The result is fifty-five hundredths, or 0.55.",
         ),
@@ -1174,17 +1174,17 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("Let"),
-        m("x = 0.636363\\ldots"),
+        m(String.raw`x = 0.636363\ldots`),
         t(". Two digits repeat, so multiply by 100:"),
-        m("100x = 63.6363\\ldots"),
+        m(String.raw`100x = 63.6363\ldots`),
         t(". Subtract:"),
-        m("100x - x = 63.6363\\ldots - 0.6363\\ldots"),
+        m(String.raw`100x - x = 63.6363\ldots - 0.6363\ldots`),
         t("→"),
         m("99x = 63"),
         t(", so"),
-        m("x = \\frac{63}{99}"),
+        m(String.raw`x = \frac{63}{99}`),
         t(". Simplify by dividing numerator and denominator by 9:"),
-        m("\\frac{63 \\div 9}{99 \\div 9} = \\frac{7}{11}"),
+        m(String.raw`\frac{63 \div 9}{99 \div 9} = \frac{7}{11}`),
         t("."),
         t(
           "The other options: 63/100 = 0.63 (terminating), 6/11 = 0.545454..., 21/33 = 0.636363... but is not simplified.",
@@ -1209,11 +1209,11 @@ const fractionConversion: Lesson = {
       ],
       explanation: [
         t("0.875 has three decimal places, so write it as"),
-        m("\\frac{875}{1000}"),
+        m(String.raw`\frac{875}{1000}`),
         t(
           ". The highest common factor of 875 and 1000 is 125. Divide both by 125:",
         ),
-        m("\\frac{875 \\div 125}{1000 \\div 125} = \\frac{7}{8}"),
+        m(String.raw`\frac{875 \div 125}{1000 \div 125} = \frac{7}{8}`),
         t(". So 0.875 = 7/8. You can verify: 7 ÷ 8 = 0.875."),
       ],
       xp: 15,
@@ -1233,7 +1233,7 @@ const fractionConversion: Lesson = {
         t(
           "First, note that 11/30 is already in simplest form (11 and 30 share no common factors). The denominator 30 = 2 × 3 × 5. Since the prime factor 3 appears (and 3 is not 2 or 5), the decimal will recur. Indeed:",
         ),
-        m("11 \\div 30 = 0.36666\\ldots = 0.3\\bar{6}"),
+        m(String.raw`11 \div 30 = 0.36666\ldots = 0.3\bar{6}`),
         t(". So the answer is 0 (recurring)."),
       ],
       xp: 15,
@@ -1304,9 +1304,9 @@ const decimalsBossQuestions: Question[] = [
       t(
         "0.075 has three decimal places, so write it as a fraction with denominator 1000:",
       ),
-      m("\\frac{75}{1000}"),
+      m(String.raw`\frac{75}{1000}`),
       t(". The highest common factor of 75 and 1000 is 25. Divide both by 25:"),
-      m("\\frac{75 \\div 25}{1000 \\div 25} = \\frac{3}{40}"),
+      m(String.raw`\frac{75 \div 25}{1000 \div 25} = \frac{3}{40}`),
       t(". So 0.075 = 3/40. You can verify: 3 ÷ 40 = 0.075."),
     ],
     xp: 20,
@@ -1326,7 +1326,7 @@ const decimalsBossQuestions: Question[] = [
       t(
         "The fraction 7/15 is already in simplest form. The denominator 15 = 3 × 5. Since 3 is a prime factor other than 2 or 5, the decimal must recur. Indeed:",
       ),
-      m("7 \\div 15 = 0.46666\\ldots = 0.4\\bar{6}"),
+      m(String.raw`7 \div 15 = 0.46666\ldots = 0.4\bar{6}`),
       t(". The answer is 'recurring'."),
     ],
     xp: 20,
@@ -1342,17 +1342,17 @@ const decimalsBossQuestions: Question[] = [
     ],
     explanation: [
       t("Let"),
-      m("x = 0.272727\\ldots"),
+      m(String.raw`x = 0.272727\ldots`),
       t(". Two digits repeat, so multiply by 100:"),
-      m("100x = 27.2727\\ldots"),
+      m(String.raw`100x = 27.2727\ldots`),
       t(". Subtract the original equation:"),
-      m("100x - x = 27.2727\\ldots - 0.2727\\ldots"),
+      m(String.raw`100x - x = 27.2727\ldots - 0.2727\ldots`),
       t("→"),
       m("99x = 27"),
       t(", so"),
-      m("x = \\frac{27}{99}"),
+      m(String.raw`x = \frac{27}{99}`),
       t(". Simplify by dividing numerator and denominator by 9:"),
-      m("\\frac{27 \\div 9}{99 \\div 9} = \\frac{3}{11}"),
+      m(String.raw`\frac{27 \div 9}{99 \div 9} = \frac{3}{11}`),
       t(
         ". The fraction 3/11 is in simplest form. You can verify: 3 ÷ 11 = 0.272727...",
       ),

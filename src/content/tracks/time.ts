@@ -12,6 +12,7 @@
  */
 
 import { m, t } from "../blocks";
+
 import type { Lesson, Track, Question } from "../../domain/content/types";
 
 // ---------------------------------------------------------------------------
@@ -36,14 +37,12 @@ const timeUnitsConversion: Lesson = {
         t(
           "Time is measured using a base-60 (sexagesimal) system inherited from the ancient Babylonians. The standard units and their relationships are:",
         ),
-        m("1 \\text{ minute} = 60 \\text{ seconds}"),
+        m(String.raw`1 \text{ minute} = 60 \text{ seconds}`),
         m(
-          "1 \\text{ hour} = 60 \\text{ minutes} = 3600 \\text{ seconds}",
+          String.raw`1 \text{ hour} = 60 \text{ minutes} = 3600 \text{ seconds}`,
         ),
-        m(
-          "1 \\text{ day} = 24 \\text{ hours} = 1440 \\text{ minutes}",
-        ),
-        m("1 \\text{ week} = 7 \\text{ days} = 168 \\text{ hours}"),
+        m(String.raw`1 \text{ day} = 24 \text{ hours} = 1440 \text{ minutes}`),
+        m(String.raw`1 \text{ week} = 7 \text{ days} = 168 \text{ hours}`),
         t(
           "Months and years are not fixed conversions: 1 year = 12 months = 365 days (or 366 in a leap year). For problems, assume 1 year = 365 days unless told otherwise.",
         ),
@@ -98,10 +97,8 @@ const timeUnitsConversion: Lesson = {
       type: "numeric",
       prompt: [t("How many minutes are in 3 hours?")],
       explanation: [
-        t(
-          "To convert hours to minutes, multiply by 60:",
-        ),
-        m("3 \\times 60 = 180"),
+        t("To convert hours to minutes, multiply by 60:"),
+        m(String.raw`3 \times 60 = 180`),
         t(
           ". There are 60 minutes in each hour, so 3 hours contains 180 minutes.",
         ),
@@ -115,7 +112,7 @@ const timeUnitsConversion: Lesson = {
       prompt: [t("Convert 450 seconds to minutes.")],
       explanation: [
         t("To convert seconds to minutes, divide by 60:"),
-        m("450 \\div 60 = 7.5"),
+        m(String.raw`450 \div 60 = 7.5`),
         t(
           ". There are 60 seconds in each minute, so 450 seconds equals 7 minutes and 30 seconds, or 7.5 minutes.",
         ),
@@ -146,11 +143,7 @@ const timeUnitsConversion: Lesson = {
       id: "4j-p4",
       type: "fillInTheBlank",
       prompt: [t("Complete the sentence about time conversions.")],
-      template: [
-        t(
-          "To convert from hours to minutes, you ___ by 60.",
-        ),
-      ],
+      template: [t("To convert from hours to minutes, you ___ by 60.")],
       explanation: [
         t(
           "When converting from a larger unit (hours) to a smaller unit (minutes), you multiply by the conversion factor. Since 1 hour = 60 minutes, you multiply the number of hours by 60. For example, 2.5 hours = 2.5 × 60 = 150 minutes.",
@@ -162,9 +155,7 @@ const timeUnitsConversion: Lesson = {
     {
       id: "4j-p5",
       type: "numeric",
-      prompt: [
-        t("How many hours are in 2 days and 5 hours?"),
-      ],
+      prompt: [t("How many hours are in 2 days and 5 hours?")],
       explanation: [
         t(
           "First convert days to hours: 2 days = 2 × 24 = 48 hours. Then add the extra 5 hours: 48 + 5 = 53 hours. Always convert all parts to the same unit before adding.",
@@ -177,9 +168,7 @@ const timeUnitsConversion: Lesson = {
       id: "4j-p6",
       type: "shortText",
       prompt: [
-        t(
-          "Write 2:30 PM in 24-hour time format (four digits, e.g. 1430).",
-        ),
+        t("Write 2:30 PM in 24-hour time format (four digits, e.g. 1430)."),
       ],
       explanation: [
         t(
@@ -192,11 +181,7 @@ const timeUnitsConversion: Lesson = {
     {
       id: "4j-p7",
       type: "numeric",
-      prompt: [
-        t(
-          "Write 9:15 PM in 24-hour time format (four digits).",
-        ),
-      ],
+      prompt: [t("Write 9:15 PM in 24-hour time format (four digits).")],
       explanation: [
         t(
           "For PM times, add 12 to the hour: 9 + 12 = 21. The minutes stay 15. So 9:15 PM in 24-hour time is 2115.",
@@ -208,11 +193,7 @@ const timeUnitsConversion: Lesson = {
     {
       id: "4j-p8",
       type: "matching",
-      prompt: [
-        t(
-          "Match each 12-hour time to its 24-hour equivalent.",
-        ),
-      ],
+      prompt: [t("Match each 12-hour time to its 24-hour equivalent.")],
       explanation: [
         t(
           "7:30 AM → 0730 (AM times keep the hour, adding a leading zero if needed). 2:15 PM → 1415 (PM: add 12 to the hour). 12:00 PM (noon) → 1200 (12 PM stays as 12). 11:45 PM → 2345 (11 + 12 = 23). 12:00 AM (midnight) → 0000 (12 AM becomes 00).",
@@ -233,7 +214,7 @@ const timeUnitsConversion: Lesson = {
       prompt: [t("How many minutes are in 2.5 hours?")],
       explanation: [
         t("Multiply the number of hours by 60:"),
-        m("2.5 \\times 60 = 150"),
+        m(String.raw`2.5 \times 60 = 150`),
         t(
           " minutes. The two full hours give 2 × 60 = 120 minutes, and the half hour gives 0.5 × 60 = 30 minutes, totalling 150 minutes. A common mistake is to multiply by 100 instead of 60, which would incorrectly give 250.",
         ),
@@ -259,7 +240,7 @@ const timeUnitsConversion: Lesson = {
         t(
           "Total minutes: 8 × 45 = 360 minutes. Convert to hours by dividing by 60:",
         ),
-        m("360 \\div 60 = 6"),
+        m(String.raw`360 \div 60 = 6`),
         t(
           " hours. Alternatively, two 45-minute episodes make 90 minutes (1.5 hours), so 8 episodes = 4 × 1.5 = 6 hours.",
         ),
@@ -277,7 +258,7 @@ const timeUnitsConversion: Lesson = {
         t(
           "Convert in one step by dividing by 3600, since 1 hour = 3600 seconds:",
         ),
-        m("7200 \\div 3600 = 2"),
+        m(String.raw`7200 \div 3600 = 2`),
         t(
           " hours. Alternatively, in two steps: 7200 ÷ 60 = 120 minutes, then 120 ÷ 60 = 2 hours. Both approaches give the same result.",
         ),
@@ -302,16 +283,16 @@ const timeUnitsConversion: Lesson = {
       options: [
         {
           id: "a",
-          label: [m("3 \\times 60 + 24 = 204")],
+          label: [m(String.raw`3 \times 60 + 24 = 204`)],
         },
         { id: "b", label: [m("3 + 24 = 27")] },
         {
           id: "c",
-          label: [m("3 \\times 60 + 24 = 184")],
+          label: [m(String.raw`3 \times 60 + 24 = 184`)],
         },
         {
           id: "d",
-          label: [m("3 \\times 100 + 24 = 324")],
+          label: [m(String.raw`3 \times 100 + 24 = 324`)],
         },
       ],
       correctOptionId: "a",
@@ -319,14 +300,8 @@ const timeUnitsConversion: Lesson = {
     {
       id: "4j-m3",
       type: "fillInTheBlank",
-      prompt: [
-        t("Complete the sentence about 24-hour time."),
-      ],
-      template: [
-        t(
-          "In 24-hour time format, midnight is written as ___.",
-        ),
-      ],
+      prompt: [t("Complete the sentence about 24-hour time.")],
+      template: [t("In 24-hour time format, midnight is written as ___.")],
       explanation: [
         t(
           "Midnight marks the beginning of a new day, so the hour is 00. In 24-hour time, midnight is 0000 (or 00:00). Note that 12:00 AM in 12-hour time equals 0000 in 24-hour time, while noon (12:00 PM) is written as 1200 in 24-hour time.",
@@ -376,9 +351,7 @@ const timetablesAndDuration: Lesson = {
         t(
           "Elapsed time is the amount of time that passes from the start of an event to its end. To calculate it:",
         ),
-        t(
-          "1. Write both times in 24-hour format for easier calculation.",
-        ),
+        t("1. Write both times in 24-hour format for easier calculation."),
         t(
           "2. If the end time is on the same day, subtract the start time from the end time.",
         ),
@@ -406,9 +379,7 @@ const timetablesAndDuration: Lesson = {
         t(
           "1. Find your departure location (stop or station) and read the departure time.",
         ),
-        t(
-          "2. Find your destination and read across to the arrival time.",
-        ),
+        t("2. Find your destination and read across to the arrival time."),
         t(
           "3. Calculate journey duration by subtracting departure time from arrival time.",
         ),
@@ -532,9 +503,7 @@ const timetablesAndDuration: Lesson = {
     {
       id: "tt-p6",
       type: "fillInTheBlank",
-      prompt: [
-        t("Complete the sentence about calculating duration."),
-      ],
+      prompt: [t("Complete the sentence about calculating duration.")],
       template: [
         t(
           "To calculate the duration of an event, you subtract the ___ time from the end time.",
@@ -595,9 +564,7 @@ const timetablesAndDuration: Lesson = {
     {
       id: "tt-p9",
       type: "matching",
-      prompt: [
-        t("Match each journey to its duration."),
-      ],
+      prompt: [t("Match each journey to its duration.")],
       explanation: [
         t(
           "8:00 AM to 12:00 PM: 1200 − 0800 = 4 hours (in 24-hour time). 9:15 AM to 10:45 AM: 1045 − 0915 = 1 hour 30 minutes. 11:30 PM to 2:00 AM: using the add-24 trick, 0200 becomes 2600, then 2600 − 2330 = 2 hours 30 minutes. 3:20 PM to 5:05 PM: 1705 − 1520 = 1 hour 45 minutes.",
@@ -758,13 +725,13 @@ const timeProblemSolving: Lesson = {
         t(
           "The relationship between speed, distance and time is given by the formula:",
         ),
-        m("\\text{speed} = \\frac{\\text{distance}}{\\text{time}}"),
+        m(String.raw`\text{speed} = \frac{\text{distance}}{\text{time}}`),
         t("which is often written as"),
-        m("v = \\frac{d}{t}"),
+        m(String.raw`v = \frac{d}{t}`),
         t(", where v is average speed, d is distance, and t is time."),
         t("From this formula we can derive two others:"),
-        m("d = v \\times t \\quad \\text{(distance = speed × time)}"),
-        m("t = \\frac{d}{v} \\quad \\text{(time = distance ÷ speed)}"),
+        m(String.raw`d = v \times t \quad \text{(distance = speed × time)}`),
+        m(String.raw`t = \frac{d}{v} \quad \text{(time = distance ÷ speed)}`),
         t(
           "The unit of speed depends on the units of distance and time. If distance is in kilometres and time is in hours, speed is in kilometres per hour (km/h). If distance is in metres and time is in seconds, speed is in metres per second (m/s).",
         ),
@@ -777,20 +744,22 @@ const timeProblemSolving: Lesson = {
       id: "ps-worked-examples",
       heading: "Worked examples",
       body: [
-        t("Example 1: A car travels 150 km in 3 hours. Find the average speed."),
-        m("v = \\frac{150}{3} = 50 \\text{ km/h}"),
+        t(
+          "Example 1: A car travels 150 km in 3 hours. Find the average speed.",
+        ),
+        m(String.raw`v = \frac{150}{3} = 50 \text{ km/h}`),
         t(
           "Example 2: A cyclist rides at 20 km/h for 2.5 hours. How far do they travel?",
         ),
-        m("d = 20 \\times 2.5 = 50 \\text{ km}"),
+        m(String.raw`d = 20 \times 2.5 = 50 \text{ km}`),
         t(
           "Example 3: How long does it take to drive 240 km at an average speed of 80 km/h?",
         ),
-        m("t = \\frac{240}{80} = 3 \\text{ hours}"),
+        m(String.raw`t = \frac{240}{80} = 3 \text{ hours}`),
         t(
           "Example 4 (mixed units): A runner covers 400 metres in 50 seconds. Find the average speed in m/s.",
         ),
-        m("v = \\frac{400}{50} = 8 \\text{ m/s}"),
+        m(String.raw`v = \frac{400}{50} = 8 \text{ m/s}`),
       ],
     },
     {
@@ -815,7 +784,9 @@ const timeProblemSolving: Lesson = {
         t(
           "5. Always check that your answer makes sense in the context (e.g. an arrival time cannot be before the departure time, and a speed should be reasonable for the mode of transport).",
         ),
-        t("Example: A student leaves home at 8:10 AM. They walk 12 minutes to the bus stop, wait 5 minutes, ride the bus for 28 minutes, then walk another 8 minutes to school. What time do they arrive?"),
+        t(
+          "Example: A student leaves home at 8:10 AM. They walk 12 minutes to the bus stop, wait 5 minutes, ride the bus for 28 minutes, then walk another 8 minutes to school. What time do they arrive?",
+        ),
         t(
           "Solution: Total travel time = 12 + 5 + 28 + 8 = 53 minutes. 8:10 AM + 53 min = 9:03 AM.",
         ),
@@ -835,7 +806,7 @@ const timeProblemSolving: Lesson = {
         t("Use the formula"),
         m("v = d / t"),
         t(":"),
-        m("v = \\frac{150}{3} = 50"),
+        m(String.raw`v = \frac{150}{3} = 50`),
         t(
           " km/h. The car covers 50 kilometres each hour on average. The term 'average' speed acknowledges that the car may have travelled faster or slower at different points during the journey.",
         ),
@@ -853,9 +824,9 @@ const timeProblemSolving: Lesson = {
       ],
       explanation: [
         t("Use the formula"),
-        m("d = v \\times t"),
+        m(String.raw`d = v \times t`),
         t(":"),
-        m("d = 20 \\times 2.5 = 50"),
+        m(String.raw`d = 20 \times 2.5 = 50`),
         t(
           " km. The cyclist covers 20 km in the first hour, another 20 km in the second hour, and 10 km in the final half hour, totalling 50 km.",
         ),
@@ -873,18 +844,18 @@ const timeProblemSolving: Lesson = {
       ],
       explanation: [
         t("Starting from"),
-        m("v = \\frac{d}{t}"),
+        m(String.raw`v = \frac{d}{t}`),
         t(", multiply both sides by t and divide by v to isolate t:"),
-        m("t = \\frac{d}{v}"),
+        m(String.raw`t = \frac{d}{v}`),
         t(
           ". The other options are incorrect rearrangements: d × v would give the wrong units, v ÷ d inverts the relationship, and d + v simply adds the values. Always check the units: time (hours) = distance (km) ÷ speed (km/h).",
         ),
       ],
       xp: 10,
       options: [
-        { id: "a", label: [m("t = d \\times v")] },
-        { id: "b", label: [m("t = \\frac{d}{v}")] },
-        { id: "c", label: [m("t = \\frac{v}{d}")] },
+        { id: "a", label: [m(String.raw`t = d \times v`)] },
+        { id: "b", label: [m(String.raw`t = \frac{d}{v}`)] },
+        { id: "c", label: [m(String.raw`t = \frac{v}{d}`)] },
         { id: "d", label: [m("t = d + v")] },
       ],
       correctOptionId: "b",
@@ -892,18 +863,11 @@ const timeProblemSolving: Lesson = {
     {
       id: "ps-p4",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete the formula for average speed. Use v, d and t.",
-        ),
-      ],
-      template: [
-        m("v ="),
-        t("___"),
-      ],
+      prompt: [t("Complete the formula for average speed. Use v, d and t.")],
+      template: [m("v ="), t("___")],
       explanation: [
         t("Average speed equals distance divided by time:"),
-        m("v = \\frac{d}{t}"),
+        m(String.raw`v = \frac{d}{t}`),
         t(
           ". The letter v stands for velocity or speed, d for distance, and t for time. This is one of the most important formulas in physics and everyday problem solving.",
         ),
@@ -923,7 +887,7 @@ const timeProblemSolving: Lesson = {
         t("Use"),
         m("t = d / v"),
         t(":"),
-        m("t = \\frac{240}{80} = 3"),
+        m(String.raw`t = \frac{240}{80} = 3`),
         t(
           " hours. At 80 km each hour, it takes exactly 3 hours to cover 240 km. The units work out because km ÷ (km/h) = h.",
         ),
@@ -968,17 +932,17 @@ const timeProblemSolving: Lesson = {
         t(
           "First, convert 2 hours 15 minutes to hours: 15 minutes = 15/60 = 0.25 hours, so 2 hours 15 minutes = 2.25 hours. Then use the speed formula:",
         ),
-        m("v = \\frac{180}{2.25} = 80"),
+        m(String.raw`v = \frac{180}{2.25} = 80`),
         t(
           " km/h. A common mistake is to use 2.15 hours (treating minutes as decimals), which would give 180 ÷ 2.15 ≈ 83.7 km/h — incorrect because 15 minutes is 0.25 hours, not 0.15 hours.",
         ),
       ],
       xp: 15,
       options: [
-        { id: "a", label: [m("80 \\text{ km/h}")] },
-        { id: "b", label: [m("90 \\text{ km/h}")] },
-        { id: "c", label: [m("83.7 \\text{ km/h}")] },
-        { id: "d", label: [m("72 \\text{ km/h}")] },
+        { id: "a", label: [m(String.raw`80 \text{ km/h}`)] },
+        { id: "b", label: [m(String.raw`90 \text{ km/h}`)] },
+        { id: "c", label: [m(String.raw`83.7 \text{ km/h}`)] },
+        { id: "d", label: [m(String.raw`72 \text{ km/h}`)] },
       ],
       correctOptionId: "a",
     },
@@ -1000,7 +964,7 @@ const timeProblemSolving: Lesson = {
         {
           id: "a",
           left: [t("Car travelling at 60 km/h for 3 hours. Distance?")],
-          right: [m("180 \\text{ km}")],
+          right: [m(String.raw`180 \text{ km}`)],
         },
         {
           id: "b",
@@ -1010,12 +974,12 @@ const timeProblemSolving: Lesson = {
         {
           id: "c",
           left: [t("Covered 90 km in 1.5 hours. Speed?")],
-          right: [m("60 \\text{ km/h}")],
+          right: [m(String.raw`60 \text{ km/h}`)],
         },
         {
           id: "d",
           left: [t("Travelled at 80 km/h for 45 minutes. Distance?")],
-          right: [m("60 \\text{ km}")],
+          right: [m(String.raw`60 \text{ km}`)],
         },
       ],
     },
@@ -1070,19 +1034,19 @@ const timeProblemSolving: Lesson = {
       options: [
         {
           id: "a",
-          label: [m("87.5 \\text{ km/h}")],
+          label: [m(String.raw`87.5 \text{ km/h}`)],
         },
         {
           id: "b",
-          label: [m("85.7 \\text{ km/h}")],
+          label: [m(String.raw`85.7 \text{ km/h}`)],
         },
         {
           id: "c",
-          label: [m("80 \\text{ km/h}")],
+          label: [m(String.raw`80 \text{ km/h}`)],
         },
         {
           id: "d",
-          label: [m("90 \\text{ km/h}")],
+          label: [m(String.raw`90 \text{ km/h}`)],
         },
       ],
       correctOptionId: "b",
@@ -1235,11 +1199,7 @@ const timeBossQuestions: Question[] = [
     options: [
       {
         id: "a",
-        label: [
-          t(
-            "The average speed is 13.5 km/h (the mean of 12 and 15).",
-          ),
-        ],
+        label: [t("The average speed is 13.5 km/h (the mean of 12 and 15).")],
       },
       {
         id: "b",
@@ -1252,9 +1212,7 @@ const timeBossQuestions: Question[] = [
       {
         id: "c",
         label: [
-          t(
-            "The average speed is 15 km/h because the second half was faster.",
-          ),
+          t("The average speed is 15 km/h because the second half was faster."),
         ],
       },
       {
@@ -1281,11 +1239,7 @@ export const timeTrack: Track = {
   title: "Time (Year 8)",
   description:
     "Converting between time units, reading timetables, calculating elapsed time, and solving time-related problems.",
-  lessons: [
-    timeUnitsConversion,
-    timetablesAndDuration,
-    timeProblemSolving,
-  ],
+  lessons: [timeUnitsConversion, timetablesAndDuration, timeProblemSolving],
   challenge: {
     id: "time-boss",
     title: "Boss challenge: Time",

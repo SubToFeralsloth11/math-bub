@@ -59,7 +59,8 @@ export function QuestionView({
   function handleCheck(input?: string) {
     if (!hasAnswer && !input) return;
     if (checked) return;
-    const answer = input ?? (question.type === "mcq" ? (selectedId ?? "") : value);
+    const answer =
+      input ?? (question.type === "mcq" ? (selectedId ?? "") : value);
     const marked = markAnswer(question, answer);
     setResult(marked);
     // Unreadable input keeps the question editable for a fresh attempt.
@@ -114,7 +115,13 @@ export function QuestionView({
           pairs={question.pairs}
           onSubmit={handleMatchingSubmit}
           revealed={checked}
-          result={result?.status === "correct" ? "correct" : result?.status === "incorrect" ? "incorrect" : null}
+          result={
+            result?.status === "correct"
+              ? "correct"
+              : result?.status === "incorrect"
+                ? "incorrect"
+                : null
+          }
         />
       ) : (
         <NumericInput

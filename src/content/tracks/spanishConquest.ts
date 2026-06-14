@@ -18,7 +18,12 @@
 
 import { t } from "../blocks";
 
-import type { Lesson, Track, Question, Figure } from "../../domain/content/types";
+import type {
+  Lesson,
+  Track,
+  Question,
+  Figure,
+} from "../../domain/content/types";
 
 // ---------------------------------------------------------------------------
 // Figures
@@ -27,37 +32,43 @@ import type { Lesson, Track, Question, Figure } from "../../domain/content/types
 const figTenochtitlan: Figure = {
   id: "tenochtitlan",
   alt: "Illustration of Tenochtitlan, the Aztec island capital on Lake Texcoco, showing step-pyramid temples, chinampas (floating gardens), causeways, and canoes navigating canals.",
-  textFallback: "[Image: Tenochtitlan — the Aztec island capital on Lake Texcoco with temples, chinampas, and causeways]",
+  textFallback:
+    "[Image: Tenochtitlan — the Aztec island capital on Lake Texcoco with temples, chinampas, and causeways]",
 };
 
 const figAztecHierarchy: Figure = {
   id: "aztec-hierarchy",
   alt: "Diagram of the Aztec social hierarchy pyramid: emperor at top, then nobles, warriors, commoners, and slaves at the bottom.",
-  textFallback: "[Diagram: Aztec social hierarchy — emperor, nobles, warriors, commoners, slaves]",
+  textFallback:
+    "[Diagram: Aztec social hierarchy — emperor, nobles, warriors, commoners, slaves]",
 };
 
 const figAztecSacrifice: Figure = {
   id: "aztec-sacrifice",
   alt: "Illustration of the Templo Mayor, the great twin temple pyramid in Tenochtitlan dedicated to Huitzilopochtli and Tlaloc, with a ceremonial scene.",
-  textFallback: "[Image: The Templo Mayor — the great twin temple pyramid in Tenochtitlan]",
+  textFallback:
+    "[Image: The Templo Mayor — the great twin temple pyramid in Tenochtitlan]",
 };
 
 const figCortesMoctezuma: Figure = {
   id: "cortes-moctezuma",
   alt: "Illustration of the first meeting between Hernán Cortés and Aztec emperor Moctezuma II in Tenochtitlan, November 1519, with Malinche as translator.",
-  textFallback: "[Image: Cortés and Moctezuma meeting in Tenochtitlan, with Malinche translating]",
+  textFallback:
+    "[Image: Cortés and Moctezuma meeting in Tenochtitlan, with Malinche translating]",
 };
 
 const figSiegeTenochtitlan: Figure = {
   id: "siege-tenochtitlan",
   alt: "Illustration of the 1521 siege of Tenochtitlan, showing Spanish brigantines on Lake Texcoco attacking Aztec canoes while Spanish and Tlaxcalan forces advance along causeways.",
-  textFallback: "[Image: The 1521 siege of Tenochtitlan — Spanish brigantines on Lake Texcoco]",
+  textFallback:
+    "[Image: The 1521 siege of Tenochtitlan — Spanish brigantines on Lake Texcoco]",
 };
 
 const figCholulaMassacre: Figure = {
   id: "cholula-massacre",
   alt: "Split illustration showing two perspectives of the 1519 Cholula massacre — Spanish attackers on one side and unarmed Cholulan civilians on the other.",
-  textFallback: "[Image: Two perspectives of the Cholula massacre — Spanish attackers and Cholulan civilians]",
+  textFallback:
+    "[Image: Two perspectives of the Cholula massacre — Spanish attackers and Cholulan civilians]",
 };
 
 // ---------------------------------------------------------------------------
@@ -152,11 +163,7 @@ const aztecOrigins: Lesson = {
     {
       id: "aztec-p2",
       type: "shortText",
-      prompt: [
-        t(
-          "What is a chinampa? Explain in your own words.",
-        ),
-      ],
+      prompt: [t("What is a chinampa? Explain in your own words.")],
       explanation: [
         t(
           "Chinampas were artificial farming islands built on the shallow waters of Lake Texcoco. The Aztecs constructed them by piling mud and decaying vegetation onto anchored rafts, creating extremely fertile plots of land. They were sometimes called 'floating gardens' although they were actually fixed in place by tree roots. Chinampas allowed the Aztecs to grow enough food to support the large population of Tenochtitlan.",
@@ -247,7 +254,11 @@ const aztecOrigins: Lesson = {
       options: [
         {
           id: "a",
-          label: [t("The best land around the lake was already taken by other groups")],
+          label: [
+            t(
+              "The best land around the lake was already taken by other groups",
+            ),
+          ],
         },
         {
           id: "b",
@@ -384,7 +395,9 @@ const aztecOrigins: Lesson = {
         },
         {
           id: "c",
-          label: [t("They abandoned the island and conquered land on the shore")],
+          label: [
+            t("They abandoned the island and conquered land on the shore"),
+          ],
         },
         {
           id: "d",
@@ -439,9 +452,7 @@ const aztecOrigins: Lesson = {
         {
           id: "b",
           label: [
-            t(
-              "The tribute system made the Aztecs too poor to afford weapons",
-            ),
+            t("The tribute system made the Aztecs too poor to afford weapons"),
           ],
         },
         {
@@ -534,11 +545,7 @@ const aztecSociety: Lesson = {
     {
       id: "society-p1",
       type: "mcq",
-      prompt: [
-        t(
-          "Which social class was at the top of the Aztec hierarchy?",
-        ),
-      ],
+      prompt: [t("Which social class was at the top of the Aztec hierarchy?")],
       explanation: [
         t(
           "The emperor (Huey Tlatoani) was at the very top of Aztec society. Below him were the nobles, then warriors, then commoners, and finally slaves at the bottom. The emperor was considered semi-divine — chosen by the gods to rule.",
@@ -573,9 +580,7 @@ const aztecSociety: Lesson = {
     {
       id: "society-p3",
       type: "matching",
-      prompt: [
-        t("Match each Aztec social class to its description."),
-      ],
+      prompt: [t("Match each Aztec social class to its description.")],
       explanation: [
         t(
           "Nobles held all important positions — priests, judges, military commanders. Warriors gained status by capturing enemies; the Eagle and Jaguar warriors were the elite. Commoners were farmers, artisans, and labourers who paid tribute. Slaves were at the bottom but could own property and their children were born free.",
@@ -604,7 +609,9 @@ const aztecSociety: Lesson = {
           id: "d",
           left: [t("Slaves (tlacotin)")],
           right: [
-            t("Lowest class, but could own property and their children were born free"),
+            t(
+              "Lowest class, but could own property and their children were born free",
+            ),
           ],
         },
       ],
@@ -651,9 +658,7 @@ const aztecSociety: Lesson = {
       id: "society-p5",
       type: "shortText",
       prompt: [
-        t(
-          "What were the two types of Aztec schools and who attended each?",
-        ),
+        t("What were the two types of Aztec schools and who attended each?"),
       ],
       explanation: [
         t(
@@ -737,13 +742,7 @@ const aztecSociety: Lesson = {
         ),
       ],
       xp: 15,
-      accepted: [
-        "military",
-        "war",
-        "capturing enemies",
-        "battle",
-        "warrior",
-      ],
+      accepted: ["military", "war", "capturing enemies", "battle", "warrior"],
     },
   ],
   mastery: [
@@ -780,9 +779,7 @@ const aztecSociety: Lesson = {
         },
         {
           id: "d",
-          label: [
-            t("The emperor was elected by commoners every four years"),
-          ],
+          label: [t("The emperor was elected by commoners every four years")],
         },
       ],
       correctOptionId: "a",
@@ -839,11 +836,7 @@ const aztecSociety: Lesson = {
         },
         {
           id: "c",
-          label: [
-            t(
-              "Calpulli were private businesses run by merchants",
-            ),
-          ],
+          label: [t("Calpulli were private businesses run by merchants")],
         },
         {
           id: "d",
@@ -976,21 +969,13 @@ const aztecReligion: Lesson = {
         ),
       ],
       xp: 15,
-      accepted: [
-        "blood",
-        "sun",
-        "debt",
-        "nourishment",
-        "keep moving",
-      ],
+      accepted: ["blood", "sun", "debt", "nourishment", "keep moving"],
     },
     {
       id: "religion-p4",
       type: "mcq",
       prompt: [
-        t(
-          "Why was being sacrificed considered an honour in Aztec society?",
-        ),
+        t("Why was being sacrificed considered an honour in Aztec society?"),
       ],
       explanation: [
         t(
@@ -1016,11 +1001,7 @@ const aztecReligion: Lesson = {
     {
       id: "religion-p5",
       type: "mcq",
-      prompt: [
-        t(
-          "What were 'Flower Wars' and what was their purpose?",
-        ),
-      ],
+      prompt: [t("What were 'Flower Wars' and what was their purpose?")],
       explanation: [
         t(
           "Flower Wars were ritualised conflicts fought between the Aztecs and neighbouring states specifically to capture prisoners for sacrifice. Unlike normal wars of conquest, the goal was not territory but live captives. Both sides agreed to these battles, which were highly formalised. The name 'Flower War' comes from the Aztec metaphor of warriors as flowers being plucked for the gods.",
@@ -1182,17 +1163,13 @@ const aztecReligion: Lesson = {
         {
           id: "c",
           label: [
-            t(
-              "The Spanish and Aztecs had identical religious practices",
-            ),
+            t("The Spanish and Aztecs had identical religious practices"),
           ],
         },
         {
           id: "d",
           label: [
-            t(
-              "Human sacrifice proves the Aztecs were not a real civilisation",
-            ),
+            t("Human sacrifice proves the Aztecs were not a real civilisation"),
           ],
         },
       ],
@@ -1272,9 +1249,7 @@ const spanishArrival: Lesson = {
       id: "arrival-p1",
       type: "numeric",
       prompt: [
-        t(
-          "In what year did Hernán Cortés arrive on the coast of Mexico?",
-        ),
+        t("In what year did Hernán Cortés arrive on the coast of Mexico?"),
       ],
       explanation: [
         t(
@@ -1310,9 +1285,7 @@ const spanishArrival: Lesson = {
       id: "arrival-p3",
       type: "shortText",
       prompt: [
-        t(
-          "Who was Malinche and why was she important to Cortés's expedition?",
-        ),
+        t("Who was Malinche and why was she important to Cortés's expedition?"),
       ],
       explanation: [
         t(
@@ -1332,9 +1305,7 @@ const spanishArrival: Lesson = {
       id: "arrival-p4",
       type: "mcq",
       prompt: [
-        t(
-          "Why did Moctezuma's strategy of sending gifts to Cortés backfire?",
-        ),
+        t("Why did Moctezuma's strategy of sending gifts to Cortés backfire?"),
       ],
       explanation: [
         t(
@@ -1466,24 +1437,14 @@ const spanishArrival: Lesson = {
     {
       id: "arrival-p8",
       type: "shortText",
-      prompt: [
-        t(
-          "Was Cortés a typical conquistador? Explain why or why not.",
-        ),
-      ],
+      prompt: [t("Was Cortés a typical conquistador? Explain why or why not.")],
       explanation: [
         t(
           "Cortés was both typical and exceptional. Like other conquistadors, he was motivated by gold, glory, and God, and he funded his own expedition. However, he was exceptional in his political skill — he built alliances with Indigenous groups, used psychological tactics, and turned the Aztec tribute system against itself. His defiance of the governor of Cuba showed unusual boldness. He was also unusually brutal, even by conquistador standards, as shown by the Cholula massacre.",
         ),
       ],
       xp: 15,
-      accepted: [
-        "typical",
-        "exceptional",
-        "alliances",
-        "political",
-        "both",
-      ],
+      accepted: ["typical", "exceptional", "alliances", "political", "both"],
     },
   ],
   mastery: [
@@ -1573,15 +1534,13 @@ const spanishArrival: Lesson = {
         },
         {
           id: "b",
-          label: [t("The Spanish could have conquered Mexico without any help")],
+          label: [
+            t("The Spanish could have conquered Mexico without any help"),
+          ],
         },
         {
           id: "c",
-          label: [
-            t(
-              "Malinche single-handedly defeated the Aztec Empire",
-            ),
-          ],
+          label: [t("Malinche single-handedly defeated the Aztec Empire")],
         },
         {
           id: "d",
@@ -1605,8 +1564,7 @@ const fallOfTenochtitlan: Lesson = {
   id: "fall-of-tenochtitlan",
   order: 5,
   title: "The fall of Tenochtitlan",
-  sourceRef:
-    "Comparing Perspectives; 9.1 Aztec Minecraft City Tour (Stile)",
+  sourceRef: "Comparing Perspectives; 9.1 Aztec Minecraft City Tour (Stile)",
   aiProvenance: {
     tool: "Claude",
     sources: [
@@ -1700,11 +1658,7 @@ const fallOfTenochtitlan: Lesson = {
     {
       id: "fall-p2",
       type: "mcq",
-      prompt: [
-        t(
-          "What was La Noche Triste ('The Sad Night')?",
-        ),
-      ],
+      prompt: [t("What was La Noche Triste ('The Sad Night')?")],
       explanation: [
         t(
           "La Noche Triste was 30 June 1520, when the Spanish attempted to escape Tenochtitlan under cover of darkness. Aztec warriors attacked them as they crossed the causeways, killing hundreds of Spaniards and thousands of Tlaxcalan allies. Many drowned because they were weighed down by stolen gold. Cortés barely survived.",
@@ -1730,11 +1684,7 @@ const fallOfTenochtitlan: Lesson = {
         },
         {
           id: "d",
-          label: [
-            t(
-              "A religious festival celebrating Aztec gods",
-            ),
-          ],
+          label: [t("A religious festival celebrating Aztec gods")],
         },
       ],
       correctOptionId: "a",
@@ -1742,7 +1692,9 @@ const fallOfTenochtitlan: Lesson = {
     {
       id: "fall-p3",
       type: "fillInTheBlank",
-      prompt: [t("Complete the sentence about the deadliest factor in the siege.")],
+      prompt: [
+        t("Complete the sentence about the deadliest factor in the siege."),
+      ],
       template: [
         t(
           "During the siege of Tenochtitlan, ___ killed far more Aztecs than Spanish weapons did, because the population had no immunity to Old World diseases.",
@@ -1754,12 +1706,7 @@ const fallOfTenochtitlan: Lesson = {
         ),
       ],
       xp: 10,
-      accepted: [
-        "smallpox",
-        "disease",
-        "illness",
-        "sickness",
-      ],
+      accepted: ["smallpox", "disease", "illness", "sickness"],
     },
     {
       id: "fall-p4",
@@ -1828,9 +1775,7 @@ const fallOfTenochtitlan: Lesson = {
       id: "fall-p6",
       type: "mcq",
       prompt: [
-        t(
-          "Who became the Aztec emperor after the death of Moctezuma II?",
-        ),
+        t("Who became the Aztec emperor after the death of Moctezuma II?"),
       ],
       explanation: [
         t(
@@ -1864,9 +1809,7 @@ const fallOfTenochtitlan: Lesson = {
         {
           id: "a",
           label: [
-            t(
-              "To capture prisoners for sacrifice, not to conquer territory",
-            ),
+            t("To capture prisoners for sacrifice, not to conquer territory"),
           ],
         },
         {
@@ -1887,7 +1830,9 @@ const fallOfTenochtitlan: Lesson = {
     {
       id: "fall-p8",
       type: "matching",
-      prompt: [t("Match each factor in the Spanish victory to its description.")],
+      prompt: [
+        t("Match each factor in the Spanish victory to its description."),
+      ],
       explanation: [
         t(
           "Tlaxcalan warriors provided the numbers without which Cortés would have been overwhelmed. Smallpox killed people with no immunity, destroying Aztec ability to fight. The tribute system meant many groups hated the Aztecs and joined the Spanish. Steel swords and armour gave the Spanish advantages in close combat.",
@@ -1921,9 +1866,7 @@ const fallOfTenochtitlan: Lesson = {
       id: "fall-p9",
       type: "shortText",
       prompt: [
-        t(
-          "What happened to Tenochtitlan after it fell to the Spanish?",
-        ),
+        t("What happened to Tenochtitlan after it fell to the Spanish?"),
       ],
       explanation: [
         t(
@@ -1931,13 +1874,7 @@ const fallOfTenochtitlan: Lesson = {
         ),
       ],
       xp: 15,
-      accepted: [
-        "destroyed",
-        "razed",
-        "Mexico City",
-        "built on top",
-        "ruins",
-      ],
+      accepted: ["destroyed", "razed", "Mexico City", "built on top", "ruins"],
     },
   ],
   mastery: [
@@ -1974,11 +1911,7 @@ const fallOfTenochtitlan: Lesson = {
         },
         {
           id: "d",
-          label: [
-            t(
-              "The Spanish had more soldiers than the Aztecs",
-            ),
-          ],
+          label: [t("The Spanish had more soldiers than the Aztecs")],
         },
       ],
       correctOptionId: "a",
@@ -1997,13 +1930,7 @@ const fallOfTenochtitlan: Lesson = {
         ),
       ],
       xp: 20,
-      accepted: [
-        "allies",
-        "indigenous",
-        "tlaxcalans",
-        "civil war",
-        "majority",
-      ],
+      accepted: ["allies", "indigenous", "tlaxcalans", "civil war", "majority"],
     },
   ],
 };
@@ -2016,8 +1943,7 @@ const analysingSources: Lesson = {
   id: "analysing-sources",
   order: 6,
   title: "Voices from the conquest: analysing historical sources",
-  sourceRef:
-    "Exam Sources A & B; Close Reading Resource (Stile)",
+  sourceRef: "Exam Sources A & B; Close Reading Resource (Stile)",
   aiProvenance: {
     tool: "Claude",
     sources: [
@@ -2105,9 +2031,7 @@ const analysingSources: Lesson = {
         {
           id: "b",
           label: [
-            t(
-              "A secondary source — written by a historian after the event",
-            ),
+            t("A secondary source — written by a historian after the event"),
           ],
         },
         {
@@ -2139,9 +2063,7 @@ const analysingSources: Lesson = {
         {
           id: "a",
           label: [
-            t(
-              "A secondary source — a modern historian's analysis of events",
-            ),
+            t("A secondary source — a modern historian's analysis of events"),
           ],
         },
         {
@@ -2214,11 +2136,7 @@ const analysingSources: Lesson = {
         },
         {
           id: "c",
-          label: [
-            t(
-              "It supports the Spanish justification for the attack",
-            ),
-          ],
+          label: [t("It supports the Spanish justification for the attack")],
         },
         {
           id: "d",
@@ -2242,7 +2160,13 @@ const analysingSources: Lesson = {
         ),
       ],
       xp: 10,
-      accepted: ["corroborated", "confirmed", "verified", "supported", "backed up"],
+      accepted: [
+        "corroborated",
+        "confirmed",
+        "verified",
+        "supported",
+        "backed up",
+      ],
     },
     {
       id: "sources-p6",
@@ -2315,7 +2239,9 @@ const analysingSources: Lesson = {
         {
           id: "d",
           left: [t("What is left out?")],
-          right: [t("Identifies omissions that might indicate deliberate bias")],
+          right: [
+            t("Identifies omissions that might indicate deliberate bias"),
+          ],
         },
       ],
     },
@@ -2454,11 +2380,7 @@ const spanishConquestChallengeQuestions: Question[] = [
     options: [
       {
         id: "a",
-        label: [
-          t(
-            "Indigenous allies, disease, and resentment of Aztec rule",
-          ),
-        ],
+        label: [t("Indigenous allies, disease, and resentment of Aztec rule")],
       },
       {
         id: "b",
@@ -2466,19 +2388,11 @@ const spanishConquestChallengeQuestions: Question[] = [
       },
       {
         id: "c",
-        label: [
-          t(
-            "The Aztecs had no army and offered no resistance",
-          ),
-        ],
+        label: [t("The Aztecs had no army and offered no resistance")],
       },
       {
         id: "d",
-        label: [
-          t(
-            "The Spanish had far more soldiers than the Aztecs",
-          ),
-        ],
+        label: [t("The Spanish had far more soldiers than the Aztecs")],
       },
     ],
     correctOptionId: "a",
@@ -2507,9 +2421,7 @@ const spanishConquestChallengeQuestions: Question[] = [
       {
         id: "c",
         left: [t("Malinche")],
-        right: [
-          t("Translator and advisor who enabled Spanish communication"),
-        ],
+        right: [t("Translator and advisor who enabled Spanish communication")],
       },
       {
         id: "d",
@@ -2591,11 +2503,7 @@ const spanishConquestChallengeQuestions: Question[] = [
       },
       {
         id: "d",
-        label: [
-          t(
-            "Professional historians are never biased",
-          ),
-        ],
+        label: [t("Professional historians are never biased")],
       },
     ],
     correctOptionId: "a",
@@ -2652,9 +2560,7 @@ const spanishConquestChallengeQuestions: Question[] = [
       {
         id: "c",
         label: [
-          t(
-            "The Spanish only fought at night when the Aztecs were sleeping",
-          ),
+          t("The Spanish only fought at night when the Aztecs were sleeping"),
         ],
       },
       {
@@ -2671,11 +2577,7 @@ const spanishConquestChallengeQuestions: Question[] = [
   {
     id: "sc-boss-q9",
     type: "mcq",
-    prompt: [
-      t(
-        "Which modern city stands on the ruins of Tenochtitlan?",
-      ),
-    ],
+    prompt: [t("Which modern city stands on the ruins of Tenochtitlan?")],
     explanation: [
       t(
         "Mexico City was built directly on top of the ruins of Tenochtitlan after the Spanish razed the Aztec capital. The Spanish used stones from Aztec temples to construct their own buildings, including a cathedral on the site of the Templo Mayor. The lake was gradually drained over centuries. Today, you can still visit the excavated ruins of the Templo Mayor in the centre of Mexico City.",
@@ -2724,7 +2626,8 @@ export const spanishConquestTrack: Track = {
   challenge: {
     id: "spanish-conquest-boss",
     title: "Boss challenge: Spanish Conquest",
-    sourceRef: "2026 8HSS Spanish Conquest Stile Unit, The Gap State High School",
+    sourceRef:
+      "2026 8HSS Spanish Conquest Stile Unit, The Gap State High School",
     questions: spanishConquestChallengeQuestions,
     bonusXp: 100,
     passBadgeId: "boss-spanish-conquest",

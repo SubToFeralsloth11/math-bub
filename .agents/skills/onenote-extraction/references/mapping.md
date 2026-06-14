@@ -79,13 +79,13 @@ difficulty level — do not attempt to recreate the textbook exercises.
 
 ## Structural mapping
 
-| OneNote concept | StudyBub type | How to use it |
-|-----------------|---------------|---------------|
-| Notebook (e.g. "2026 - Year 8 Maths") | Subject | One Subject per notebook |
-| Section (e.g. "Term 1") | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
-| Curriculum-plan topic line | Lesson | One lesson per topic; use exercise number as title prefix |
-| Exercise-table row | Difficulty guide | Calibrate question count and difficulty per lesson |
-| Embedded image in page | Figure | Copy PNG to `public/figures/`, reference by filename stem |
+| OneNote concept                       | StudyBub type    | How to use it                                                        |
+| ------------------------------------- | ---------------- | -------------------------------------------------------------------- |
+| Notebook (e.g. "2026 - Year 8 Maths") | Subject          | One Subject per notebook                                             |
+| Section (e.g. "Term 1")               | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
+| Curriculum-plan topic line            | Lesson           | One lesson per topic; use exercise number as title prefix            |
+| Exercise-table row                    | Difficulty guide | Calibrate question count and difficulty per lesson                   |
+| Embedded image in page                | Figure           | Copy PNG to `public/figures/`, reference by filename stem            |
 
 ## Subject generation
 
@@ -107,20 +107,20 @@ populate the Subject.
 ## Track generation
 
 **The OneNote section structure is NOT a track structure.** OneNote sections
-(Welcome, _Content Library, student section) are navigation artefacts. The
+(Welcome, \_Content Library, student section) are navigation artefacts. The
 curriculum is organised by TERM within sections, and by TOPIC within terms.
 
 Group related topics into sensible tracks based on subject area:
 
-| Topics | Suggested track id |
-|--------|-------------------|
+| Topics                                                 | Suggested track id   |
+| ------------------------------------------------------ | -------------------- |
 | 1E/1F, 1G, 1H (negative integers, order of operations) | `integer-operations` |
-| 4A, 4B, 4C, 4E, 4F (perimeter, circumference, area) | `perimeter-and-area` |
-| 4K, 4L, 4M (Pythagoras) | `pythagoras` |
-| 4H, 4I (volume, capacity) | `volume` |
-| 3F (decimals) | `decimals` |
-| 2D (quadrilaterals) | `quadrilaterals` |
-| 10D, 10E, 10H, 10I (congruency, similarity) | `geometry` |
+| 4A, 4B, 4C, 4E, 4F (perimeter, circumference, area)    | `perimeter-and-area` |
+| 4K, 4L, 4M (Pythagoras)                                | `pythagoras`         |
+| 4H, 4I (volume, capacity)                              | `volume`             |
+| 3F (decimals)                                          | `decimals`           |
+| 2D (quadrilaterals)                                    | `quadrilaterals`     |
+| 10D, 10E, 10H, 10I (congruency, similarity)            | `geometry`           |
 
 Each track:
 
@@ -182,14 +182,14 @@ Every question must carry `aiProvenance` markers (at the lesson level) and a
 
 Do not default to all numeric questions. Vary question types across the lesson:
 
-| Question type | When to use |
-|--------------|-------------|
-| `numeric` | Calculations with a single numeric answer |
-| `expression` | Algebraic expressions where equivalence matters (use mathjs) |
-| `mcq` | Conceptual understanding, identifying correct methods, avoiding common mistakes |
-| `shortText` | Word answers, explanations, describing properties |
-| `fillInTheBlank` | Partial answers, completing steps in a worked solution |
-| `matching` | Connecting related concepts (e.g. shape to formula, term to definition) |
+| Question type    | When to use                                                                     |
+| ---------------- | ------------------------------------------------------------------------------- |
+| `numeric`        | Calculations with a single numeric answer                                       |
+| `expression`     | Algebraic expressions where equivalence matters (use mathjs)                    |
+| `mcq`            | Conceptual understanding, identifying correct methods, avoiding common mistakes |
+| `shortText`      | Word answers, explanations, describing properties                               |
+| `fillInTheBlank` | Partial answers, completing steps in a worked solution                          |
+| `matching`       | Connecting related concepts (e.g. shape to formula, term to definition)         |
 
 At least 40% of questions across a lesson should be non-numeric types.
 

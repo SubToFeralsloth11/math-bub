@@ -74,10 +74,7 @@ export function SubjectScreen() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col">
-      <AppHeader
-        back={{ to: "/", label: "Subjects" }}
-        right={<RewardBar />}
-      />
+      <AppHeader back={{ to: "/", label: "Subjects" }} right={<RewardBar />} />
       <main className="flex-1 px-5 py-6">
         <div className="flex items-center gap-4">
           <div

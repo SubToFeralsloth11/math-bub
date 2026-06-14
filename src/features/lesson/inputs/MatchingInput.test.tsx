@@ -1,4 +1,4 @@
-import { fireEvent, screen , render } from "@testing-library/react";
+import { fireEvent, screen, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { MatchingInput } from "./MatchingInput";
@@ -45,7 +45,9 @@ describe("MatchingInput", () => {
       />,
     );
 
-    expect(screen.getByRole("button", { name: /check answer/i })).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /check answer/i }),
+    ).toBeDisabled();
   });
 
   it("calls onSubmit with mapping when all pairs connected", () => {

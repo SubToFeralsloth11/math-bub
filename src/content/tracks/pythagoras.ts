@@ -33,9 +33,13 @@ const lesson4K: Lesson = {
       heading: "Key idea: Pythagoras' theorem",
       body: [
         t("Pythagoras' theorem applies to right-angled triangles only."),
-        t("It states that the square of the hypotenuse (c) equals the sum of the squares of the other two sides (a and b):"),
+        t(
+          "It states that the square of the hypotenuse (c) equals the sum of the squares of the other two sides (a and b):",
+        ),
         m("c^2 = a^2 + b^2"),
-        t("The hypotenuse is the longest side, always opposite the right angle."),
+        t(
+          "The hypotenuse is the longest side, always opposite the right angle.",
+        ),
         t("The other two sides are called the legs."),
       ],
     },
@@ -43,21 +47,33 @@ const lesson4K: Lesson = {
       id: "4k-worked",
       heading: "Worked example: finding the hypotenuse",
       body: [
-        t("In a right-angled triangle, the two legs are 3 cm and 4 cm. Find the hypotenuse."),
+        t(
+          "In a right-angled triangle, the two legs are 3 cm and 4 cm. Find the hypotenuse.",
+        ),
         m(String.raw`c^2 = 3^2 + 4^2 = 9 + 16 = 25`),
         m(String.raw`c = \sqrt{25} = 5`),
         t("The hypotenuse is 5 cm."),
-        t("The set (3, 4, 5) is called a Pythagorean triple - three whole numbers that satisfy the theorem."),
+        t(
+          "The set (3, 4, 5) is called a Pythagorean triple - three whole numbers that satisfy the theorem.",
+        ),
       ],
     },
     {
       id: "4k-mistake",
       heading: "Common mistake: identifying the hypotenuse",
       body: [
-        t("The hypotenuse is always the side opposite the right angle. It is always the longest side."),
-        t("Do not assume a side is the hypotenuse just because it is labelled c."),
-        t("Always check: find the right angle first, then look at the side directly across from it."),
-        t("Pythagoras' theorem only works for right-angled triangles. If a triangle does not have a right angle, you cannot use this theorem."),
+        t(
+          "The hypotenuse is always the side opposite the right angle. It is always the longest side.",
+        ),
+        t(
+          "Do not assume a side is the hypotenuse just because it is labelled c.",
+        ),
+        t(
+          "Always check: find the right angle first, then look at the side directly across from it.",
+        ),
+        t(
+          "Pythagoras' theorem only works for right-angled triangles. If a triangle does not have a right angle, you cannot use this theorem.",
+        ),
       ],
     },
   ],
@@ -68,7 +84,9 @@ const lesson4K: Lesson = {
       type: "mcq",
       prompt: [t("In a right-angled triangle, the hypotenuse is the:")],
       explanation: [
-        t("The hypotenuse is always the longest side and lies opposite the right angle."),
+        t(
+          "The hypotenuse is always the longest side and lies opposite the right angle.",
+        ),
       ],
       xp: 10,
       options: [
@@ -84,7 +102,9 @@ const lesson4K: Lesson = {
       id: "4k-p2",
       type: "numeric",
       prompt: [
-        t("In a right-angled triangle, the two shorter sides are 3 cm and 4 cm. Find the length of the hypotenuse, in cm."),
+        t(
+          "In a right-angled triangle, the two shorter sides are 3 cm and 4 cm. Find the length of the hypotenuse, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 3^2 + 4^2 = 9 + 16 = 25`),
@@ -100,7 +120,9 @@ const lesson4K: Lesson = {
       id: "4k-p3",
       type: "numeric",
       prompt: [
-        t("Find the hypotenuse of a right-angled triangle with legs 6 cm and 8 cm. Give your answer in cm."),
+        t(
+          "Find the hypotenuse of a right-angled triangle with legs 6 cm and 8 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 6^2 + 8^2 = 36 + 64 = 100`),
@@ -116,7 +138,9 @@ const lesson4K: Lesson = {
       id: "4k-p4",
       type: "numeric",
       prompt: [
-        t("Find the hypotenuse of a right-angled triangle with legs 5 cm and 12 cm. Give your answer in cm."),
+        t(
+          "Find the hypotenuse of a right-angled triangle with legs 5 cm and 12 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 5^2 + 12^2 = 25 + 144 = 169`),
@@ -132,10 +156,14 @@ const lesson4K: Lesson = {
       id: "4k-p5",
       type: "numeric",
       prompt: [
-        t("A ladder 5 m long leans against a vertical wall. The foot of the ladder is 3 m from the base of the wall. How high up the wall does the ladder reach, in m?"),
+        t(
+          "A ladder 5 m long leans against a vertical wall. The foot of the ladder is 3 m from the base of the wall. How high up the wall does the ladder reach, in m?",
+        ),
       ],
       explanation: [
-        t("The ladder forms the hypotenuse (c = 5), the ground distance is one leg (a = 3)."),
+        t(
+          "The ladder forms the hypotenuse (c = 5), the ground distance is one leg (a = 3).",
+        ),
         m(String.raw`b^2 = 5^2 - 3^2 = 25 - 9 = 16`),
         m(String.raw`b = \sqrt{16} = 4`),
         t("The ladder reaches 4 m up the wall. This is a 3-4-5 triangle."),
@@ -149,10 +177,14 @@ const lesson4K: Lesson = {
       id: "4k-p6",
       type: "numeric",
       prompt: [
-        t("A rectangular playing field is 30 m wide and 40 m long. A path runs diagonally from one corner to the opposite corner. How long is this diagonal path, in m?"),
+        t(
+          "A rectangular playing field is 30 m wide and 40 m long. A path runs diagonally from one corner to the opposite corner. How long is this diagonal path, in m?",
+        ),
       ],
       explanation: [
-        t("The width and length are the legs of a right triangle. The diagonal is the hypotenuse."),
+        t(
+          "The width and length are the legs of a right triangle. The diagonal is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 30^2 + 40^2 = 900 + 1600 = 2500`),
         m(String.raw`d = \sqrt{2500} = 50`),
         t("The diagonal path is 50 m. This is the 3-4-5 triple scaled by 10."),
@@ -166,13 +198,19 @@ const lesson4K: Lesson = {
       id: "4k-p7",
       type: "numeric",
       prompt: [
-        t("A ship sails 12 km north and then 5 km east. How far is the ship from its starting point (as the crow flies), in km?"),
+        t(
+          "A ship sails 12 km north and then 5 km east. How far is the ship from its starting point (as the crow flies), in km?",
+        ),
       ],
       explanation: [
-        t("The north and east legs form a right triangle. The straight-line distance is the hypotenuse."),
+        t(
+          "The north and east legs form a right triangle. The straight-line distance is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 12^2 + 5^2 = 144 + 25 = 169`),
         m(String.raw`d = \sqrt{169} = 13`),
-        t("The ship is 13 km from its starting point. This is a 5-12-13 triple."),
+        t(
+          "The ship is 13 km from its starting point. This is a 5-12-13 triple.",
+        ),
       ],
       xp: 15,
       accepted: ["13"],
@@ -183,7 +221,9 @@ const lesson4K: Lesson = {
       id: "4k-p8",
       type: "mcq",
       prompt: [
-        t("Which of these sets of numbers CANNOT be the side lengths of a right-angled triangle?"),
+        t(
+          "Which of these sets of numbers CANNOT be the side lengths of a right-angled triangle?",
+        ),
       ],
       explanation: [
         t("Check each set:"),
@@ -210,7 +250,9 @@ const lesson4K: Lesson = {
         t("For which type of triangle can Pythagoras' theorem be used?"),
       ],
       explanation: [
-        t("Pythagoras' theorem only applies to right-angled triangles. It does not work for acute, obtuse, isosceles (unless right-angled), or equilateral triangles."),
+        t(
+          "Pythagoras' theorem only applies to right-angled triangles. It does not work for acute, obtuse, isosceles (unless right-angled), or equilateral triangles.",
+        ),
       ],
       xp: 20,
       options: [
@@ -227,10 +269,16 @@ const lesson4K: Lesson = {
       type: "fillInTheBlank",
       prompt: [t("Complete the statement of Pythagoras' theorem.")],
       explanation: [
-        t("In a right-angled triangle, the square of the hypotenuse equals the sum of the squares of the other two sides: c² = a² + b²."),
+        t(
+          "In a right-angled triangle, the square of the hypotenuse equals the sum of the squares of the other two sides: c² = a² + b².",
+        ),
       ],
       xp: 20,
-      template: [t("In a right-angled triangle, the square of the ___ equals the sum of the squares of the other two sides.")],
+      template: [
+        t(
+          "In a right-angled triangle, the square of the ___ equals the sum of the squares of the other two sides.",
+        ),
+      ],
       accepted: ["hypotenuse", "longest side"],
     },
   ],
@@ -239,7 +287,9 @@ const lesson4K: Lesson = {
       id: "4k-m1",
       type: "numeric",
       prompt: [
-        t("Find the length of the hypotenuse when the two shorter sides are 9 cm and 12 cm. Give your answer in cm."),
+        t(
+          "Find the length of the hypotenuse when the two shorter sides are 9 cm and 12 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 9^2 + 12^2 = 81 + 144 = 225`),
@@ -253,11 +303,11 @@ const lesson4K: Lesson = {
     {
       id: "4k-m2",
       type: "mcq",
-      prompt: [
-        t("Which equation correctly states Pythagoras' theorem?"),
-      ],
+      prompt: [t("Which equation correctly states Pythagoras' theorem?")],
       explanation: [
-        t("Pythagoras' theorem is c² = a² + b², where c is the hypotenuse and a and b are the legs."),
+        t(
+          "Pythagoras' theorem is c² = a² + b², where c is the hypotenuse and a and b are the legs.",
+        ),
       ],
       xp: 15,
       options: [
@@ -272,7 +322,9 @@ const lesson4K: Lesson = {
       id: "4k-m3",
       type: "numeric",
       prompt: [
-        t("A right-angled triangle has shorter sides of 7 m and 24 m. Find the length of the hypotenuse, in m."),
+        t(
+          "A right-angled triangle has shorter sides of 7 m and 24 m. Find the length of the hypotenuse, in m.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 7^2 + 24^2 = 49 + 576 = 625`),
@@ -287,13 +339,19 @@ const lesson4K: Lesson = {
       id: "4k-m4",
       type: "shortText",
       prompt: [
-        t("Explain why a triangle with side lengths 4 cm, 5 cm and 6 cm is NOT a right-angled triangle."),
+        t(
+          "Explain why a triangle with side lengths 4 cm, 5 cm and 6 cm is NOT a right-angled triangle.",
+        ),
       ],
       explanation: [
-        t("For a right-angled triangle, the square of the longest side must equal the sum of the squares of the other two."),
+        t(
+          "For a right-angled triangle, the square of the longest side must equal the sum of the squares of the other two.",
+        ),
         m(String.raw`6^2 = 36`),
         m(String.raw`4^2 + 5^2 = 16 + 25 = 41`),
-        t("Since 36 ≠ 41, the triangle does not satisfy Pythagoras' theorem and is not right-angled."),
+        t(
+          "Since 36 ≠ 41, the triangle does not satisfy Pythagoras' theorem and is not right-angled.",
+        ),
       ],
       xp: 15,
       accepted: [
@@ -325,22 +383,32 @@ const lesson4L: Lesson = {
       id: "4l-key",
       heading: "Key idea: using Pythagoras' theorem",
       body: [
-        t("Pythagoras' theorem is used to find unknown side lengths in right-angled triangles and to solve real-world problems involving distances."),
+        t(
+          "Pythagoras' theorem is used to find unknown side lengths in right-angled triangles and to solve real-world problems involving distances.",
+        ),
         t("To find the hypotenuse when you know both legs:"),
         m(String.raw`c = \sqrt{a^2 + b^2}`),
-        t("Steps: 1. Square each leg. 2. Add the squares. 3. Take the square root of the sum."),
-        t("Many real-world situations form right triangles: ladders against walls, diagonals of rectangles, navigation paths, and distances between points on a grid."),
+        t(
+          "Steps: 1. Square each leg. 2. Add the squares. 3. Take the square root of the sum.",
+        ),
+        t(
+          "Many real-world situations form right triangles: ladders against walls, diagonals of rectangles, navigation paths, and distances between points on a grid.",
+        ),
       ],
     },
     {
       id: "4l-worked",
       heading: "Worked example: finding the hypotenuse",
       body: [
-        t("Find the hypotenuse of a right-angled triangle when the legs are 8 cm and 15 cm."),
+        t(
+          "Find the hypotenuse of a right-angled triangle when the legs are 8 cm and 15 cm.",
+        ),
         m(String.raw`c^2 = 8^2 + 15^2 = 64 + 225 = 289`),
         m(String.raw`c = \sqrt{289} = 17`),
         t("The hypotenuse is 17 cm."),
-        t("Always check: is the hypotenuse larger than both legs? 17 > 8 and 17 > 15 ✓."),
+        t(
+          "Always check: is the hypotenuse larger than both legs? 17 > 8 and 17 > 15 ✓.",
+        ),
       ],
     },
     {
@@ -349,10 +417,14 @@ const lesson4L: Lesson = {
       body: [
         t("A common error is to stop after adding the squares. Remember:"),
         m(String.raw`c^2`),
-        t("is the square of the hypotenuse - you still need to take the square root to find c."),
+        t(
+          "is the square of the hypotenuse - you still need to take the square root to find c.",
+        ),
         t("Another mistake is to add the side lengths first and then square:"),
         m(String.raw`\sqrt{6^2 + 8^2} = \sqrt{36 + 64} = \sqrt{100} = 10`),
-        t("The correct approach is to square first, add, then take the square root."),
+        t(
+          "The correct approach is to square first, add, then take the square root.",
+        ),
         m(String.raw`6 + 8 = 14`),
         t("is NOT the hypotenuse."),
       ],
@@ -364,7 +436,9 @@ const lesson4L: Lesson = {
       id: "4l-p1",
       type: "numeric",
       prompt: [
-        t("Find the hypotenuse when the two shorter sides are 9 cm and 12 cm. Give your answer in cm."),
+        t(
+          "Find the hypotenuse when the two shorter sides are 9 cm and 12 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 9^2 + 12^2 = 81 + 144 = 225`),
@@ -380,7 +454,9 @@ const lesson4L: Lesson = {
       id: "4l-p2",
       type: "numeric",
       prompt: [
-        t("Find the length of the hypotenuse when the shorter sides are 8 cm and 15 cm. Give your answer in cm."),
+        t(
+          "Find the length of the hypotenuse when the shorter sides are 8 cm and 15 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 8^2 + 15^2 = 64 + 225 = 289`),
@@ -396,10 +472,14 @@ const lesson4L: Lesson = {
       id: "4l-p3",
       type: "numeric",
       prompt: [
-        t("A television screen is 80 cm wide and 60 cm tall. What is the length of the diagonal of the screen, in cm?"),
+        t(
+          "A television screen is 80 cm wide and 60 cm tall. What is the length of the diagonal of the screen, in cm?",
+        ),
       ],
       explanation: [
-        t("The width and height form the legs of a right triangle. The diagonal is the hypotenuse."),
+        t(
+          "The width and height form the legs of a right triangle. The diagonal is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 80^2 + 60^2 = 6400 + 3600 = 10000`),
         m(String.raw`d = \sqrt{10000} = 100`),
         t("The diagonal is 100 cm. This is the 3-4-5 triple scaled by 20."),
@@ -413,13 +493,19 @@ const lesson4L: Lesson = {
       id: "4l-p4",
       type: "numeric",
       prompt: [
-        t("A ship sails 24 km east and then 10 km north. How far is it from its starting point, in km?"),
+        t(
+          "A ship sails 24 km east and then 10 km north. How far is it from its starting point, in km?",
+        ),
       ],
       explanation: [
-        t("The east and north distances form a right triangle. The straight-line distance is the hypotenuse."),
+        t(
+          "The east and north distances form a right triangle. The straight-line distance is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 24^2 + 10^2 = 576 + 100 = 676`),
         m(String.raw`d = \sqrt{676} = 26`),
-        t("The ship is 26 km from its starting point. This is the 5-12-13 triple scaled by 2: 10-24-26."),
+        t(
+          "The ship is 26 km from its starting point. This is the 5-12-13 triple scaled by 2: 10-24-26.",
+        ),
       ],
       xp: 15,
       accepted: ["26"],
@@ -430,13 +516,19 @@ const lesson4L: Lesson = {
       id: "4l-p5",
       type: "numeric",
       prompt: [
-        t("A rectangular garden is 16 m by 12 m. What is the length of the diagonal path across it, in m?"),
+        t(
+          "A rectangular garden is 16 m by 12 m. What is the length of the diagonal path across it, in m?",
+        ),
       ],
       explanation: [
-        t("The width and length form the legs. The diagonal is the hypotenuse."),
+        t(
+          "The width and length form the legs. The diagonal is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 16^2 + 12^2 = 256 + 144 = 400`),
         m(String.raw`d = \sqrt{400} = 20`),
-        t("The diagonal is 20 m. This is the 3-4-5 triple scaled by 4: 12-16-20."),
+        t(
+          "The diagonal is 20 m. This is the 3-4-5 triple scaled by 4: 12-16-20.",
+        ),
       ],
       xp: 15,
       accepted: ["20"],
@@ -447,7 +539,9 @@ const lesson4L: Lesson = {
       id: "4l-p6",
       type: "numeric",
       prompt: [
-        t("In a right-angled triangle, the two shorter sides are 20 cm and 21 cm. Find the hypotenuse, in cm."),
+        t(
+          "In a right-angled triangle, the two shorter sides are 20 cm and 21 cm. Find the hypotenuse, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 20^2 + 21^2 = 400 + 441 = 841`),
@@ -463,10 +557,14 @@ const lesson4L: Lesson = {
       id: "4l-p7",
       type: "numeric",
       prompt: [
-        t("A point on a map is 15 km east and 8 km north of a town. What is the straight-line distance from the town to the point, in km?"),
+        t(
+          "A point on a map is 15 km east and 8 km north of a town. What is the straight-line distance from the town to the point, in km?",
+        ),
       ],
       explanation: [
-        t("The east and north distances are the legs. The straight-line distance is the hypotenuse."),
+        t(
+          "The east and north distances are the legs. The straight-line distance is the hypotenuse.",
+        ),
         m(String.raw`d^2 = 15^2 + 8^2 = 225 + 64 = 289`),
         m(String.raw`d = \sqrt{289} = 17`),
         t("The distance is 17 km. This is the 8-15-17 Pythagorean triple."),
@@ -480,10 +578,14 @@ const lesson4L: Lesson = {
       id: "4l-p8",
       type: "mcq",
       prompt: [
-        t("After you have squared both shorter sides and added them, what must you do next to find the hypotenuse?"),
+        t(
+          "After you have squared both shorter sides and added them, what must you do next to find the hypotenuse?",
+        ),
       ],
       explanation: [
-        t("Finding the hypotenuse is a three-step process: square, add, then take the square root. Forgetting the square root leaves you with c², not c."),
+        t(
+          "Finding the hypotenuse is a three-step process: square, add, then take the square root. Forgetting the square root leaves you with c², not c.",
+        ),
       ],
       xp: 20,
       options: [
@@ -500,7 +602,9 @@ const lesson4L: Lesson = {
       type: "fillInTheBlank",
       prompt: [t("Complete the formula for finding the hypotenuse.")],
       explanation: [
-        t("The hypotenuse c is found by c = √(a² + b²). The formula c² = a² + b² is the standard statement."),
+        t(
+          "The hypotenuse c is found by c = √(a² + b²). The formula c² = a² + b² is the standard statement.",
+        ),
       ],
       xp: 20,
       template: [t("The formula for Pythagoras' theorem is: c² = a² + ___")],
@@ -511,7 +615,9 @@ const lesson4L: Lesson = {
       id: "4l-p10",
       type: "mcq",
       prompt: [
-        t("A right-angled triangle has shorter sides of 7 cm and 24 cm. What is the length of the hypotenuse?"),
+        t(
+          "A right-angled triangle has shorter sides of 7 cm and 24 cm. What is the length of the hypotenuse?",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 7^2 + 24^2 = 49 + 576 = 625`),
@@ -532,12 +638,18 @@ const lesson4L: Lesson = {
       id: "4l-p11",
       type: "shortText",
       prompt: [
-        t("A student claims that for a right triangle with legs 6 and 8, the hypotenuse is 14 because 6 + 8 = 14. What mistake has the student made?"),
+        t(
+          "A student claims that for a right triangle with legs 6 and 8, the hypotenuse is 14 because 6 + 8 = 14. What mistake has the student made?",
+        ),
       ],
       explanation: [
-        t("The student added the legs instead of squaring them first. The correct method is: square each leg (36 and 64), add (100), then take the square root (10). The hypotenuse is 10, not 14."),
+        t(
+          "The student added the legs instead of squaring them first. The correct method is: square each leg (36 and 64), add (100), then take the square root (10). The hypotenuse is 10, not 14.",
+        ),
         m(String.raw`\sqrt{6^2 + 8^2} \neq 6 + 8`),
-        t(". The square root of a sum is not equal to the sum of the square roots."),
+        t(
+          ". The square root of a sum is not equal to the sum of the square roots.",
+        ),
       ],
       xp: 20,
       accepted: [
@@ -553,7 +665,9 @@ const lesson4L: Lesson = {
       id: "4l-p12",
       type: "matching",
       prompt: [
-        t("Match each pair of shorter sides with the correct length of the hypotenuse."),
+        t(
+          "Match each pair of shorter sides with the correct length of the hypotenuse.",
+        ),
       ],
       explanation: [
         t("3² + 4² = 9 + 16 = 25, √25 = 5."),
@@ -592,7 +706,9 @@ const lesson4L: Lesson = {
       id: "4l-m1",
       type: "numeric",
       prompt: [
-        t("A right-angled triangle has shorter sides of 11 cm and 60 cm. Find the length of the hypotenuse, in cm."),
+        t(
+          "A right-angled triangle has shorter sides of 11 cm and 60 cm. Find the length of the hypotenuse, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 11^2 + 60^2 = 121 + 3600 = 3721`),
@@ -607,13 +723,17 @@ const lesson4L: Lesson = {
       id: "4l-m2",
       type: "numeric",
       prompt: [
-        t("A rectangular room is 12 m long and 9 m wide. What is the diagonal distance from one corner to the opposite corner, in m?"),
+        t(
+          "A rectangular room is 12 m long and 9 m wide. What is the diagonal distance from one corner to the opposite corner, in m?",
+        ),
       ],
       explanation: [
         t("The length and width are legs. The diagonal is the hypotenuse."),
         m(String.raw`d^2 = 12^2 + 9^2 = 144 + 81 = 225`),
         m(String.raw`d = \sqrt{225} = 15`),
-        t("The diagonal is 15 m. This is the 3-4-5 triple scaled by 3: 9-12-15."),
+        t(
+          "The diagonal is 15 m. This is the 3-4-5 triple scaled by 3: 9-12-15.",
+        ),
       ],
       xp: 15,
       accepted: ["15"],
@@ -623,7 +743,9 @@ const lesson4L: Lesson = {
       id: "4l-m3",
       type: "mcq",
       prompt: [
-        t("A right-angled triangle has legs of length 10 cm and 24 cm. The length of the hypotenuse is:"),
+        t(
+          "A right-angled triangle has legs of length 10 cm and 24 cm. The length of the hypotenuse is:",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 10^2 + 24^2 = 100 + 576 = 676`),
@@ -643,10 +765,14 @@ const lesson4L: Lesson = {
       id: "4l-m4",
       type: "shortText",
       prompt: [
-        t("A friend tells you that √(x² + y²) = x + y for all numbers x and y. Is your friend correct? Give a counterexample to prove your answer."),
+        t(
+          "A friend tells you that √(x² + y²) = x + y for all numbers x and y. Is your friend correct? Give a counterexample to prove your answer.",
+        ),
       ],
       explanation: [
-        t("The statement is false. For example, if x = 3 and y = 4: √(3² + 4²) = √(9 + 16) = √25 = 5, but 3 + 4 = 7. Not equal. You cannot distribute a square root over addition."),
+        t(
+          "The statement is false. For example, if x = 3 and y = 4: √(3² + 4²) = √(9 + 16) = √25 = 5, but 3 + 4 = 7. Not equal. You cannot distribute a square root over addition.",
+        ),
       ],
       xp: 15,
       accepted: [
@@ -679,32 +805,50 @@ const lesson4M: Lesson = {
       id: "4m-key",
       heading: "Key idea: finding a shorter side",
       body: [
-        t("When you know the hypotenuse and one leg, you can find the other leg by rearranging Pythagoras' theorem:"),
+        t(
+          "When you know the hypotenuse and one leg, you can find the other leg by rearranging Pythagoras' theorem:",
+        ),
         m(String.raw`a^2 = c^2 - b^2`),
         m(String.raw`b^2 = c^2 - a^2`),
-        t("Steps: 1. Square the hypotenuse. 2. Subtract the square of the known leg. 3. Take the square root of the result."),
-        t("Always check: the shorter side must be less than the hypotenuse. If your answer is larger than the hypotenuse, you have made a mistake."),
+        t(
+          "Steps: 1. Square the hypotenuse. 2. Subtract the square of the known leg. 3. Take the square root of the result.",
+        ),
+        t(
+          "Always check: the shorter side must be less than the hypotenuse. If your answer is larger than the hypotenuse, you have made a mistake.",
+        ),
       ],
     },
     {
       id: "4m-worked",
       heading: "Worked example: finding a shorter side",
       body: [
-        t("A right-angled triangle has hypotenuse 15 cm and one leg 9 cm. Find the other leg."),
+        t(
+          "A right-angled triangle has hypotenuse 15 cm and one leg 9 cm. Find the other leg.",
+        ),
         m(String.raw`a^2 = 15^2 - 9^2 = 225 - 81 = 144`),
         m(String.raw`a = \sqrt{144} = 12`),
         t("The unknown leg is 12 cm. Check: 12 < 15 ✓."),
-        t("Notice that we subtracted, not added. This is the key difference from finding the hypotenuse."),
+        t(
+          "Notice that we subtracted, not added. This is the key difference from finding the hypotenuse.",
+        ),
       ],
     },
     {
       id: "4m-mistake",
       heading: "Common mistake: adding instead of subtracting",
       body: [
-        t("When finding a shorter side, you must subtract, not add. A common error is to use c² + a² or to add the squares of the two known sides."),
-        t("Remember: the hypotenuse is the longest side, so its square is the largest number. When you subtract a smaller square from it, you get a positive number that is less than the square of the hypotenuse."),
-        t("If your calculated leg is longer than the hypotenuse, you probably added instead of subtracted."),
-        t("Also: check that your answer is reasonable. A leg must be shorter than the hypotenuse."),
+        t(
+          "When finding a shorter side, you must subtract, not add. A common error is to use c² + a² or to add the squares of the two known sides.",
+        ),
+        t(
+          "Remember: the hypotenuse is the longest side, so its square is the largest number. When you subtract a smaller square from it, you get a positive number that is less than the square of the hypotenuse.",
+        ),
+        t(
+          "If your calculated leg is longer than the hypotenuse, you probably added instead of subtracted.",
+        ),
+        t(
+          "Also: check that your answer is reasonable. A leg must be shorter than the hypotenuse.",
+        ),
       ],
     },
   ],
@@ -714,12 +858,16 @@ const lesson4M: Lesson = {
       id: "4m-p1",
       type: "numeric",
       prompt: [
-        t("Find the unknown shorter side: hypotenuse = 10 cm, one shorter side = 8 cm. Give your answer in cm."),
+        t(
+          "Find the unknown shorter side: hypotenuse = 10 cm, one shorter side = 8 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 10^2 - 8^2 = 100 - 64 = 36`),
         m(String.raw`a = \sqrt{36} = 6`),
-        t("The unknown side is 6 cm. This is a 6-8-10 triangle (the 3-4-5 triple scaled by 2)."),
+        t(
+          "The unknown side is 6 cm. This is a 6-8-10 triangle (the 3-4-5 triple scaled by 2).",
+        ),
       ],
       xp: 10,
       accepted: ["6"],
@@ -730,7 +878,9 @@ const lesson4M: Lesson = {
       id: "4m-p2",
       type: "numeric",
       prompt: [
-        t("Find the unknown shorter side: hypotenuse = 13 cm, one shorter side = 5 cm. Give your answer in cm."),
+        t(
+          "Find the unknown shorter side: hypotenuse = 13 cm, one shorter side = 5 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 13^2 - 5^2 = 169 - 25 = 144`),
@@ -746,7 +896,9 @@ const lesson4M: Lesson = {
       id: "4m-p3",
       type: "numeric",
       prompt: [
-        t("In a right-angled triangle, the hypotenuse is 25 cm and one leg is 24 cm. Find the other leg, in cm."),
+        t(
+          "In a right-angled triangle, the hypotenuse is 25 cm and one leg is 24 cm. Find the other leg, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 25^2 - 24^2 = 625 - 576 = 49`),
@@ -762,10 +914,14 @@ const lesson4M: Lesson = {
       id: "4m-p4",
       type: "numeric",
       prompt: [
-        t("A ladder 13 m long leans against a wall. The foot of the ladder is 12 m from the wall. How high up the wall does the ladder reach, in m?"),
+        t(
+          "A ladder 13 m long leans against a wall. The foot of the ladder is 12 m from the wall. How high up the wall does the ladder reach, in m?",
+        ),
       ],
       explanation: [
-        t("The ladder is the hypotenuse (c = 13), the ground distance is one leg (a = 12)."),
+        t(
+          "The ladder is the hypotenuse (c = 13), the ground distance is one leg (a = 12).",
+        ),
         m(String.raw`b^2 = 13^2 - 12^2 = 169 - 144 = 25`),
         m(String.raw`b = \sqrt{25} = 5`),
         t("The ladder reaches 5 m up the wall. This is a 5-12-13 triangle."),
@@ -779,10 +935,14 @@ const lesson4M: Lesson = {
       id: "4m-p5",
       type: "numeric",
       prompt: [
-        t("A wire 17 m long runs from the top of a pole to a point on the ground 15 m from the base of the pole. How tall is the pole, in m?"),
+        t(
+          "A wire 17 m long runs from the top of a pole to a point on the ground 15 m from the base of the pole. How tall is the pole, in m?",
+        ),
       ],
       explanation: [
-        t("The wire is the hypotenuse (c = 17), the ground distance is one leg (a = 15)."),
+        t(
+          "The wire is the hypotenuse (c = 17), the ground distance is one leg (a = 15).",
+        ),
         m(String.raw`h^2 = 17^2 - 15^2 = 289 - 225 = 64`),
         m(String.raw`h = \sqrt{64} = 8`),
         t("The pole is 8 m tall. This is the 8-15-17 Pythagorean triple."),
@@ -796,12 +956,16 @@ const lesson4M: Lesson = {
       id: "4m-p6",
       type: "numeric",
       prompt: [
-        t("In a right-angled triangle, the hypotenuse is 15 cm and one leg is 9 cm. Find the other leg, in cm."),
+        t(
+          "In a right-angled triangle, the hypotenuse is 15 cm and one leg is 9 cm. Find the other leg, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 15^2 - 9^2 = 225 - 81 = 144`),
         m(String.raw`a = \sqrt{144} = 12`),
-        t("The unknown leg is 12 cm. This is the 9-12-15 triple (the 3-4-5 scaled by 3)."),
+        t(
+          "The unknown leg is 12 cm. This is the 9-12-15 triple (the 3-4-5 scaled by 3).",
+        ),
       ],
       xp: 15,
       accepted: ["12"],
@@ -812,13 +976,19 @@ const lesson4M: Lesson = {
       id: "4m-p7",
       type: "numeric",
       prompt: [
-        t("A kite string is 50 m long. The kite is directly above a point on the ground that is 30 m from the person holding the string. How high is the kite, in m?"),
+        t(
+          "A kite string is 50 m long. The kite is directly above a point on the ground that is 30 m from the person holding the string. How high is the kite, in m?",
+        ),
       ],
       explanation: [
-        t("The string is the hypotenuse (c = 50), the ground distance is one leg (a = 30)."),
+        t(
+          "The string is the hypotenuse (c = 50), the ground distance is one leg (a = 30).",
+        ),
         m(String.raw`h^2 = 50^2 - 30^2 = 2500 - 900 = 1600`),
         m(String.raw`h = \sqrt{1600} = 40`),
-        t("The kite is 40 m high. This is the 3-4-5 triple scaled by 10: 30-40-50."),
+        t(
+          "The kite is 40 m high. This is the 3-4-5 triple scaled by 10: 30-40-50.",
+        ),
       ],
       xp: 15,
       accepted: ["40"],
@@ -829,10 +999,14 @@ const lesson4M: Lesson = {
       id: "4m-p8",
       type: "mcq",
       prompt: [
-        t("To find the length of a shorter side in a right-angled triangle when you know the hypotenuse and the other leg, you should use:"),
+        t(
+          "To find the length of a shorter side in a right-angled triangle when you know the hypotenuse and the other leg, you should use:",
+        ),
       ],
       explanation: [
-        t("The correct formula is a² = c² - b², where c is the hypotenuse and b is the known leg. You subtract, not add, because the hypotenuse is the longest side."),
+        t(
+          "The correct formula is a² = c² - b², where c is the hypotenuse and b is the known leg. You subtract, not add, because the hypotenuse is the longest side.",
+        ),
       ],
       xp: 20,
       options: [
@@ -847,12 +1021,22 @@ const lesson4M: Lesson = {
     {
       id: "4m-p9",
       type: "fillInTheBlank",
-      prompt: [t("Complete the rule for checking your answer when finding a shorter side.")],
+      prompt: [
+        t(
+          "Complete the rule for checking your answer when finding a shorter side.",
+        ),
+      ],
       explanation: [
-        t("The hypotenuse is always the longest side in a right-angled triangle. Any shorter side must have a length less than the hypotenuse. This is a quick way to check your answer is reasonable."),
+        t(
+          "The hypotenuse is always the longest side in a right-angled triangle. Any shorter side must have a length less than the hypotenuse. This is a quick way to check your answer is reasonable.",
+        ),
       ],
       xp: 20,
-      template: [t("The calculated shorter side must always be ___ than the hypotenuse.")],
+      template: [
+        t(
+          "The calculated shorter side must always be ___ than the hypotenuse.",
+        ),
+      ],
       accepted: ["less", "shorter", "smaller"],
     },
     // Enrichment 3 (mcq) - given numbers
@@ -860,12 +1044,16 @@ const lesson4M: Lesson = {
       id: "4m-p10",
       type: "mcq",
       prompt: [
-        t("Given the hypotenuse c = 10 cm and one leg b = 6 cm, the other leg a is:"),
+        t(
+          "Given the hypotenuse c = 10 cm and one leg b = 6 cm, the other leg a is:",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 10^2 - 6^2 = 100 - 36 = 64`),
         m(String.raw`a = \sqrt{64} = 8`),
-        t("Always check: 8 < 10 ✓. Options b and c are common mistakes from adding (100 + 36) or misunderstanding the formula."),
+        t(
+          "Always check: 8 < 10 ✓. Options b and c are common mistakes from adding (100 + 36) or misunderstanding the formula.",
+        ),
       ],
       xp: 20,
       options: [
@@ -881,10 +1069,14 @@ const lesson4M: Lesson = {
       id: "4m-p11",
       type: "mcq",
       prompt: [
-        t("A student calculates a shorter side and gets 15 cm, but the hypotenuse is 10 cm. The student has probably:"),
+        t(
+          "A student calculates a shorter side and gets 15 cm, but the hypotenuse is 10 cm. The student has probably:",
+        ),
       ],
       explanation: [
-        t("If the calculated leg (15 cm) is longer than the hypotenuse (10 cm), the student likely added the squares instead of subtracting. You must use a² = c² - b², not c² + b²."),
+        t(
+          "If the calculated leg (15 cm) is longer than the hypotenuse (10 cm), the student likely added the squares instead of subtracting. You must use a² = c² - b², not c² + b².",
+        ),
       ],
       xp: 20,
       options: [
@@ -900,10 +1092,14 @@ const lesson4M: Lesson = {
       id: "4m-p12",
       type: "shortText",
       prompt: [
-        t("Why should you always check that your answer for a shorter side is less than the given hypotenuse?"),
+        t(
+          "Why should you always check that your answer for a shorter side is less than the given hypotenuse?",
+        ),
       ],
       explanation: [
-        t("The hypotenuse is defined as the longest side of a right-angled triangle. If a calculated shorter side turned out to be longer than the hypotenuse, it would contradict the definition and indicate a mistake in calculation."),
+        t(
+          "The hypotenuse is defined as the longest side of a right-angled triangle. If a calculated shorter side turned out to be longer than the hypotenuse, it would contradict the definition and indicate a mistake in calculation.",
+        ),
       ],
       xp: 20,
       accepted: [
@@ -919,9 +1115,7 @@ const lesson4M: Lesson = {
     {
       id: "4m-m1",
       type: "numeric",
-      prompt: [
-        t("Find the unknown side: hypotenuse = 41, one leg = 9."),
-      ],
+      prompt: [t("Find the unknown side: hypotenuse = 41, one leg = 9.")],
       explanation: [
         m(String.raw`a^2 = 41^2 - 9^2 = 1681 - 81 = 1600`),
         m(String.raw`a = \sqrt{1600} = 40`),
@@ -934,7 +1128,9 @@ const lesson4M: Lesson = {
       id: "4m-m2",
       type: "numeric",
       prompt: [
-        t("A right-angled triangle has hypotenuse 29 cm and one leg 20 cm. Find the other leg, in cm."),
+        t(
+          "A right-angled triangle has hypotenuse 29 cm and one leg 20 cm. Find the other leg, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 29^2 - 20^2 = 841 - 400 = 441`),
@@ -949,17 +1145,34 @@ const lesson4M: Lesson = {
       id: "4m-m3",
       type: "mcq",
       prompt: [
-        t("When rearranging Pythagoras' theorem to find a shorter side, which statement is true?"),
+        t(
+          "When rearranging Pythagoras' theorem to find a shorter side, which statement is true?",
+        ),
       ],
       explanation: [
-        t("The hypotenuse (c) must be the longest side and is the one you subtract from: a² = c² - b². If you subtract from the wrong side, you may get a negative number under the square root, which has no real solution."),
+        t(
+          "The hypotenuse (c) must be the longest side and is the one you subtract from: a² = c² - b². If you subtract from the wrong side, you may get a negative number under the square root, which has no real solution.",
+        ),
       ],
       xp: 15,
       options: [
-        { id: "a", label: [t("You always subtract the known leg's square from the hypotenuse's square")] },
-        { id: "b", label: [t("You can subtract either way and get the same answer")] },
+        {
+          id: "a",
+          label: [
+            t(
+              "You always subtract the known leg's square from the hypotenuse's square",
+            ),
+          ],
+        },
+        {
+          id: "b",
+          label: [t("You can subtract either way and get the same answer")],
+        },
         { id: "c", label: [t("You add the two known squares")] },
-        { id: "d", label: [t("You divide the hypotenuse's square by the leg's square")] },
+        {
+          id: "d",
+          label: [t("You divide the hypotenuse's square by the leg's square")],
+        },
       ],
       correctOptionId: "a",
     },
@@ -967,10 +1180,14 @@ const lesson4M: Lesson = {
       id: "4m-m4",
       type: "shortText",
       prompt: [
-        t("Can a right-angled triangle have a hypotenuse of 10 cm and a shorter side of 12 cm? Explain your answer."),
+        t(
+          "Can a right-angled triangle have a hypotenuse of 10 cm and a shorter side of 12 cm? Explain your answer.",
+        ),
       ],
       explanation: [
-        t("No, this is impossible. The hypotenuse is defined as the longest side of a right-angled triangle. If a side measured 12 cm and the hypotenuse only 10 cm, that side would be longer than the hypotenuse, which contradicts the definition of the hypotenuse."),
+        t(
+          "No, this is impossible. The hypotenuse is defined as the longest side of a right-angled triangle. If a side measured 12 cm and the hypotenuse only 10 cm, that side would be longer than the hypotenuse, which contradicts the definition of the hypotenuse.",
+        ),
       ],
       xp: 15,
       accepted: [
@@ -997,12 +1214,16 @@ const bossChallenge: BossChallenge = {
       id: "pyth-boss-q1",
       type: "numeric",
       prompt: [
-        t("Find the hypotenuse when the shorter sides are 10 cm and 24 cm. Give your answer in cm."),
+        t(
+          "Find the hypotenuse when the shorter sides are 10 cm and 24 cm. Give your answer in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`c^2 = 10^2 + 24^2 = 100 + 576 = 676`),
         m(String.raw`c = \sqrt{676} = 26`),
-        t("The hypotenuse is 26 cm. This is the 5-12-13 triple scaled by 2: 10-24-26."),
+        t(
+          "The hypotenuse is 26 cm. This is the 5-12-13 triple scaled by 2: 10-24-26.",
+        ),
       ],
       xp: 20,
       accepted: ["26"],
@@ -1013,7 +1234,9 @@ const bossChallenge: BossChallenge = {
       id: "pyth-boss-q2",
       type: "numeric",
       prompt: [
-        t("In a right-angled triangle, the hypotenuse is 37 cm and one leg is 35 cm. Find the other leg, in cm."),
+        t(
+          "In a right-angled triangle, the hypotenuse is 37 cm and one leg is 35 cm. Find the other leg, in cm.",
+        ),
       ],
       explanation: [
         m(String.raw`a^2 = 37^2 - 35^2 = 1369 - 1225 = 144`),
@@ -1029,14 +1252,22 @@ const bossChallenge: BossChallenge = {
       id: "pyth-boss-q3",
       type: "numeric",
       prompt: [
-        t("A rhombus has diagonals of length 10 cm and 24 cm. The diagonals of a rhombus bisect each other at right angles. Find the length of each side of the rhombus, in cm."),
+        t(
+          "A rhombus has diagonals of length 10 cm and 24 cm. The diagonals of a rhombus bisect each other at right angles. Find the length of each side of the rhombus, in cm.",
+        ),
       ],
       explanation: [
-        t("The diagonals bisect each other at right angles, creating four congruent right triangles."),
-        t("Each right triangle has legs of half the diagonals: 5 cm and 12 cm."),
+        t(
+          "The diagonals bisect each other at right angles, creating four congruent right triangles.",
+        ),
+        t(
+          "Each right triangle has legs of half the diagonals: 5 cm and 12 cm.",
+        ),
         m(String.raw`s^2 = 5^2 + 12^2 = 25 + 144 = 169`),
         m(String.raw`s = \sqrt{169} = 13`),
-        t("Each side of the rhombus is 13 cm. This is the 5-12-13 Pythagorean triple."),
+        t(
+          "Each side of the rhombus is 13 cm. This is the 5-12-13 Pythagorean triple.",
+        ),
       ],
       xp: 25,
       accepted: ["13"],
@@ -1047,7 +1278,9 @@ const bossChallenge: BossChallenge = {
       id: "pyth-boss-q4",
       type: "numeric",
       prompt: [
-        t("A rectangular park is 80 m by 60 m. A person walks diagonally across the park from one corner to the opposite corner. How many metres do they save compared to walking around the two sides?"),
+        t(
+          "A rectangular park is 80 m by 60 m. A person walks diagonally across the park from one corner to the opposite corner. How many metres do they save compared to walking around the two sides?",
+        ),
       ],
       explanation: [
         t("Walking two sides: 80 + 60 = 140 m."),
@@ -1055,7 +1288,9 @@ const bossChallenge: BossChallenge = {
         m(String.raw`d^2 = 80^2 + 60^2 = 6400 + 3600 = 10000`),
         m(String.raw`d = \sqrt{10000} = 100`),
         t("Distance saved: 140 - 100 = 40 m."),
-        t("The diagonal is always the shortest distance between two points. This is the 3-4-5 triple scaled by 20: 60-80-100."),
+        t(
+          "The diagonal is always the shortest distance between two points. This is the 3-4-5 triple scaled by 20: 60-80-100.",
+        ),
       ],
       xp: 25,
       accepted: ["40"],
@@ -1066,10 +1301,14 @@ const bossChallenge: BossChallenge = {
       id: "pyth-boss-q5",
       type: "mcq",
       prompt: [
-        t("Pythagoras' theorem is used to find an unknown side length in which of the following?"),
+        t(
+          "Pythagoras' theorem is used to find an unknown side length in which of the following?",
+        ),
       ],
       explanation: [
-        t("Pythagoras' theorem (c² = a² + b²) applies exclusively to right-angled triangles. It does not work for acute, obtuse, or non-right triangles. For other triangles, different rules like the sine or cosine rule are needed."),
+        t(
+          "Pythagoras' theorem (c² = a² + b²) applies exclusively to right-angled triangles. It does not work for acute, obtuse, or non-right triangles. For other triangles, different rules like the sine or cosine rule are needed.",
+        ),
       ],
       xp: 20,
       options: [

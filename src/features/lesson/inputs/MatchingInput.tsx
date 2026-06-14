@@ -121,9 +121,7 @@ export function MatchingInput({
                 disabled={revealed}
                 onClick={() => handleRightClick(item.id)}
                 className={`rounded-bub p-3 text-left transition ${
-                  isConnected
-                    ? "ring-2 ring-brand bg-brand-soft"
-                    : "bg-card"
+                  isConnected ? "ring-2 ring-brand bg-brand-soft" : "bg-card"
                 } ${revealed ? "" : "hover:ring-2 hover:ring-hairline"}`}
               >
                 <RichBlocks blocks={item.content} />

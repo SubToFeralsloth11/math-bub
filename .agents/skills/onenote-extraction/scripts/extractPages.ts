@@ -12,7 +12,7 @@
  */
 
 import { chromium } from "playwright";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const SESSION_FILE =
   process.env.HOME + "/.agent-browser/sessions/onenote-default.json";
@@ -85,7 +85,7 @@ async function main() {
   console.log("Opening notebook...");
   await page.goto(NOTEBOOK_URL, {
     waitUntil: "domcontentloaded",
-    timeout: 30000,
+    timeout: 30_000,
   });
   console.log("Title:", await page.title());
 
@@ -160,7 +160,7 @@ async function main() {
       const url = wopiFrame.url();
 
       console.log(
-        `      ${content.length} chars, ${images.length} images. URL: ${url.substring(0, 80)}`,
+        `      ${content.length} chars, ${images.length} images. URL: ${url.slice(0, 80)}`,
       );
 
       pages.push({
@@ -184,7 +184,10 @@ async function main() {
   const outputPath = OUTPUT_DIR + "/extracted.json";
   writeFileSync(outputPath, JSON.stringify(result, null, 2));
   console.log(`\n✅ Saved to ${outputPath}`);
-  const totalPages = result.sections.reduce((s, sec) => s + sec.pages.length, 0);
+  const totalPages = result.sections.reduce(
+    (s, sec) => s + sec.pages.length,
+    0,
+  );
   const totalImages = result.sections.reduce(
     (s, sec) => s + sec.pages.reduce((p, page) => p + page.images.length, 0),
     0,
@@ -205,7 +208,7 @@ async function main() {
 // ---------------------------------------------------------------------------
 
 async function waitForWopiFrame(page: any) {
-  for (let i = 0; i < 20; i++) {
+  for (let index = 0; index < 20; index++) {
     await sleep(1000);
     const wf = page
       .frames()
@@ -220,15 +223,18 @@ async function dumpStructure(frame: any) {
   const structure = await frame.$$eval(
     '[role="navigation"], [role="tablist"], [role="tree"], [role="tabpanel"]',
     (els: Element[]) =>
-      els.map((el) => ({
-        role: el.getAttribute("role") || el.id || el.tagName.toLowerCase(),
-        children: el.children.length,
-        text: el.textContent?.trim().substring(0, 200) || "",
+      els.map((element) => ({
+        role:
+          element.getAttribute("role") ||
+          element.id ||
+          element.tagName.toLowerCase(),
+        children: element.children.length,
+        text: element.textContent?.trim().slice(0, 200) || "",
       })),
   );
   for (const s of structure) {
     console.log(
-      `  [${s.role}] (${s.children} children): "${s.text.substring(0, 100)}"`,
+      `  [${s.role}] (${s.children} children): "${s.text.slice(0, 100)}"`,
     );
   }
 }
@@ -240,12 +246,13 @@ async function dumpStructure(frame: any) {
 async function getSections(frame: any): Promise<string[]> {
   const names = await frame.$$eval(
     '[role="navigation"] [role="tab"], [role="tree"] [role="treeitem"], [role="navigation"] [role="treeitem"]',
-    (els: Element[]) =>
-      [...new Set(
+    (els: Element[]) => [
+      ...new Set(
         els
-          .map((el) => (el.textContent || "").trim())
+          .map((element) => (element.textContent || "").trim())
           .filter((t) => t.length > 1 && t.length < 80),
-      )],
+      ),
+    ],
   );
   if (names.length > 0) return names;
   return [];
@@ -253,7 +260,9 @@ async function getSections(frame: any): Promise<string[]> {
 
 async function clickSection(frame: any, name: string): Promise<boolean> {
   const clicked = await frame.evaluate((sectionName: string) => {
-    const trees = document.querySelectorAll('[role="navigation"] [role="tree"]');
+    const trees = document.querySelectorAll(
+      '[role="navigation"] [role="tree"]',
+    );
     const sectionTree = trees[0];
     if (!sectionTree) return false;
     const items = sectionTree.querySelectorAll('[role="treeitem"]');
@@ -267,9 +276,9 @@ async function clickSection(frame: any, name: string): Promise<boolean> {
   }, name);
   if (clicked) return true;
   try {
-    const el = await frame.$(`[role="treeitem"]:has-text("${name}")`);
-    if (el) {
-      await el.click({ timeout: 3000 });
+    const element = await frame.$(`[role="treeitem"]:has-text("${name}")`);
+    if (element) {
+      await element.click({ timeout: 3000 });
       return true;
     }
   } catch {}
@@ -278,30 +287,30 @@ async function clickSection(frame: any, name: string): Promise<boolean> {
 
 async function getPages(frame: any): Promise<string[]> {
   const pages = await frame.evaluate(() => {
-    const trees = document.querySelectorAll('[role="navigation"] [role="tree"]');
+    const trees = document.querySelectorAll(
+      '[role="navigation"] [role="tree"]',
+    );
     const pageTree = trees[1];
     if (!pageTree) return [] as string[];
     const items = pageTree.querySelectorAll('[role="treeitem"]');
-    return Array.from(items)
-      .map((el) => (el.textContent || "").trim())
+    return [...items]
+      .map((element) => (element.textContent || "").trim())
       .filter((t) => t.length > 0 && t.length < 120);
   });
   if (pages.length > 0) return pages;
 
-  const allItems = await frame.$$eval(
-    '[role="treeitem"]',
-    (els: Element[]) =>
-      els
-        .map((el) => (el.textContent || "").trim())
-        .filter((t) => t.length > 1 && t.length < 120),
+  const allItems = await frame.$$eval('[role="treeitem"]', (els: Element[]) =>
+    els
+      .map((element) => (element.textContent || "").trim())
+      .filter((t) => t.length > 1 && t.length < 120),
   );
-  const exclude = [
+  const exclude = new Set([
     "Welcome",
     "_Content Library",
     "Collaboration Space",
     "GRIMES, Thomas (tgrim43)",
-  ];
-  return allItems.filter((n) => !exclude.includes(n));
+  ]);
+  return allItems.filter((n) => !exclude.has(n));
 }
 
 async function clickPage(frame: any, name: string): Promise<boolean> {
@@ -312,9 +321,9 @@ async function clickPage(frame: any, name: string): Promise<boolean> {
   ];
   for (const sel of selectors) {
     try {
-      const el = await frame.$(sel);
-      if (el) {
-        await el.click({ timeout: 5000 });
+      const element = await frame.$(sel);
+      if (element) {
+        await element.click({ timeout: 5000 });
         return true;
       }
     } catch {}
@@ -347,24 +356,28 @@ async function getPageContent(frame: any): Promise<string> {
     const rawText = await frame.evaluate(() => {
       // Get content from the page canvas area first.
       const selects = [
-        '.OutlineElement', '#PageContent', '#WACPageContent',
-        '.PageContent', '[data-id="pageContent"]', '.page-canvas',
+        ".OutlineElement",
+        "#PageContent",
+        "#WACPageContent",
+        ".PageContent",
+        '[data-id="pageContent"]',
+        ".page-canvas",
       ];
       for (const sel of selects) {
-        const el = document.querySelector(sel);
-        if (el) {
-          const text = el.textContent?.trim();
+        const element = document.querySelector(sel);
+        if (element) {
+          const text = element.textContent?.trim();
           if (text && text.length > 50) return text;
         }
       }
       // Fallback: all contenteditable regions.
       const editables = document.querySelectorAll('[contenteditable="true"]');
       const texts: string[] = [];
-      for (const el of editables) {
-        const text = el.textContent?.trim();
+      for (const element of editables) {
+        const text = element.textContent?.trim();
         if (text && text.length > 30) texts.push(text);
       }
-      if (texts.length > 0) return texts.join('\n\n');
+      if (texts.length > 0) return texts.join("\n\n");
       return document.body.innerText;
     });
 
@@ -375,9 +388,9 @@ async function getPageContent(frame: any): Promise<string> {
     ];
     let cleaned = rawText;
     for (const pattern of prefixesToStrip) {
-      cleaned = cleaned.replace(pattern, '').trim();
+      cleaned = cleaned.replace(pattern, "").trim();
     }
-    return cleaned.substring(0, 8000);
+    return cleaned.slice(0, 8000);
   } catch {
     return "(error extracting content)";
   }
@@ -430,14 +443,13 @@ async function extractImages(
   }
 
   const images: ExtractedImage[] = [];
-  const safeSection = sectionName.replace(/[^a-zA-Z0-9_-]/g, "_");
-  const safePage = pageName.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const safeSection = sectionName.replaceAll(/[^a-zA-Z0-9_-]/g, "_");
+  const safePage = pageName.replaceAll(/[^a-zA-Z0-9_-]/g, "_");
   const prefix = `${safeSection}__${safePage}`;
 
-  for (let i = 0; i < imageData.length; i++) {
-    const img = imageData[i];
-    const ext = guessExtension(img.src);
-    const filename = `${prefix}__img${String(i).padStart(3, "0")}.${ext}`;
+  for (const [index, img] of imageData.entries()) {
+    const extension = guessExtension(img.src);
+    const filename = `${prefix}__img${String(index).padStart(3, "0")}.${extension}`;
     const filepath = `${OUTPUT_DIR}/${filename}`;
 
     // Skip if this src appears too many times (likely UI chrome that's copied
@@ -452,7 +464,13 @@ async function extractImages(
           // Skip data URIs that are too small (UI sprites).
           if (buf.length < 500) continue;
           writeFileSync(filepath, buf);
-          images.push({ filename, src: img.src.substring(0, 80), alt: img.alt, width: img.width, height: img.height });
+          images.push({
+            filename,
+            src: img.src.slice(0, 80),
+            alt: img.alt,
+            width: img.width,
+            height: img.height,
+          });
           downloadedSrcs.add(img.src);
         }
       } else if (img.src.startsWith("blob:")) {
@@ -460,12 +478,18 @@ async function extractImages(
           const buf = await wopiFrame.evaluate(async (blobUrl: string) => {
             const resp = await fetch(blobUrl);
             const blob = await resp.blob();
-            const arr = await blob.arrayBuffer();
-            return Array.from(new Uint8Array(arr));
+            const array = await blob.arrayBuffer();
+            return [...new Uint8Array(array)];
           }, img.src);
           if (buf && buf.length > 500) {
             writeFileSync(filepath, Buffer.from(buf));
-            images.push({ filename, src: img.src.substring(0, 80), alt: img.alt, width: img.width, height: img.height });
+            images.push({
+              filename,
+              src: img.src.slice(0, 80),
+              alt: img.alt,
+              width: img.width,
+              height: img.height,
+            });
             downloadedSrcs.add(img.src);
           }
         } catch {}
@@ -473,20 +497,32 @@ async function extractImages(
         // Skip if already downloaded (dedup).
         if (downloadedSrcs.has(img.src)) continue;
         try {
-          const resp = await page.request.get(img.src, { timeout: 10000 });
+          const resp = await page.request.get(img.src, { timeout: 10_000 });
           if (resp.ok()) {
             const buf = await resp.body();
             if (buf.length < 500) continue;
             writeFileSync(filepath, buf);
-            images.push({ filename, src: img.src.substring(0, 120), alt: img.alt, width: img.width, height: img.height });
+            images.push({
+              filename,
+              src: img.src.slice(0, 120),
+              alt: img.alt,
+              width: img.width,
+              height: img.height,
+            });
             downloadedSrcs.add(img.src);
           }
         } catch {
           try {
-            const el = await wopiFrame.$(`img[src="${img.src}"]`);
-            if (el) {
-              await el.screenshot({ path: filepath });
-              images.push({ filename, src: img.src.substring(0, 80), alt: img.alt, width: img.width, height: img.height });
+            const element = await wopiFrame.$(`img[src="${img.src}"]`);
+            if (element) {
+              await element.screenshot({ path: filepath });
+              images.push({
+                filename,
+                src: img.src.slice(0, 80),
+                alt: img.alt,
+                width: img.width,
+                height: img.height,
+              });
               downloadedSrcs.add(img.src);
             }
           } catch {}
@@ -506,8 +542,8 @@ async function extractImages(
 function deduplicateAcrossPages(result: ExtractedNotebook) {
   // src URLs that appear on more than 1 page = duplicated across pages.
   const multiPageSrcs = new Set<string>();
-  for (const [src, count] of seenSrcs) {
-    if (count > 1) multiPageSrcs.add(src);
+  for (const [source, count] of seenSrcs) {
+    if (count > 1) multiPageSrcs.add(source);
   }
 
   const firstSeen = new Set<string>();
@@ -534,15 +570,18 @@ function deduplicateAcrossPages(result: ExtractedNotebook) {
 /**
  * Guesses a file extension from an image URL.
  */
-function guessExtension(src: string): string {
-  if (src.startsWith("data:image/png")) return "png";
-  if (src.startsWith("data:image/jpeg") || src.startsWith("data:image/jpg"))
+function guessExtension(source: string): string {
+  if (source.startsWith("data:image/png")) return "png";
+  if (
+    source.startsWith("data:image/jpeg") ||
+    source.startsWith("data:image/jpg")
+  )
     return "jpg";
-  if (src.startsWith("data:image/gif")) return "gif";
-  if (src.startsWith("data:image/webp")) return "webp";
-  if (src.startsWith("data:image/svg")) return "svg";
+  if (source.startsWith("data:image/gif")) return "gif";
+  if (source.startsWith("data:image/webp")) return "webp";
+  if (source.startsWith("data:image/svg")) return "svg";
   // Try URL path extension.
-  const m = src.match(/\.(\w+)(?:\?|$)/);
+  const m = source.match(/\.(\w+)(?:\?|$)/);
   if (m) {
     const e = m[1].toLowerCase();
     if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(e))
@@ -551,7 +590,7 @@ function guessExtension(src: string): string {
   return "png"; // Default.
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });

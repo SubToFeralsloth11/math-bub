@@ -266,7 +266,15 @@ describe("progress reducer - US6 boss challenge", () => {
   it("awards the boss badge via its criterion on completion", () => {
     // A reducer over content with an algebra track and a boss-pass badge.
     const badged = createProgressReducer({
-      subjects: [{ id: "maths", title: "Maths", description: "Maths", icon: "🧮", accent: "#6D4AFF" }],
+      subjects: [
+        {
+          id: "maths",
+          title: "Maths",
+          description: "Maths",
+          icon: "🧮",
+          accent: "#6D4AFF",
+        },
+      ],
       tracks: [
         {
           id: "algebra",

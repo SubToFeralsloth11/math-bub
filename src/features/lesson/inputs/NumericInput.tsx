@@ -50,9 +50,7 @@ export function NumericInput({
             placeholder="Type your answer"
           />
         </div>
-        {unit ? (
-          <span className="font-display text-muted">{unit}</span>
-        ) : null}
+        {unit ? <span className="font-display text-muted">{unit}</span> : null}
       </div>
       <MathSymbolButtons
         inputRef={inputRef}

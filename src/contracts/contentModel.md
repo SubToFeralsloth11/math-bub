@@ -21,6 +21,7 @@ The `"math"` kind is rendered via KaTeX for any symbolic notation (maths,
 chemistry, physics formulae). It is not exclusively maths.
 
 Helpers in `src/content/blocks.ts`:
+
 - `t(text)` → `{ kind: "text", text }`
 - `m(tex, fallback?)` → `{ kind: "math", tex, fallback: fallback ?? tex }`
 
@@ -33,8 +34,8 @@ when absent, `textFallback` is shown so the question remains answerable.
 
 ```typescript
 interface Figure {
-  id: string;           // Maps to the asset filename
-  alt: string;          // Accessible description / image alt text
+  id: string; // Maps to the asset filename
+  alt: string; // Accessible description / image alt text
   textFallback: string; // Shown in place of a missing image
 }
 ```
@@ -48,15 +49,16 @@ tracks directly — tracks reference their subject via `subjectId`.
 
 ```typescript
 interface Subject {
-  id: string;          // Unique slug, e.g. "maths", "science"
-  title: string;       // Display name, e.g. "Maths", "Science"
+  id: string; // Unique slug, e.g. "maths", "science"
+  title: string; // Display name, e.g. "Maths", "Science"
   description: string; // Blurb, e.g. "Algebra, geometry, and more"
-  icon: string;        // Single emoji, e.g. "🧮", "🔬"
-  accent: string;      // Hex colour, e.g. "#6D4AFF"
+  icon: string; // Single emoji, e.g. "🧮", "🔬"
+  accent: string; // Hex colour, e.g. "#6D4AFF"
 }
 ```
 
 **Constraints**:
+
 - `id` unique across all subjects
 - All fields non-empty
 - `accent` is a 7-char hex colour (`#RRGGBB`)
@@ -70,16 +72,17 @@ the track card in list views.
 
 ```typescript
 interface Track {
-  id: string;           // Unique slug (any alphanumeric string)
-  subjectId: string;    // References Subject.id
-  title: string;        // Display name, e.g. "Algebra (Year 8)"
-  description: string;  // Blurb
-  lessons: Lesson[];    // Ordered; order values 1..n contiguous with no gaps
+  id: string; // Unique slug (any alphanumeric string)
+  subjectId: string; // References Subject.id
+  title: string; // Display name, e.g. "Algebra (Year 8)"
+  description: string; // Blurb
+  lessons: Lesson[]; // Ordered; order values 1..n contiguous with no gaps
   challenge: BossChallenge;
 }
 ```
 
 **Constraints**:
+
 - `subjectId` must reference a real Subject.id
 - `id` unique across all tracks
 - At least one lesson, with unique IDs per track
@@ -91,19 +94,20 @@ interface Track {
 
 ```typescript
 interface Lesson {
-  id: string;              // Unique within the track
-  order: number;           // 1-based position; contiguous within a track
-  title: string;           // Display title, e.g. "5G Expanding brackets"
-  sourceRef: string;       // Originating worksheet reference, e.g. "5G"
+  id: string; // Unique within the track
+  order: number; // 1-based position; contiguous within a track
+  title: string; // Display title, e.g. "5G Expanding brackets"
+  sourceRef: string; // Originating worksheet reference, e.g. "5G"
   learnCards: LearnCard[]; // At least one, shown before practice
-  practice: Question[];    // At least one practice question
-  mastery: Question[];     // At least one mastery-check question
-  passThreshold?: number;  // Fraction 0..1; defaults to 0.8
+  practice: Question[]; // At least one practice question
+  mastery: Question[]; // At least one mastery-check question
+  passThreshold?: number; // Fraction 0..1; defaults to 0.8
   aiProvenance?: AiProvenance; // Optional AI involvement marker
 }
 ```
 
 **Constraints**:
+
 - `learnCards`, `practice`, `mastery` all non-empty
 - `passThreshold` must be in (0, 1] if present
 - No duplicate learn-card IDs, no duplicate question IDs (across practice + mastery)
@@ -114,9 +118,9 @@ interface Lesson {
 
 ```typescript
 interface LearnCard {
-  id: string;            // Unique within the lesson
-  heading: string;       // Card heading, e.g. "Key idea"
-  body: RichBlock[];     // Ordered rich-content blocks
+  id: string; // Unique within the lesson
+  heading: string; // Card heading, e.g. "Key idea"
+  body: RichBlock[]; // Ordered rich-content blocks
   figure?: Figure | null; // Optional figure
 }
 ```
@@ -127,12 +131,12 @@ interface LearnCard {
 
 ```typescript
 interface BossChallenge {
-  id: string;            // Stable id, e.g. "algebra-boss"
-  title: string;         // Display title
-  sourceRef: string;     // Originating practice paper
+  id: string; // Stable id, e.g. "algebra-boss"
+  title: string; // Display title
+  sourceRef: string; // Originating practice paper
   questions: Question[]; // Challenge question set (no learn cards)
-  bonusXp: number;       // Bonus XP awarded on completion
-  passBadgeId: string;   // Badge granted for finishing the challenge
+  bonusXp: number; // Bonus XP awarded on completion
+  passBadgeId: string; // Badge granted for finishing the challenge
   aiProvenance?: AiProvenance; // Optional AI involvement marker
 }
 ```
@@ -147,11 +151,11 @@ Fields common to every question variant:
 
 ```typescript
 interface QuestionBase {
-  id: string;               // Unique within its set (lesson or challenge)
-  prompt: RichBlock[];      // The question text/maths
-  figure?: Figure | null;   // Optional figure shown with the question
+  id: string; // Unique within its set (lesson or challenge)
+  prompt: RichBlock[]; // The question text/maths
+  figure?: Figure | null; // Optional figure shown with the question
   explanation: RichBlock[]; // Worked explanation shown on wrong answer
-  xp: number;               // XP awarded for a correct answer
+  xp: number; // XP awarded for a correct answer
 }
 ```
 
@@ -167,8 +171,8 @@ interface McqQuestion {
   figure?: Figure | null;
   explanation: RichBlock[];
   xp: number;
-  options: McqOption[];       // 2–5 options, unique ids
-  correctOptionId: string;    // Must match one option's id
+  options: McqOption[]; // 2–5 options, unique ids
+  correctOptionId: string; // Must match one option's id
 }
 
 interface McqOption {
@@ -189,8 +193,8 @@ interface NumericQuestion {
   figure?: Figure | null;
   explanation: RichBlock[];
   xp: number;
-  accepted: string[];  // At least one non-empty string
-  unit?: string;       // Optional unit stripped before comparison (e.g. "cm")
+  accepted: string[]; // At least one non-empty string
+  unit?: string; // Optional unit stripped before comparison (e.g. "cm")
 }
 ```
 
@@ -207,7 +211,7 @@ interface ExpressionQuestion {
   figure?: Figure | null;
   explanation: RichBlock[];
   xp: number;
-  target: string;      // A mathjs-parseable target expression
+  target: string; // A mathjs-parseable target expression
   variables: string[]; // Symbols sampled when testing equivalence
 }
 ```
@@ -225,7 +229,7 @@ interface ShortTextQuestion {
   figure?: Figure | null;
   explanation: RichBlock[];
   xp: number;
-  accepted: string[];  // At least one non-empty string
+  accepted: string[]; // At least one non-empty string
 }
 ```
 
@@ -242,8 +246,8 @@ interface FillInTheBlankQuestion {
   prompt: RichBlock[];
   explanation: RichBlock[];
   xp: number;
-  template: RichBlock[];  // Contains ___ marker where gap goes
-  accepted: string[];     // At least one non-empty string
+  template: RichBlock[]; // Contains ___ marker where gap goes
+  accepted: string[]; // At least one non-empty string
 }
 ```
 
@@ -258,9 +262,9 @@ treated as literal LaTeX and ignored by the splitter.
 
 ```typescript
 interface MatchingPair {
-  id: string;           // Unique within the question
-  left: RichBlock[];    // Left-column content (non-empty)
-  right: RichBlock[];   // Right-column content (non-empty)
+  id: string; // Unique within the question
+  left: RichBlock[]; // Left-column content (non-empty)
+  right: RichBlock[]; // Right-column content (non-empty)
 }
 
 interface MatchingQuestion {
@@ -269,7 +273,7 @@ interface MatchingQuestion {
   prompt: RichBlock[];
   explanation: RichBlock[];
   xp: number;
-  pairs: MatchingPair[];  // At least 2, no duplicate IDs
+  pairs: MatchingPair[]; // At least 2, no duplicate IDs
 }
 ```
 
@@ -288,8 +292,8 @@ Every `Lesson` and `BossChallenge` may carry:
 
 ```typescript
 interface AiProvenance {
-  tool: string;       // Non-empty, e.g. "Claude", "ChatGPT"
-  sources: string[];  // May be empty
+  tool: string; // Non-empty, e.g. "Claude", "ChatGPT"
+  sources: string[]; // May be empty
   role: "generated" | "checked" | "both";
 }
 ```
@@ -312,11 +316,11 @@ type BadgeCriterion =
   | "all-tracks-complete";
 
 interface Badge {
-  id: string;             // Stable slug
-  title: string;          // Display title
-  description: string;    // Unlock condition shown to learner
+  id: string; // Stable slug
+  title: string; // Display title
+  description: string; // Unlock condition shown to learner
   criterion: BadgeCriterion; // Rule key evaluated to award the badge
-  icon: string;           // Short emoji or glyph
+  icon: string; // Short emoji or glyph
 }
 ```
 
@@ -326,13 +330,14 @@ interface Badge {
 
 ```typescript
 interface AppContent {
-  subjects: Subject[];  // Display-order list
-  tracks: Track[];      // Display-order list
-  badges: Badge[];      // Display-order list
+  subjects: Subject[]; // Display-order list
+  tracks: Track[]; // Display-order list
+  badges: Badge[]; // Display-order list
 }
 ```
 
 **Constraints**:
+
 - At least one subject
 - No duplicate subject, track, or badge IDs
 - Every track's `subjectId` references a real subject
@@ -343,12 +348,12 @@ interface AppContent {
 
 ## URL Structure
 
-| Path | Screen | Description |
-|------|--------|-------------|
-| `/` | HomeScreen | Subject cards |
-| `/subject/:subjectId` | SubjectScreen | Tracks within subject |
-| `/subject/:subjectId/track/:trackId` | TrackMapScreen | Lesson map |
-| `/lesson/:trackId/:lessonId` | LessonScreen | Lesson flow |
-| `/challenge/:trackId` | BossChallengeScreen | Boss challenge |
-| `/track/:trackId` | Redirect | → `/subject/:subjectId/track/:trackId` |
-| `/badges` | BadgesScreen | Badge collection |
+| Path                                 | Screen              | Description                            |
+| ------------------------------------ | ------------------- | -------------------------------------- |
+| `/`                                  | HomeScreen          | Subject cards                          |
+| `/subject/:subjectId`                | SubjectScreen       | Tracks within subject                  |
+| `/subject/:subjectId/track/:trackId` | TrackMapScreen      | Lesson map                             |
+| `/lesson/:trackId/:lessonId`         | LessonScreen        | Lesson flow                            |
+| `/challenge/:trackId`                | BossChallengeScreen | Boss challenge                         |
+| `/track/:trackId`                    | Redirect            | → `/subject/:subjectId/track/:trackId` |
+| `/badges`                            | BadgesScreen        | Badge collection                       |

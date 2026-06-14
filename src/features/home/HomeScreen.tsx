@@ -63,7 +63,8 @@ export function HomeScreen() {
       <main className="flex-1 px-5 py-6">
         <h1 className="text-3xl text-ink md:text-4xl">Choose a subject</h1>
         <p className="mt-1 text-muted">
-          Pick a subject to keep learning. Your progress is saved on this device.
+          Pick a subject to keep learning. Your progress is saved on this
+          device.
         </p>
 
         <div className="mt-7 flex flex-col gap-4">

@@ -303,9 +303,7 @@ describe("validateContent - subject validation", () => {
   it("flags a subject with an empty title", () => {
     const content = validContent();
     content.subjects[0].title = "";
-    expect(validateContent(content).join("\n")).toMatch(
-      /empty title/i,
-    );
+    expect(validateContent(content).join("\n")).toMatch(/empty title/i);
   });
 });
 
@@ -456,9 +454,7 @@ describe("validateContent - matching question validation", () => {
       ],
     };
     content.tracks[0].lessons[0].practice = [match];
-    expect(validateContent(content).join("\n")).toMatch(
-      /duplicate pair id/,
-    );
+    expect(validateContent(content).join("\n")).toMatch(/duplicate pair id/);
   });
 
   it("flags a matching question with empty pair content", () => {
@@ -494,7 +490,9 @@ describe("validateContent - matching question validation", () => {
       id: "m1",
       type: "matching",
       prompt: [{ kind: "text", text: "Match chemical formulas to names" }],
-      explanation: [{ kind: "text", text: "H2O is water, CO2 is carbon dioxide." }],
+      explanation: [
+        { kind: "text", text: "H2O is water, CO2 is carbon dioxide." },
+      ],
       xp: 10,
       pairs: [
         {
@@ -546,7 +544,9 @@ describe("validateContent - aiProvenance validation", () => {
       sources: ["worksheet.pdf"],
       role: "invalid" as "generated",
     };
-    expect(validateContent(content).join("\n")).toMatch(/invalid (role|provenance)/i);
+    expect(validateContent(content).join("\n")).toMatch(
+      /invalid (role|provenance)/i,
+    );
   });
 
   it("accepts a lesson with no aiProvenance at all", () => {

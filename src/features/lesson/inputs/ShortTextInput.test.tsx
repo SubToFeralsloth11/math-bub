@@ -1,4 +1,4 @@
-import { fireEvent, screen , render } from "@testing-library/react";
+import { fireEvent, screen, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { ShortTextInput } from "./ShortTextInput";

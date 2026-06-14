@@ -27,36 +27,36 @@ async function answerCorrectly(
   question: Question,
 ) {
   switch (question.type) {
-  case "mcq": {
-    const radios = screen.getAllByRole("radio");
-    const correct = radios.find(
-      (radio) => radio.getAttribute("value") === question.correctOptionId,
-    );
-    await user.click(correct!);
-  
-  break;
-  }
-  case "numeric": {
-    await user.type(screen.getByRole("textbox"), question.accepted[0]);
-  
-  break;
-  }
-  case "shortText": {
-    await user.type(screen.getByRole("textbox"), question.accepted[0]);
-  
-  break;
-  }
-  case "fillInTheBlank": {
-    await user.type(screen.getByRole("textbox"), question.accepted[0]);
-  
-  break;
-  }
-  case "expression": {
-    await user.type(screen.getByRole("textbox"), question.target);
-  
-  break;
-  }
-  // No default
+    case "mcq": {
+      const radios = screen.getAllByRole("radio");
+      const correct = radios.find(
+        (radio) => radio.getAttribute("value") === question.correctOptionId,
+      );
+      await user.click(correct!);
+
+      break;
+    }
+    case "numeric": {
+      await user.type(screen.getByRole("textbox"), question.accepted[0]);
+
+      break;
+    }
+    case "shortText": {
+      await user.type(screen.getByRole("textbox"), question.accepted[0]);
+
+      break;
+    }
+    case "fillInTheBlank": {
+      await user.type(screen.getByRole("textbox"), question.accepted[0]);
+
+      break;
+    }
+    case "expression": {
+      await user.type(screen.getByRole("textbox"), question.target);
+
+      break;
+    }
+    // No default
   }
   await user.click(screen.getByRole("button", { name: /check answer/i }));
   await user.click(screen.getByRole("button", { name: /next|finish/i }));

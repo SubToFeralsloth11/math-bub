@@ -51,6 +51,7 @@ we do not need perfect extraction because we are generating new content, not
 copying.
 
 **What it typically captures from a well-organised Class Notebook:**
+
 - **Curriculum-plan pages** (e.g. "Term 1", "Term 2"): week-by-week topic lists
   with textbook exercise references. These provide the track/lesson structure.
 - **Exercise-table pages** (e.g. "Questions"): exercise numbers organised by
@@ -90,6 +91,7 @@ Playwright-compatible (standard `storageState` format).
 9. Writes `extracted.json` to `/tmp/onenote-extraction/`
 
 **Configuration in the script:**
+
 - `NOTEBOOK_URL` — the SharePoint doc.aspx URL for the Class Notebook
 - `SECTIONS` — hardcoded list of section names to extract (dynamic detection is unstable)
 - Image size threshold: `naturalWidth > 60 && naturalHeight > 60`
@@ -196,15 +198,15 @@ For every topic you generate content for, follow these rules:
 Do not create one track per OneNote section. Group related topics into
 sensible tracks based on subject area:
 
-| Topics | Suggested track id |
-|--------|-------------------|
+| Topics                                                 | Suggested track id   |
+| ------------------------------------------------------ | -------------------- |
 | 1E/1F, 1G, 1H (negative integers, order of operations) | `integer-operations` |
-| 4A, 4B, 4C, 4E, 4F (perimeter, circumference, area) | `perimeter-and-area` |
-| 4K, 4L, 4M (Pythagoras) | `pythagoras` |
-| 4H, 4I (volume, capacity) | `volume` |
-| 3F (decimals) | `decimals` |
-| 2D (quadrilaterals) | `quadrilaterals` |
-| 10D, 10E, 10H, 10I (congruency, similarity) | `geometry` |
+| 4A, 4B, 4C, 4E, 4F (perimeter, circumference, area)    | `perimeter-and-area` |
+| 4K, 4L, 4M (Pythagoras)                                | `pythagoras`         |
+| 4H, 4I (volume, capacity)                              | `volume`             |
+| 3F (decimals)                                          | `decimals`           |
+| 2D (quadrilaterals)                                    | `quadrilaterals`     |
+| 10D, 10E, 10H, 10I (congruency, similarity)            | `geometry`           |
 
 #### Using the exercise-table as a difficulty guide
 
@@ -224,13 +226,13 @@ ratio of difficulty levels to generate.
 
 #### Structural mapping
 
-| OneNote concept | StudyBub type | How to use it |
-|-----------------|---------------|---------------|
-| Notebook (e.g. "2026 - Year 8 Maths") | Subject | One Subject per notebook |
-| Section (e.g. "Term 1") | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
-| Curriculum-plan topic line | Lesson | One lesson per topic; use exercise number as title prefix |
-| Exercise-table row | Difficulty guide | Calibrate question count and difficulty per lesson |
-| Embedded image in page | Figure | Copy PNG to `public/figures/`, reference by filename stem |
+| OneNote concept                       | StudyBub type    | How to use it                                                        |
+| ------------------------------------- | ---------------- | -------------------------------------------------------------------- |
+| Notebook (e.g. "2026 - Year 8 Maths") | Subject          | One Subject per notebook                                             |
+| Section (e.g. "Term 1")               | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
+| Curriculum-plan topic line            | Lesson           | One lesson per topic; use exercise number as title prefix            |
+| Exercise-table row                    | Difficulty guide | Calibrate question count and difficulty per lesson                   |
+| Embedded image in page                | Figure           | Copy PNG to `public/figures/`, reference by filename stem            |
 
 #### Image examination and figure usage
 
@@ -260,6 +262,7 @@ content generation.
 5. Wire the Figure into at least one learnCard or question.
 
 **Images that must not be silently ignored:**
+
 - The Term Maths Planner (curriculum roadmap).
 - Any image containing worked solutions or step-by-step reasoning.
 - Diagrams of geometric shapes, number lines, or graphs.
@@ -392,16 +395,19 @@ export const trackNameTrack: Track = {
 ## Key constraints and limitations
 
 ### WOPI iframe isolation
+
 The WOPI frame (`officeapps.live.com`) is cross-origin from the parent
 SharePoint page. `agent-browser snapshot` cannot see inside it. Use
 Playwright's `page.frames()` to access the iframe directly.
 
 ### Read-only mode
+
 Class Notebooks open in read-only mode (`edit=0`). The File backstage ("File"
 tab) does not expose Export, Save As, or Download options. Text extraction must
 be done via DOM scraping.
 
 ### Dynamic section tree
+
 The section tree structure changes after clicking sections (collapsed sections
 expand). Use hardcoded section names from a prior manual inspection rather than
 dynamic discovery for reliability.
@@ -416,6 +422,7 @@ The most valuable pages for content generation are the curriculum-plan pages
 - Extension topics marked with "EXTENSION" prefix.
 
 Example from a cleaned page:
+
 ```
 Week 2
 1E/1F Adding and subtracting negative integers
@@ -431,5 +438,6 @@ Parse these to build the track lesson list. Each topic line becomes a lesson.
 Group consecutive weeks that cover related topics into the same track.
 
 ### IRM encryption
+
 `.one` files downloaded from SharePoint are encrypted at rest by Information
 Rights Management (IRM). Do not attempt to parse `.one` files directly.

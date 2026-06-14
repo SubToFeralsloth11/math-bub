@@ -68,8 +68,8 @@ export class ErrorBoundary extends Component<
           </div>
           <h1 className="text-2xl text-ink">Something popped</h1>
           <p className="text-muted">
-            StudyBub hit an unexpected snag. Your saved progress is safe - reload
-            to pick up where you left off.
+            StudyBub hit an unexpected snag. Your saved progress is safe -
+            reload to pick up where you left off.
           </p>
           <button
             type="button"

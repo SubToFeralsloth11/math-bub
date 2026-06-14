@@ -1,4 +1,4 @@
-import { fireEvent, screen , render } from "@testing-library/react";
+import { fireEvent, screen, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { FillInTheBlankInput } from "./FillInTheBlankInput";
@@ -24,7 +24,9 @@ describe("FillInTheBlankInput", () => {
     expect(
       screen.getByText("is the powerhouse of the cell."),
     ).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: /fill in the blank/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /fill in the blank/i }),
+    ).toBeInTheDocument();
   });
 
   it("accepts input in the gap", () => {

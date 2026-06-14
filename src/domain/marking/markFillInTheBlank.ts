@@ -14,9 +14,7 @@ export function markFillInTheBlank(
   if (input === "") {
     return { status: "incorrect" };
   }
-  const accepted = question.accepted.map((value) =>
-    normaliseShortText(value),
-  );
+  const accepted = question.accepted.map((value) => normaliseShortText(value));
   return accepted.includes(input)
     ? { status: "correct" }
     : { status: "incorrect" };

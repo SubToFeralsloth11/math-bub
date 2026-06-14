@@ -15,7 +15,7 @@
  */
 
 import { chromium } from "playwright";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const SESSION_FILE =
   process.env.HOME + "/.agent-browser/sessions/onenote-default.json";
@@ -35,8 +35,8 @@ async function main() {
     console.log(
       `Session: ${storageState.cookies?.length || 0} cookies, ${storageState.origins?.length || 0} origins`,
     );
-  } catch (e) {
-    console.error("Failed to load session:", e);
+  } catch (error) {
+    console.error("Failed to load session:", error);
     console.log(
       "Run agent-browser with --session-name onenote and log in first.",
     );
@@ -54,26 +54,31 @@ async function main() {
   const page = await context.newPage();
 
   // -----------------------------------------------------------------------
-  // Open the Class Notebook for content-rich pages. 
+  // Open the Class Notebook for content-rich pages.
   const notebookUrl =
     "https://qedu-my.sharepoint.com/personal/dhive0_eq_edu_au/_layouts/15/Doc.aspx?sourcedoc={c8d53722-3c72-4046-9f6d-e71d54ddf069}&action=view";
   console.log("\nOpening notebook...");
   // Use domcontentloaded instead of networkidle; SharePoint never idles.
-  await page.goto(notebookUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.goto(notebookUrl, {
+    waitUntil: "domcontentloaded",
+    timeout: 30_000,
+  });
   console.log("Title:", await page.title());
 
   // -----------------------------------------------------------------------
   // Wait for WOPI frame to load
   // -----------------------------------------------------------------------
   console.log("Waiting for WOPI frame (polling up to 30s)...");
-  for (let i = 0; i < 30; i++) {
+  for (let index = 0; index < 30; index++) {
     await sleep(1000);
-    const wf = page.frames().filter((f) => f.url().includes("officeapps.live.com"));
+    const wf = page
+      .frames()
+      .filter((f) => f.url().includes("officeapps.live.com"));
     if (wf.length > 0) {
-      console.log(`  WOPI frame appeared after ${i + 1}s`);
+      console.log(`  WOPI frame appeared after ${index + 1}s`);
       break;
     }
-    if (i % 5 === 4) process.stdout.write(`  ${i + 1}s...`);
+    if (index % 5 === 4) process.stdout.write(`  ${index + 1}s...`);
   }
   process.stdout.write("\n");
 
@@ -90,13 +95,13 @@ async function main() {
     console.log("\n⚠️  No WOPI frame found yet.");
     console.log("Frame URLs:");
     for (const f of frames) {
-      console.log(`  ${f.name() || "(unnamed)"}: ${f.url().substring(0, 120)}`);
+      console.log(`  ${f.name() || "(unnamed)"}: ${f.url().slice(0, 120)}`);
     }
     console.log("\nWaiting longer for dynamic frame creation...");
-    await sleep(10000);
+    await sleep(10_000);
     const frames2 = page.frames();
     for (const f of frames2) {
-      console.log(`  ${f.name() || "(unnamed)"}: ${f.url().substring(0, 120)}`);
+      console.log(`  ${f.name() || "(unnamed)"}: ${f.url().slice(0, 120)}`);
       if (f.url().includes("officeapps.live.com")) {
         wopiFrames.push(f);
       }
@@ -106,13 +111,13 @@ async function main() {
   if (wopiFrames.length === 0) {
     console.log("\n❌ Still no WOPI frame. Session may be expired.");
     console.log("Re-login with agent-browser and try again.");
-    await sleep(10000);
+    await sleep(10_000);
     await browser.close();
     return;
   }
 
   const wopiFrame = wopiFrames[0];
-  console.log(`\n✅ Found WOPI frame: ${wopiFrame.url().substring(0, 120)}`);
+  console.log(`\n✅ Found WOPI frame: ${wopiFrame.url().slice(0, 120)}`);
 
   // -----------------------------------------------------------------------
   // Explore the WOPI toolbar
@@ -123,14 +128,14 @@ async function main() {
   const toolbarElements = await wopiFrame.$$eval(
     'button, [role="button"], [role="tab"], [role="menuitem"], a, [role="link"]',
     (els) =>
-      els.map((el) => ({
-        tag: el.tagName.toLowerCase(),
-        text: (el.textContent || "").trim().substring(0, 60),
-        role: el.getAttribute("role") || "",
-        ariaLabel: el.getAttribute("aria-label") || "",
-        title: el.getAttribute("title") || "",
-        className: el.className?.toString().substring(0, 60) || "",
-        visible: el.offsetParent !== null,
+      els.map((element) => ({
+        tag: element.tagName.toLowerCase(),
+        text: (element.textContent || "").trim().slice(0, 60),
+        role: element.getAttribute("role") || "",
+        ariaLabel: element.getAttribute("aria-label") || "",
+        title: element.getAttribute("title") || "",
+        className: element.className?.toString().slice(0, 60) || "",
+        visible: element.offsetParent !== null,
       })),
   );
 
@@ -139,9 +144,9 @@ async function main() {
   console.log(`Visible elements with text: ${visible.length}`);
 
   // Show the first 30 for orientation.
-  for (const el of visible.slice(0, 30)) {
+  for (const element of visible.slice(0, 30)) {
     console.log(
-      `  [${el.tag}] ${el.role || ""} "${el.text}" ${el.ariaLabel ? `aria="${el.ariaLabel}"` : ""}`,
+      `  [${element.tag}] ${element.role || ""} "${element.text}" ${element.ariaLabel ? `aria="${element.ariaLabel}"` : ""}`,
     );
   }
 
@@ -155,10 +160,10 @@ async function main() {
     'button:has-text("File")',
     '[role="tab"]:has-text("File")',
     '[role="menubar"] >> text="File"',
-    '#FileTabButton',
+    "#FileTabButton",
     '[aria-label*="File"]',
     '[title="File"]',
-    '.o365cs-nav-fileButton',
+    ".o365cs-nav-fileButton",
   ];
 
   let fileButton = null;
@@ -186,10 +191,10 @@ async function main() {
   // The File backstage has: Close, Info, Print, Share, About, Edit in Desktop App.
   // Click "Print" to open the print panel.
   console.log("\n=== Looking for Print in File backstage ===");
-  const printBtn = await wopiFrame.$(':has-text("Print") >> visible=true');
-  if (printBtn) {
+  const printButton = await wopiFrame.$(':has-text("Print") >> visible=true');
+  if (printButton) {
     console.log("Clicking Print...");
-    await printBtn.click();
+    await printButton.click();
     await sleep(4000);
 
     // The print panel should now be visible. Look for download/export buttons.
@@ -200,20 +205,34 @@ async function main() {
         return els
           .filter((e) => e.offsetParent !== null && e.children.length === 0)
           .map((e) => e.textContent?.trim())
-          .filter((t): t is string => !!t && t.length > 1 && t.length < 80 && !seen.has(t) && (seen.add(t), true))
+          .filter(
+            (t): t is string =>
+              !!t &&
+              t.length > 1 &&
+              t.length < 80 &&
+              !seen.has(t) &&
+              (seen.add(t), true),
+          )
           .slice(0, 40);
       },
     );
     console.log("Print panel items:", printItems);
 
     // Try to trigger download
-    for (const kw of ["Download as PDF", "Export to PDF", "PDF", "Download", "Export", "Create PDF"]) {
-      const dlBtn = await wopiFrame.$(`:has-text("${kw}") >> visible=true`);
-      if (dlBtn) {
+    for (const kw of [
+      "Download as PDF",
+      "Export to PDF",
+      "PDF",
+      "Download",
+      "Export",
+      "Create PDF",
+    ]) {
+      const dlButton = await wopiFrame.$(`:has-text("${kw}") >> visible=true`);
+      if (dlButton) {
         console.log(`Found "${kw}", clicking...`);
         const [download] = await Promise.all([
-          page.waitForEvent("download", { timeout: 15000 }).catch(() => null),
-          dlBtn.click(),
+          page.waitForEvent("download", { timeout: 15_000 }).catch(() => null),
+          dlButton.click(),
         ]);
         if (download) {
           const path = `/tmp/onenote-export.${download.suggestedFilename().split(".").pop()}`;
@@ -238,11 +257,11 @@ async function main() {
   // Keep browser open for inspection
   // -----------------------------------------------------------------------
   console.log("\nKeeping browser open 15s for inspection...");
-  await sleep(15000);
+  await sleep(15_000);
   await browser.close();
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });

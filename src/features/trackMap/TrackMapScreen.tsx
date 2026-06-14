@@ -155,7 +155,10 @@ export function TrackMapScreen() {
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col">
       <AppHeader
-        back={{ to: subject ? `/subject/${subject.id}` : "/", label: subject ? "Subjects" : "Home" }}
+        back={{
+          to: subject ? `/subject/${subject.id}` : "/",
+          label: subject ? "Subjects" : "Home",
+        }}
         title={track.title}
         right={<RewardBar />}
       />

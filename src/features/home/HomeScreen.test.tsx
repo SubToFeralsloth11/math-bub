@@ -17,32 +17,38 @@ describe("HomeScreen", () => {
     ).toBeInTheDocument();
 
     // Maths has 8 tracks.
-    expect(
-      screen.getByRole("link", { name: /Maths/i }),
-    ).toHaveAttribute("href", "/subject/maths");
+    expect(screen.getByRole("link", { name: /Maths/i })).toHaveAttribute(
+      "href",
+      "/subject/maths",
+    );
     expect(screen.getByText(/8 tracks/)).toBeInTheDocument();
 
     // Other subjects have no tracks yet.
-    expect(
-      screen.getByRole("link", { name: /Science/i }),
-    ).toHaveAttribute("href", "/subject/science");
+    expect(screen.getByRole("link", { name: /Science/i })).toHaveAttribute(
+      "href",
+      "/subject/science",
+    );
     expect(screen.getAllByText("No tracks yet").length).toBeGreaterThan(0);
 
-    expect(
-      screen.getByRole("link", { name: /HASS/i }),
-    ).toHaveAttribute("href", "/subject/hass");
+    expect(screen.getByRole("link", { name: /HASS/i })).toHaveAttribute(
+      "href",
+      "/subject/hass",
+    );
 
-    expect(
-      screen.getByRole("link", { name: /English/i }),
-    ).toHaveAttribute("href", "/subject/english");
+    expect(screen.getByRole("link", { name: /English/i })).toHaveAttribute(
+      "href",
+      "/subject/english",
+    );
 
-    expect(
-      screen.getByRole("link", { name: /German/i }),
-    ).toHaveAttribute("href", "/subject/german");
+    expect(screen.getByRole("link", { name: /German/i })).toHaveAttribute(
+      "href",
+      "/subject/german",
+    );
 
-    expect(
-      screen.getByRole("link", { name: /HPE/i }),
-    ).toHaveAttribute("href", "/subject/hpe");
+    expect(screen.getByRole("link", { name: /HPE/i })).toHaveAttribute(
+      "href",
+      "/subject/hpe",
+    );
   });
 
   it("offers links to badges and a reset control", () => {

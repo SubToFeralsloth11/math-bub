@@ -59,7 +59,15 @@ const track: Track = {
 };
 
 const content: AppContent = {
-  subjects: [{ id: "maths", title: "Maths", description: "Maths", icon: "🧮", accent: "#6D4AFF" }],
+  subjects: [
+    {
+      id: "maths",
+      title: "Maths",
+      description: "Maths",
+      icon: "🧮",
+      accent: "#6D4AFF",
+    },
+  ],
   tracks: [track],
   badges: [
     {

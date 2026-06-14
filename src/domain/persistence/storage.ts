@@ -109,7 +109,9 @@ export function saveProgress(
     storage.setItem(STORAGE_KEY, JSON.stringify(state));
     return true;
   } catch {
-    console.warn("StudyBub: could not save progress (storage full or blocked).");
+    console.warn(
+      "StudyBub: could not save progress (storage full or blocked).",
+    );
     return false;
   }
 }

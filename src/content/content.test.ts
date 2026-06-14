@@ -54,7 +54,9 @@ describe("authored content", () => {
 
   it("resolves every referenced figure id to a manifest entry", () => {
     const manifestIds = new Set(
-      [...geometryFigures, ...spanishConquestFigures].map((figure) => figure.id),
+      [...geometryFigures, ...spanishConquestFigures].map(
+        (figure) => figure.id,
+      ),
     );
     for (const id of referencedFigureIds()) {
       expect(manifestIds).toContain(id);

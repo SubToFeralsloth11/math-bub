@@ -79,7 +79,15 @@ const badges: Badge[] = [
 ];
 
 const content: AppContent = {
-  subjects: [{ id: "maths", title: "Maths", description: "Maths", icon: "🧮", accent: "#6D4AFF" }],
+  subjects: [
+    {
+      id: "maths",
+      title: "Maths",
+      description: "Maths",
+      icon: "🧮",
+      accent: "#6D4AFF",
+    },
+  ],
   tracks: [track("algebra", ["a1", "a2"])],
   badges,
 };

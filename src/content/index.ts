@@ -134,8 +134,6 @@ export const trackIds: string[] = appContent.tracks.map((track) => track.id);
 if (import.meta.env?.DEV) {
   const issues = validateContent(appContent);
   if (issues.length > 0) {
-    console.error(
-      "StudyBub content validation issues:\n" + issues.join("\n"),
-    );
+    console.error("StudyBub content validation issues:\n" + issues.join("\n"));
   }
 }

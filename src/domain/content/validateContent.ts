@@ -173,7 +173,10 @@ function validateQuestion(
           `${where}: fillInTheBlank "${question.id}" has no non-empty accepted answers.`,
         );
       }
-      if (question.template.length === 0 || !hasBlankMarker(question.template)) {
+      if (
+        question.template.length === 0 ||
+        !hasBlankMarker(question.template)
+      ) {
         issues.push(
           `${where}: fillInTheBlank "${question.id}" template must contain "___" marker.`,
         );
