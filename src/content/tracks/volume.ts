@@ -10,7 +10,32 @@
 
 import { m, t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type {
+  Figure,
+  Lesson,
+  Track,
+  Question,
+} from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figRectangularPrism: Figure = {
+  id: "volume-rectangular-prism",
+  alt: "3D rectangular prism in oblique projection with the length, width and height labelled with arrows, and the formula volume = length x width x height.",
+  textFallback:
+    "[Diagram: 3D rectangular prism (box) with length l, width w, and height h labelled on each edge, and the formula volume = l x w x h]",
+};
+
+const figCylinder: Figure = {
+  id: "volume-cylinder",
+  alt: "3D cylinder lying on its side with the radius r shown at the circular end and the height h shown along the axis, with the formula volume = pi x r squared x h.",
+  textFallback:
+    "[Diagram: 3D cylinder with radius r at the circular end and height h along the axis, and the formula volume = pi x r^2 x h]",
+};
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // 4H - Volume and capacity
@@ -30,6 +55,7 @@ const volumeAndCapacity: Lesson = {
     {
       id: "4h-key",
       heading: "Key idea: volume",
+      figure: figRectangularPrism,
       body: [
         t(
           "Volume measures the amount of space inside a three-dimensional object. It is measured in cubic units such as cubic centimetres (cm³) and cubic metres (m³).",
@@ -343,6 +369,7 @@ const volumePrismsCylinders: Lesson = {
     {
       id: "4i-key",
       heading: "Key idea: prism and cylinder volume",
+      figure: figCylinder,
       body: [
         t(
           "A prism is a 3D shape with two identical, parallel ends and a uniform cross-section along its length. Examples include rectangular prisms, triangular prisms and hexagonal prisms.",
@@ -832,6 +859,9 @@ const volumeChallengeQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track export
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by the volume track. */
+export const volumeFigures: Figure[] = [figRectangularPrism, figCylinder];
 
 export const volumeTrack: Track = {
   id: "volume",

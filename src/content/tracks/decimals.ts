@@ -12,7 +12,32 @@
 
 import { m, t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type {
+  Figure,
+  Lesson,
+  Track,
+  Question,
+} from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figPlaceValueChart: Figure = {
+  id: "decimals-place-value-chart",
+  alt: "Place value chart with columns from millions down to thousandths, showing the digits 4, 2, ., 7, 5 to illustrate the value 42.75 with the decimal digits highlighted.",
+  textFallback:
+    "[Diagram: Place value chart from Millions to Thousandths, with the digits 4, 2, ., 7, 5 filled in to represent 42.75]",
+};
+
+const figRoundingNumberLine: Figure = {
+  id: "decimals-rounding-number-line",
+  alt: "Number line from 2.30 to 2.40 with 2.345 marked and an arc showing it rounds to 2.35.",
+  textFallback:
+    "[Diagram: Number line 2.30 to 2.40 with 2.345 plotted and an arrow showing it rounds to 2.35]",
+};
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Lesson 1 – 3F Terminating decimals, recurring decimals and rounding
@@ -32,6 +57,7 @@ const terminatingRecurringRounding: Lesson = {
     {
       id: "3f-decimal-types",
       heading: "Key idea: terminating and recurring decimals",
+      figure: figPlaceValueChart,
       body: [
         t(
           "A terminating decimal ends after a finite number of decimal places. For example, 0.25 and 0.875 are terminating decimals.",
@@ -446,6 +472,7 @@ const roundingDecimals: Lesson = {
     {
       id: "round-dp",
       heading: "Key idea: rounding to decimal places",
+      figure: figRoundingNumberLine,
       body: [
         t(
           "Rounding to a given number of decimal places (d.p.) follows a consistent method:",
@@ -1427,6 +1454,12 @@ const decimalsBossQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by the decimals track. */
+export const decimalsFigures: Figure[] = [
+  figPlaceValueChart,
+  figRoundingNumberLine,
+];
 
 /** The Decimals track. */
 export const decimalsTrack: Track = {

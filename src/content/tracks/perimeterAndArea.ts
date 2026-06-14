@@ -12,7 +12,39 @@
 
 import { m, t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type {
+  Figure,
+  Lesson,
+  Track,
+  Question,
+} from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figPerimeterRectangle: Figure = {
+  id: "perimeter-rectangle-labelled",
+  alt: "Rectangle with length 5 cm and width 3 cm labelled, the perimeter highlighted in colour, and the equation perimeter = 2 x (length + width) = 16 cm.",
+  textFallback:
+    "[Diagram: Rectangle with length 5 cm, width 3 cm, perimeter highlighted, and the formula perimeter = 2 x (length + width) = 16 cm]",
+};
+
+const figCircleRadiusDiameter: Figure = {
+  id: "perimeter-circle-radius-diameter",
+  alt: "Circle with a red radius arrow from the centre to the edge, and a blue diameter arrow passing through the centre, with the equation circumference = pi x d = 2 x pi x r below.",
+  textFallback:
+    "[Diagram: Circle with radius r from centre to edge, diameter d through the centre, and the formula circumference = pi x d = 2 x pi x r]",
+};
+
+const figTriangleBaseHeight: Figure = {
+  id: "area-triangle-base-height",
+  alt: "Right-angled triangle with the base labelled b and the perpendicular height labelled h, with a right-angle square marked, and the formula area = 1/2 x b x h.",
+  textFallback:
+    "[Diagram: Right-angled triangle with base b along the bottom, height h on the vertical side, right-angle square marked, and the formula area = 1/2 x b x h]",
+};
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Lesson 1: 4A Length and perimeter
@@ -33,6 +65,7 @@ const lengthAndPerimeter: Lesson = {
     {
       id: "4a-key",
       heading: "Key idea: perimeter",
+      figure: figPerimeterRectangle,
       body: [
         t(
           "The perimeter is the total distance around the outside of a shape. To find it, add all side lengths together.",
@@ -345,6 +378,7 @@ const circumference: Lesson = {
     {
       id: "4b-key",
       heading: "Key idea: circumference",
+      figure: figCircleRadiusDiameter,
       body: [
         t("The circumference C is the perimeter (distance around) a circle."),
         t("If you know the diameter d:"),
@@ -676,6 +710,7 @@ const area: Lesson = {
     {
       id: "4c-key",
       heading: "Key idea: area formulas",
+      figure: figTriangleBaseHeight,
       body: [
         t(
           "Area measures the space inside a flat shape. It is measured in square units (cm², m², km²).",
@@ -1756,6 +1791,13 @@ const perimeterAreaChallengeQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track export
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by the perimeter and area track. */
+export const perimeterAndAreaFigures: Figure[] = [
+  figPerimeterRectangle,
+  figCircleRadiusDiameter,
+  figTriangleBaseHeight,
+];
 
 /** The Perimeter and Area track (Year 8, chapter 4). */
 export const perimeterAndAreaTrack: Track = {

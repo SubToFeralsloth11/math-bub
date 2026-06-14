@@ -12,7 +12,32 @@
 
 import { m, t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type {
+  Figure,
+  Lesson,
+  Track,
+  Question,
+} from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figNumberLine: Figure = {
+  id: "integers-number-line",
+  alt: "Number line from -5 to 5 with a blue dot at -3 and a red arrow pointing right to 1, labelled -3 + 4 = 1.",
+  textFallback:
+    "[Diagram: Number line -5 to 5 with a dot at -3 and an arrow to 1, showing -3 + 4 = 1]",
+};
+
+const figSignRulesGrid: Figure = {
+  id: "integers-sign-rules-grid",
+  alt: "2 by 2 grid of multiplication sign rules: positive x positive = positive, positive x negative = negative, negative x positive = negative, negative x negative = positive.",
+  textFallback:
+    "[Diagram: 2x2 grid showing the four sign rules for multiplication: same signs give a positive answer, different signs give a negative answer]",
+};
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Lesson 1 – 1E/1F Adding and subtracting negative integers
@@ -32,6 +57,7 @@ const addingSubtractingNegatives: Lesson = {
     {
       id: "1e-key",
       heading: "Key idea: adding and subtracting negatives",
+      figure: figNumberLine,
       body: [
         t("Adding a negative is the same as subtracting the positive:"),
         m("5 + (-3) = 5 - 3 = 2"),
@@ -371,6 +397,7 @@ const multiplyingDividingNegatives: Lesson = {
     {
       id: "1g-key",
       heading: "Key idea: sign rules for multiplication and division",
+      figure: figSignRulesGrid,
       body: [
         t(
           "When multiplying or dividing two numbers, the sign of the answer follows two simple rules:",
@@ -1596,6 +1623,12 @@ const integerOpsChallengeQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by the integer operations track. */
+export const integerOperationsFigures: Figure[] = [
+  figNumberLine,
+  figSignRulesGrid,
+];
 
 /** The Integer Operations track. */
 export const integerOperationsTrack: Track = {

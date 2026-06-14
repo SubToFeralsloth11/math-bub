@@ -13,7 +13,25 @@
 
 import { m, t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type {
+  Figure,
+  Lesson,
+  Track,
+  Question,
+} from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figClock12And24: Figure = {
+  id: "time-12-24-clock",
+  alt: "Analogue clock showing 2:30 with the 24-hour time 14:30 labelled, and callouts to 24-hour time 14:30 and 12-hour time 2:30 pm.",
+  textFallback:
+    "[Diagram: Analogue clock face showing 2:30, with 14:30 written in the centre and labels for 24-hour time 14:30 and 12-hour time 2:30 pm]",
+};
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 // Lesson 1 – 4J Time units and conversions
@@ -69,6 +87,7 @@ const timeUnitsConversion: Lesson = {
     {
       id: "4j-12-24-time",
       heading: "Key idea: 12-hour and 24-hour time",
+      figure: figClock12And24,
       body: [
         t("There are two common ways to write the time of day:"),
         t(
@@ -1231,6 +1250,9 @@ const timeBossQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by the time track. */
+export const timeFigures: Figure[] = [figClock12And24];
 
 /** The Time track (Year 8, chapter 4J). */
 export const timeTrack: Track = {

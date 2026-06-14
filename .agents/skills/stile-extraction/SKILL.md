@@ -131,6 +131,7 @@ navigation chrome. Fall back to `document.body.innerText` if the selector is
 absent.
 
 The extracted text will include:
+
 - Lesson title and section headings.
 - Learning objectives and success criteria.
 - Question prompts and student answers (if submitted).
@@ -182,6 +183,7 @@ empty-link UI elements, leaving only the external educational resources.
 
 **YouTube videos:** Stile embeds YouTube via iframes. The video IDs are loaded
 dynamically by React and are not present in the DOM. To find them:
+
 1. Note the video title from the extracted text.
 2. Search YouTube with the title (see Step 3e below).
 3. Add the resolved YouTube URL to the lesson's sourceRef or aiProvenance.
@@ -249,6 +251,7 @@ After extracting all lessons, organise the content into a structured inventory:
 ```
 
 Create an `inventory.md` that maps each Stile lesson to:
+
 - The StudyBub lesson it will seed.
 - Key facts, dates, names, and concepts extracted.
 - External resources that enrich it.
@@ -297,20 +300,20 @@ tasks. Nevertheless, do not copy it verbatim. Instead:
 
 ### Structural mapping
 
-| Stile concept | StudyBub type | How to use it |
-|---|---|---|
-| Stile subject (e.g. "2026 8HSS T2 Spanish Conquest") | Track | One track per Stile subject |
-| Subject area (e.g. HSS, Science, English) | Subject | Group tracks under subjects |
-| Lesson/worksheet | Lesson | One StudyBub lesson per content-heavy Stile lesson |
-| Learning objectives | LearnCard heading/body | Convert objectives into "Key idea" learnCard content |
-| Video + comprehension questions | LearnCard + practice Qs | Summarise video content in a learnCard; convert comprehension Qs to varied practice |
-| Textbook chapter content | LearnCard body | Expand chapter summaries into detailed learnCards with worked examples |
-| Discussion/prompt activities | Practice Qs (shortText) | Convert discussion prompts into short-text questions with accepted answer patterns |
-| Source analysis task | Lesson (standalone) | Create a dedicated lesson on historical source skills |
-| Assessment/exam sources | LearnCard examples + mastery Qs | Use sources as case studies in learnCards; create source-analysis mastery questions |
-| Project brief | Lesson topic seed | Use the project topic list to generate a lesson on that aspect of the subject |
-| Kahoot quiz | Boss challenge Qs | Use quiz questions to inform boss challenge content and difficulty |
-| PDF handout | LearnCard content | Incorporate the implied content (from the PDF title) into learnCards |
+| Stile concept                                        | StudyBub type                   | How to use it                                                                       |
+| ---------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------- |
+| Stile subject (e.g. "2026 8HSS T2 Spanish Conquest") | Track                           | One track per Stile subject                                                         |
+| Subject area (e.g. HSS, Science, English)            | Subject                         | Group tracks under subjects                                                         |
+| Lesson/worksheet                                     | Lesson                          | One StudyBub lesson per content-heavy Stile lesson                                  |
+| Learning objectives                                  | LearnCard heading/body          | Convert objectives into "Key idea" learnCard content                                |
+| Video + comprehension questions                      | LearnCard + practice Qs         | Summarise video content in a learnCard; convert comprehension Qs to varied practice |
+| Textbook chapter content                             | LearnCard body                  | Expand chapter summaries into detailed learnCards with worked examples              |
+| Discussion/prompt activities                         | Practice Qs (shortText)         | Convert discussion prompts into short-text questions with accepted answer patterns  |
+| Source analysis task                                 | Lesson (standalone)             | Create a dedicated lesson on historical source skills                               |
+| Assessment/exam sources                              | LearnCard examples + mastery Qs | Use sources as case studies in learnCards; create source-analysis mastery questions |
+| Project brief                                        | Lesson topic seed               | Use the project topic list to generate a lesson on that aspect of the subject       |
+| Kahoot quiz                                          | Boss challenge Qs               | Use quiz questions to inform boss challenge content and difficulty                  |
+| PDF handout                                          | LearnCard content               | Incorporate the implied content (from the PDF title) into learnCards                |
 
 ### Lesson structure
 
@@ -377,7 +380,7 @@ material — they help you identify which concepts warrant a visual — but
 they are **not** to be copied into `public/figures/`. Stile screenshots
 carry the Stile chrome, embedded third-party images (often copyrighted),
 and styling that is inconsistent with StudyBub. The StudyBub figures are
-*generated* by the `openai-image` skill, inspired by the concept the
+_generated_ by the `openai-image` skill, inspired by the concept the
 source image conveys but redrawn in the project's clean, textbook style.
 
 Workflow:

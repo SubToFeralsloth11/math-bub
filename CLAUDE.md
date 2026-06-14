@@ -31,3 +31,17 @@ All content MUST be appropriate for the target Year 8 curriculum by default. Con
 Every lesson and boss challenge MUST carry a `sourceRef` that links back to the originating worksheet, textbook, or practice paper. AI-generated or AI-checked content MUST additionally carry an `aiProvenance` marker declaring (a) which AI tool was used, (b) which source materials were provided, and (c) whether the content was generated, checked, or both. AI-produced content MUST pass the same validation gates as hand-authored content.
 
 **Rationale:** Source references let the learner revisit original material. AI provenance ensures reviewers can distinguish human-authored from AI-assisted content, and that AI output is held to the same quality bar.
+
+#### Principle VI: Automated quality gates
+
+Every push and pull request to `main` MUST pass all automated quality gates before it can merge. These gates run in the CI workflow (`.github/workflows/quality-and-deploy.yml`) and consist of:
+
+- **Static analysis:** ESLint (lint), Prettier (formatting), jscpd (copy-paste duplication).
+- **Unit tests:** Vitest with v8 coverage at or above the 80% thresholds for lines, functions, branches, and statements.
+- **Type-check:** `tsc -b` with strict mode and no unused locals or parameters.
+- **Build:** `vite build` producing a production bundle.
+- **End-to-end tests:** Playwright against Chromium.
+
+All five gate groups must succeed before a deploy to GitHub Pages is triggered on the `main` branch. No code that fails any gate may be deployed.
+
+**Rationale:** Automated gates prevent regressions, enforce consistent style, catch type errors and dead code, and ensure the learner never encounters a broken build. Making them non-negotiable removes the temptation to skip checks under time pressure.

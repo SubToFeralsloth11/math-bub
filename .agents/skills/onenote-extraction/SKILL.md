@@ -242,7 +242,7 @@ ratio of difficulty levels to generate.
 | Section (e.g. "Term 1")               | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
 | Curriculum-plan topic line            | Lesson           | One lesson per topic; use exercise number as title prefix            |
 | Exercise-table row                    | Difficulty guide | Calibrate question count and difficulty per lesson                   |
-| Embedded image in page                | Figure seed      | Identify the concept; generate a fresh figure with `openai-image` |
+| Embedded image in page                | Figure seed      | Identify the concept; generate a fresh figure with `openai-image`    |
 
 #### Image examination and figure usage
 
@@ -250,7 +250,7 @@ Every image extracted from OneNote must be examined. This is not optional
 — images carry curriculum structure, worked examples, and exercise
 layouts that inform content generation. But they are **reference
 material**, not assets. Do not copy PNGs into `public/figures/`. The
-StudyBub figures are *generated* by the `openai-image` skill, inspired
+StudyBub figures are _generated_ by the `openai-image` skill, inspired
 by what the source image conveys but redrawn in the project's clean,
 textbook style.
 
@@ -283,7 +283,7 @@ textbook style.
    - **photo-of-textbook** — photographs of textbook pages. The text
      itself is the source material; the photo is noise. Extract the
      concept and discard the image.
-4. For each *concept* the source image represents, decide whether a
+4. For each _concept_ the source image represents, decide whether a
    freshly generated figure would add learning or engagement value. If
    yes, write a `Figure` entry in the relevant track file and generate
    the image as described in "Generating figures with the openai-image

@@ -183,7 +183,9 @@ describe("ImageLightbox", () => {
   it("scales the content area to fill the viewport width without a small max-width cap", () => {
     render(<ImageLightbox {...defaultProps} />);
 
-    const content = screen.getByRole("dialog").querySelector("div > div:last-child")!;
+    const content = screen
+      .getByRole("dialog")
+      .querySelector("div > div:last-child")!;
     // Should use 90% of viewport width on larger screens, not be capped at a small max-width.
     expect(content.className).not.toContain("max-w-4xl");
     expect(content.className).toContain("sm:w-[90vw]");
