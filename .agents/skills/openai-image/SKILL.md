@@ -56,6 +56,71 @@ images are supported.
 - `--compression` - 0 to 100, for jpeg or webp output only.
 - `--moderation` - `auto` (default) or `low` (generation only).
 
+## Timeouts
+
+Generation can be slow — always use a generous timeout when invoking the script
+via `bash`:
+
+- `--quality low`: 60 seconds.
+- `--quality medium`: 180 seconds (3 minutes).
+- `--quality high`: 300 seconds (5 minutes).
+
+Higher resolutions (above 1024x1024) and complex prompts can push these higher.
+If a command times out, retry with `--quality medium` which usually completes
+within 2–3 minutes with good results.
+
+## Post-generation optimisation
+
+Images from gpt-image models are PNGs that are often 3–4 MB each — too large for
+web delivery. Always run an optimisation step after generation.
+
+### Lossless PNG compression
+
+For PNG output, use `optipng` at its highest optimisation level:
+
+```bash
+optipng -o5 output.png
+```
+
+This typically saves 7–11% with no quality loss.
+
+### WebP conversion (recommended)
+
+For web delivery, convert to WebP which is typically 85–90% smaller than the
+original PNG with negligible quality loss:
+
+```bash
+cwebp -q 80 input.png -o output.webp
+```
+
+The `-q` flag sets quality (0–100). Use 80 as a good balance of size and
+fidelity; use 90 for high-detail illustrations.
+
+When using WebP, ensure the consuming code tries `.webp` first with a `.png`
+fallback so existing PNG assets remain supported.
+
+### Batch optimisation
+
+To convert a set of PNGs to optimised WebP in one pass:
+
+```bash
+for f in *.png; do
+  cwebp -q 80 "$f" -o "${f%.png}.webp"
+done
+rm *.png  # remove originals after verifying the WebP output
+```
+
+## 1Password integration
+
+If the `OPENAI_API_KEY` environment variable holds an `op://` reference (e.g.
+`op://Lem/OpenAI API Key/password`), wrap invocations with `op run`. You may
+need to blank out other `op://` variables that reference vaults not present on
+the current machine:
+
+```bash
+SONAR_TOKEN="" OTHER_VAR="" op run -- uv run {baseDir}/scripts/generate.py "prompt" -o output.png
+```
+
 ## Notes
 
 - Output format is taken from the `-o` file extension unless `--output-format` is given.

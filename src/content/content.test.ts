@@ -11,6 +11,7 @@ import {
   tracksForSubject,
 } from "./index";
 import { geometryFigures } from "./tracks/geometry";
+import { spanishConquestFigures } from "./tracks/spanishConquest";
 import { validateContent } from "../domain/content/validateContent";
 
 // Collects every figure id referenced anywhere in the authored content.
@@ -52,7 +53,9 @@ describe("authored content", () => {
   });
 
   it("resolves every referenced figure id to a manifest entry", () => {
-    const manifestIds = new Set(geometryFigures.map((figure) => figure.id));
+    const manifestIds = new Set(
+      [...geometryFigures, ...spanishConquestFigures].map((figure) => figure.id),
+    );
     for (const id of referencedFigureIds()) {
       expect(manifestIds).toContain(id);
     }

@@ -16,9 +16,49 @@
  * @module content/tracks/spanishConquest
  */
 
-import { m, t } from "../blocks";
+import { t } from "../blocks";
 
-import type { Lesson, Track, Question } from "../../domain/content/types";
+import type { Lesson, Track, Question, Figure } from "../../domain/content/types";
+
+// ---------------------------------------------------------------------------
+// Figures
+// ---------------------------------------------------------------------------
+
+const figTenochtitlan: Figure = {
+  id: "tenochtitlan",
+  alt: "Illustration of Tenochtitlan, the Aztec island capital on Lake Texcoco, showing step-pyramid temples, chinampas (floating gardens), causeways, and canoes navigating canals.",
+  textFallback: "[Image: Tenochtitlan — the Aztec island capital on Lake Texcoco with temples, chinampas, and causeways]",
+};
+
+const figAztecHierarchy: Figure = {
+  id: "aztec-hierarchy",
+  alt: "Diagram of the Aztec social hierarchy pyramid: emperor at top, then nobles, warriors, commoners, and slaves at the bottom.",
+  textFallback: "[Diagram: Aztec social hierarchy — emperor, nobles, warriors, commoners, slaves]",
+};
+
+const figAztecSacrifice: Figure = {
+  id: "aztec-sacrifice",
+  alt: "Illustration of the Templo Mayor, the great twin temple pyramid in Tenochtitlan dedicated to Huitzilopochtli and Tlaloc, with a ceremonial scene.",
+  textFallback: "[Image: The Templo Mayor — the great twin temple pyramid in Tenochtitlan]",
+};
+
+const figCortesMoctezuma: Figure = {
+  id: "cortes-moctezuma",
+  alt: "Illustration of the first meeting between Hernán Cortés and Aztec emperor Moctezuma II in Tenochtitlan, November 1519, with Malinche as translator.",
+  textFallback: "[Image: Cortés and Moctezuma meeting in Tenochtitlan, with Malinche translating]",
+};
+
+const figSiegeTenochtitlan: Figure = {
+  id: "siege-tenochtitlan",
+  alt: "Illustration of the 1521 siege of Tenochtitlan, showing Spanish brigantines on Lake Texcoco attacking Aztec canoes while Spanish and Tlaxcalan forces advance along causeways.",
+  textFallback: "[Image: The 1521 siege of Tenochtitlan — Spanish brigantines on Lake Texcoco]",
+};
+
+const figCholulaMassacre: Figure = {
+  id: "cholula-massacre",
+  alt: "Split illustration showing two perspectives of the 1519 Cholula massacre — Spanish attackers on one side and unarmed Cholulan civilians on the other.",
+  textFallback: "[Image: Two perspectives of the Cholula massacre — Spanish attackers and Cholulan civilians]",
+};
 
 // ---------------------------------------------------------------------------
 // Lesson 1 – The Aztec Empire: rise of a civilisation
@@ -58,6 +98,7 @@ const aztecOrigins: Lesson = {
     {
       id: "origins-tenochtitlan",
       heading: "Tenochtitlan: a city on water",
+      figure: figTenochtitlan,
       body: [
         t(
           "The Aztecs named their island city Tenochtitlan (te-noch-TIT-lan). Over time it grew into one of the largest and most impressive cities in the world, with an estimated population of 200,000–300,000 people — larger than any European city of the same period.",
@@ -439,6 +480,7 @@ const aztecSociety: Lesson = {
     {
       id: "society-hierarchy",
       heading: "A strictly ordered world",
+      figure: figAztecHierarchy,
       body: [
         t(
           "Aztec society was organised as a strict hierarchy — a system that ranks people with the most important at the top and everyone else beneath in decreasing order of importance. There was very little opportunity to move out of the social class you were born into.",
@@ -846,6 +888,7 @@ const aztecReligion: Lesson = {
     {
       id: "religion-sacrifice",
       heading: "Human sacrifice: why and how",
+      figure: figAztecSacrifice,
       body: [
         t(
           "Human sacrifice was central to Aztec religion. The most common form involved cutting out the still-beating heart of the victim at the top of a temple pyramid. The body would then be thrown down the steps. This was not random violence — it was a highly ritualised ceremony with specific meanings.",
@@ -1210,6 +1253,7 @@ const spanishArrival: Lesson = {
     {
       id: "arrival-moctezuma",
       heading: "Moctezuma's dilemma",
+      figure: figCortesMoctezuma,
       body: [
         t(
           "When Moctezuma II, the Aztec emperor, heard reports of strange beings arriving on the coast — pale-skinned men riding enormous deer-like creatures (horses), carrying weapons that spat thunder and fire — he faced an impossible decision. Some accounts suggest Moctezuma initially believed Cortés might be the returning god Quetzalcoatl, whose return had been prophesied, though many historians now debate whether this was a later Spanish invention.",
@@ -1592,6 +1636,7 @@ const fallOfTenochtitlan: Lesson = {
     {
       id: "fall-siege",
       heading: "The siege and the invisible killer",
+      figure: figSiegeTenochtitlan,
       body: [
         t(
           "Cortés retreated to Tlaxcala, where he regrouped and planned his return. He had ships built in pieces, carried them over the mountains, and reassembled them on Lake Texcoco — giving the Spanish control of the water for the first time. In May 1521, he began a full siege of Tenochtitlan.",
@@ -2016,6 +2061,7 @@ const analysingSources: Lesson = {
     {
       id: "sources-cholula",
       heading: "Case study: two views of the Cholula massacre",
+      figure: figCholulaMassacre,
       body: [
         t(
           "The Cholula massacre of 1519 shows how the same event can appear completely different depending on who tells the story. Cortés and his allies, including thousands of Tlaxcalan warriors, entered the city of Cholula (a major Aztec ally) and killed thousands of unarmed civilians in the central courtyard. Read these two accounts:",
@@ -2649,6 +2695,16 @@ const spanishConquestChallengeQuestions: Question[] = [
 // ---------------------------------------------------------------------------
 // Track
 // ---------------------------------------------------------------------------
+
+/** Figures referenced by this track. */
+export const spanishConquestFigures: Figure[] = [
+  figTenochtitlan,
+  figAztecHierarchy,
+  figAztecSacrifice,
+  figCortesMoctezuma,
+  figSiegeTenochtitlan,
+  figCholulaMassacre,
+];
 
 /** The Spanish Conquest track (Year 8 HSS). */
 export const spanishConquestTrack: Track = {

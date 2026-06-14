@@ -18,6 +18,7 @@ interface FigureProps {
  */
 export function Figure({ figure }: Readonly<FigureProps>) {
   const [failed, setFailed] = useState(false);
+  const [triedWebp, setTriedWebp] = useState(false);
 
   if (failed) {
     return (
@@ -30,11 +31,22 @@ export function Figure({ figure }: Readonly<FigureProps>) {
     );
   }
 
+  /** Try WebP first, falling back to PNG if unavailable. */
+  const handleError = () => {
+    if (!triedWebp) {
+      setTriedWebp(true);
+    } else {
+      setFailed(true);
+    }
+  };
+
+  const ext = triedWebp ? ".png" : ".webp";
+
   return (
     <img
-      src={`/figures/${figure.id}.png`}
+      src={`/figures/${figure.id}${ext}`}
       alt={figure.alt}
-      onError={() => setFailed(true)}
+      onError={handleError}
       className="my-3 max-h-72 w-full rounded-bub object-contain ring-1 ring-hairline"
     />
   );
