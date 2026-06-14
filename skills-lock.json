@@ -1,11 +1,23 @@
 {
   "version": 1,
   "skills": {
+    "openai-image": {
+      "source": "johngrimes/skills",
+      "sourceType": "github",
+      "skillPath": "openai-image/SKILL.md",
+      "computedHash": "2099b76c50b82a7e90c0dd0e432801662c648a007ba69db7d0f1cc2fad918179"
+    },
     "skill-creator": {
       "source": "johngrimes/skills",
       "sourceType": "github",
       "skillPath": "skill-creator/SKILL.md",
       "computedHash": "f58f0e5d4a8c38fa01e81c99c8ba960afa941d695eb55b0dcb2b2bede15ad89b"
+    },
+    "svg-diagram": {
+      "source": "johngrimes/skills",
+      "sourceType": "github",
+      "skillPath": "svg-diagram/SKILL.md",
+      "computedHash": "d068c67ea373c89463572153c5cf0925159d91b14d64b1af7446e30aa21058b0"
     }
   }
 }

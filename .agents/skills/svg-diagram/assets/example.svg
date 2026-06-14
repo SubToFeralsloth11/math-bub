@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="-314.25 1793.5 1409.7277 603.5" width="1409.7277" height="603.5">
+  <defs>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="StickArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -3 7 6" markerWidth="7" markerHeight="6" color="black">
+      <g>
+        <path d="M 4.8 0 L 0 0 M 0 -1.8 L 4.8 0 L 0 1.8" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <g id="Real-time_view" fill-opacity="1" stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none">
+    <title>Real-time view</title>
+    <g id="Real-time_view_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_19">
+        <path d="M 34 2258 L 226 2258 C 229.3137 2258 232 2260.6863 232 2264 L 232 2313 C 232 2316.3137 229.3137 2319 226 2319 L 34 2319 C 30.68629 2319 28 2316.3137 28 2313 L 28 2264 C 28 2260.6863 30.68629 2258 34 2258 Z" fill="#cbffe5"/>
+        <path d="M 34 2258 L 226 2258 C 229.3137 2258 232 2260.6863 232 2264 L 232 2313 C 232 2316.3137 229.3137 2319 226 2319 L 34 2319 C 30.68629 2319 28 2316.3137 28 2313 L 28 2264 C 28 2260.6863 30.68629 2258 34 2258 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(38 2277.5)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="10.804688" y="17" xml:space="preserve">SMART authorisation</tspan>
+        </text>
+      </g>
+      <g id="Line_21">
+        <line x1="313.53662" y1="2174" x2="191.5" y2="2174" stroke="#686868" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_22">
+        <line x1="313.53662" y1="2288.5" x2="233" y2="2288.5" stroke="#686868" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_45">
+        <path d="M 74.5 2143.5 L 185.5 2143.5 C 188.8137 2143.5 191.5 2146.1863 191.5 2149.5 L 191.5 2198.5 C 191.5 2201.8137 188.8137 2204.5 185.5 2204.5 L 74.5 2204.5 C 71.18629 2204.5 68.5 2201.8137 68.5 2198.5 L 68.5 2149.5 C 68.5 2146.1863 71.18629 2143.5 74.5 2143.5 Z" fill="#ffd3b4"/>
+        <path d="M 74.5 2143.5 L 185.5 2143.5 C 188.8137 2143.5 191.5 2146.1863 191.5 2149.5 L 191.5 2198.5 C 191.5 2201.8137 188.8137 2204.5 185.5 2204.5 L 74.5 2204.5 C 71.18629 2204.5 68.5 2201.8137 68.5 2198.5 L 68.5 2149.5 C 68.5 2146.1863 71.18629 2143.5 74.5 2143.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(78.5 2163)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="18.949219" y="17" xml:space="preserve">FHIR API</tspan>
+        </text>
+      </g>
+      <g id="Graphic_48">
+        <path d="M -287 2028.5 L -117 2028.5 C -113.68629 2028.5 -111 2031.1863 -111 2034.5 L -111 2083.5 C -111 2086.8137 -113.68629 2089.5 -117 2089.5 L -287 2089.5 C -290.3137 2089.5 -293 2086.8137 -293 2083.5 L -293 2034.5 C -293 2031.1863 -290.3137 2028.5 -287 2028.5 Z" fill="#c3f7ff"/>
+        <path d="M -287 2028.5 L -117 2028.5 C -113.68629 2028.5 -111 2031.1863 -111 2034.5 L -111 2083.5 C -111 2086.8137 -113.68629 2089.5 -117 2089.5 L -287 2089.5 C -290.3137 2089.5 -293 2086.8137 -293 2083.5 L -293 2034.5 C -293 2031.1863 -290.3137 2028.5 -287 2028.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(-283 2048)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="15.382812" y="17" xml:space="preserve">Source data view</tspan>
+        </text>
+      </g>
+      <g id="Graphic_47">
+        <path d="M 9.573244 2028.5 L 251 2028.5 C 254.3137 2028.5 257 2031.1863 257 2034.5 L 257 2083.5 C 257 2086.8137 254.3137 2089.5 251 2089.5 L 9.573244 2089.5 C 6.259536 2089.5 3.5732443 2086.8137 3.5732443 2083.5 L 3.5732443 2034.5 C 3.5732443 2031.1863 6.259536 2028.5 9.573244 2028.5 Z" fill="#fff4fb"/>
+        <path d="M 9.573244 2028.5 L 251 2028.5 C 254.3137 2028.5 257 2031.1863 257 2034.5 L 257 2083.5 C 257 2086.8137 254.3137 2089.5 251 2089.5 L 9.573244 2089.5 C 6.259536 2089.5 3.5732443 2086.8137 3.5732443 2083.5 L 3.5732443 2034.5 C 3.5732443 2031.1863 6.259536 2028.5 9.573244 2028.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(13.573244 2048)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="12.041504" y="17" xml:space="preserve">Candidate predictions view</tspan>
+        </text>
+      </g>
+      <g id="Line_50">
+        <line x1="-128" y1="2174" x2="55.6" y2="2174" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_49">
+        <rect x="-91.02045" y="2162" width="111.0039" height="24" fill="white"/>
+        <text transform="translate(-86.02045 2167)" fill="black">
+          <tspan font-family="Roboto" font-size="12" fill="black" x="0" y="11" xml:space="preserve">FHIR subscriptions</tspan>
+        </text>
+      </g>
+      <g id="Graphic_51">
+        <path d="M -270.5 2133.5 L -134 2133.5 C -130.68629 2133.5 -128 2136.1863 -128 2139.5 L -128 2208.5 C -128 2211.8137 -130.68629 2214.5 -134 2214.5 L -270.5 2214.5 C -273.8137 2214.5 -276.5 2211.8137 -276.5 2208.5 L -276.5 2139.5 C -276.5 2136.1863 -273.8137 2133.5 -270.5 2133.5 Z" fill="#ffd3b4"/>
+        <path d="M -270.5 2133.5 L -134 2133.5 C -130.68629 2133.5 -128 2136.1863 -128 2139.5 L -128 2208.5 C -128 2211.8137 -130.68629 2214.5 -134 2214.5 L -270.5 2214.5 C -273.8137 2214.5 -276.5 2211.8137 -276.5 2208.5 L -276.5 2139.5 C -276.5 2136.1863 -273.8137 2133.5 -270.5 2133.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(-266.5 2152)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="17.261719" y="17" xml:space="preserve">SQL on FHIR </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="6.496094" y="39" xml:space="preserve">view execution</tspan>
+        </text>
+      </g>
+      <g id="Line_53">
+        <line x1="-202" y1="2089.5" x2="-202.1767" y2="2120.6002" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_55">
+        <path d="M -165.125 2214.5 C -165.125 2276.6553 -97.21992 2287.7366 15.100184 2288.4602" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_54">
+        <rect x="-102.23511" y="2267.1074" width="101.39453" height="38" fill="white"/>
+        <text transform="translate(-97.23511 2272.1074)" fill="black">
+          <tspan font-family="Roboto" font-size="12" fill="black" x="1.4853516" y="11" xml:space="preserve">access token for </tspan>
+          <tspan font-family="Roboto" font-size="12" fill="black" x=".7734375" y="25" xml:space="preserve">bulk data access</tspan>
+        </text>
+      </g>
+      <g id="Line_57">
+        <path d="M 3.5732443 2059 C -50.809557 2059 -41.089226 2059 -97.09363 2059" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_59">
+        <path d="M 10.323244 1924 L 251.75 1924 C 255.0637 1924 257.75 1926.6863 257.75 1930 L 257.75 1979 C 257.75 1982.3137 255.0637 1985 251.75 1985 L 10.323244 1985 C 7.009536 1985 4.3232443 1982.3137 4.3232443 1979 L 4.3232443 1930 C 4.3232443 1926.6863 7.009536 1924 10.323244 1924 Z" fill="#ffd9f2"/>
+        <path d="M 10.323244 1924 L 251.75 1924 C 255.0637 1924 257.75 1926.6863 257.75 1930 L 257.75 1979 C 257.75 1982.3137 255.0637 1985 251.75 1985 L 10.323244 1985 C 7.009536 1985 4.3232443 1982.3137 4.3232443 1979 L 4.3232443 1930 C 4.3232443 1926.6863 7.009536 1924 10.323244 1924 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(14.323244 1943.5)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="11.322754" y="17" xml:space="preserve">Admission predictions view</tspan>
+        </text>
+      </g>
+      <g id="Graphic_66">
+        <path d="M 439.75 1976 L 609.75 1976 C 613.0637 1976 615.75 1978.6863 615.75 1982 L 615.75 2031 C 615.75 2034.3137 613.0637 2037 609.75 2037 L 439.75 2037 C 436.4363 2037 433.75 2034.3137 433.75 2031 L 433.75 1982 C 433.75 1978.6863 436.4363 1976 439.75 1976 Z" fill="#c3f7ff"/>
+        <path d="M 439.75 1976 L 609.75 1976 C 613.0637 1976 615.75 1978.6863 615.75 1982 L 615.75 2031 C 615.75 2034.3137 613.0637 2037 609.75 2037 L 439.75 2037 C 436.4363 2037 433.75 2034.3137 433.75 2031 L 433.75 1982 C 433.75 1978.6863 436.4363 1976 439.75 1976 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(443.75 1995.5)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="11.773438" y="17" xml:space="preserve">Model monitoring</tspan>
+        </text>
+      </g>
+      <g id="Line_64">
+        <path d="M 479.25 2037 C 475.867 2090.645 392.90575 2061.14 269.9019 2059.1077" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_62">
+        <path d="M 479.25 1976 C 479.25 1916.8243 379.78976 1951.6215 270.64958 1954.3362" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_61">
+        <rect x="311.23915" y="2044.3563" width="69.484375" height="38" fill="white"/>
+        <text transform="translate(316.23915 2049.3563)" fill="black">
+          <tspan font-family="Roboto" font-size="12" fill="black" x="7.183594" y="11" xml:space="preserve">replayed</tspan>
+          <tspan font-family="Roboto" font-size="12" fill="black" x="0" y="25" xml:space="preserve">predictions</tspan>
+        </text>
+      </g>
+      <g id="Graphic_60">
+        <rect x="312.07854" y="1929.5253" width="69.484375" height="38" fill="white"/>
+        <text transform="translate(317.07854 1934.5253)" fill="black">
+          <tspan font-family="Roboto" font-size="12" fill="black" x="2.4345703" y="11" xml:space="preserve">monitored</tspan>
+          <tspan font-family="Roboto" font-size="12" fill="black" x="0" y="25" xml:space="preserve">predictions</tspan>
+        </text>
+      </g>
+      <g id="Line_67">
+        <path d="M 4.3232443 1954.5 C -56.97654 1954.5 -144.30408 1957.562 -155.33906 2015.6498" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_74">
+        <path d="M 319.53662 2119.5 L 1078.4777 2119.5 C 1081.7915 2119.5 1084.4777 2122.1863 1084.4777 2125.5 L 1084.4777 2340.5054 C 1084.4777 2343.819 1081.7915 2346.5054 1078.4777 2346.5054 L 319.53662 2346.5054 C 316.2229 2346.5054 313.53662 2343.819 313.53662 2340.5054 L 313.53662 2125.5 C 313.53662 2122.1863 316.2229 2119.5 319.53662 2119.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(323.53662 2129.5)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="0" y="17" xml:space="preserve">Health service</tspan>
+        </text>
+      </g>
+      <g id="Graphic_73">
+        <path d="M 718.97774 2179.5 L 860.9777 2179.5 C 864.2915 2179.5 866.9777 2182.1863 866.9777 2185.5 L 866.9777 2304.9946 C 866.9777 2308.3083 864.2915 2310.9946 860.9777 2310.9946 L 718.97774 2310.9946 C 715.664 2310.9946 712.97774 2308.3083 712.97774 2304.9946 L 712.97774 2185.5 C 712.97774 2182.1863 715.664 2179.5 718.97774 2179.5 Z" fill="#fdf6e3"/>
+        <path d="M 718.97774 2179.5 L 860.9777 2179.5 C 864.2915 2179.5 866.9777 2182.1863 866.9777 2185.5 L 866.9777 2304.9946 C 866.9777 2308.3083 864.2915 2310.9946 860.9777 2310.9946 L 718.97774 2310.9946 C 715.664 2310.9946 712.97774 2308.3083 712.97774 2304.9946 L 712.97774 2185.5 C 712.97774 2182.1863 715.664 2179.5 718.97774 2179.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(722.97774 2212.2473)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="39.191406" y="17" xml:space="preserve">Patient </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="9.691406" y="39" xml:space="preserve">administration </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="17.769531" y="61" xml:space="preserve">system (PAS)</tspan>
+        </text>
+      </g>
+      <g id="Graphic_72">
+        <path d="M 540.97774 2179.5 L 682.97774 2179.5 C 686.29145 2179.5 688.97774 2182.1863 688.97774 2185.5 L 688.97774 2304.9946 C 688.97774 2308.3083 686.29145 2310.9946 682.97774 2310.9946 L 540.97774 2310.9946 C 537.66404 2310.9946 534.97774 2308.3083 534.97774 2304.9946 L 534.97774 2185.5 C 534.97774 2182.1863 537.66404 2179.5 540.97774 2179.5 Z" fill="#fdf6e3"/>
+        <path d="M 540.97774 2179.5 L 682.97774 2179.5 C 686.29145 2179.5 688.97774 2182.1863 688.97774 2185.5 L 688.97774 2304.9946 C 688.97774 2308.3083 686.29145 2310.9946 682.97774 2310.9946 L 540.97774 2310.9946 C 537.66404 2310.9946 534.97774 2308.3083 534.97774 2304.9946 L 534.97774 2185.5 C 534.97774 2182.1863 537.66404 2179.5 540.97774 2179.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(544.97774 2212.2473)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="24.273438" y="17" xml:space="preserve">Laboratory </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="20.824219" y="39" xml:space="preserve">information </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="21.1875" y="61" xml:space="preserve">system (LIS)</tspan>
+        </text>
+      </g>
+      <g id="Graphic_71">
+        <path d="M 896.9777 2179.5 L 1038.9777 2179.5 C 1042.2915 2179.5 1044.9777 2182.1863 1044.9777 2185.5 L 1044.9777 2304.9946 C 1044.9777 2308.3083 1042.2915 2310.9946 1038.9777 2310.9946 L 896.9777 2310.9946 C 893.664 2310.9946 890.9777 2308.3083 890.9777 2304.9946 L 890.9777 2185.5 C 890.9777 2182.1863 893.664 2179.5 896.9777 2179.5 Z" fill="#fdf6e3"/>
+        <path d="M 896.9777 2179.5 L 1038.9777 2179.5 C 1042.2915 2179.5 1044.9777 2182.1863 1044.9777 2185.5 L 1044.9777 2304.9946 C 1044.9777 2308.3083 1042.2915 2310.9946 1038.9777 2310.9946 L 896.9777 2310.9946 C 893.664 2310.9946 890.9777 2308.3083 890.9777 2304.9946 L 890.9777 2185.5 C 890.9777 2182.1863 893.664 2179.5 896.9777 2179.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(900.9777 2212.2473)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="23.835938" y="17" xml:space="preserve">Medication </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="15.472656" y="39" xml:space="preserve">management </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="39.523438" y="61" xml:space="preserve">system</tspan>
+        </text>
+      </g>
+      <g id="Graphic_70">
+        <path d="M 362.97774 2179.5 L 504.97774 2179.5 C 508.29145 2179.5 510.97774 2182.1863 510.97774 2185.5 L 510.97774 2304.9946 C 510.97774 2308.3083 508.29145 2310.9946 504.97774 2310.9946 L 362.97774 2310.9946 C 359.66404 2310.9946 356.97774 2308.3083 356.97774 2304.9946 L 356.97774 2185.5 C 356.97774 2182.1863 359.66404 2179.5 362.97774 2179.5 Z" fill="#fdf6e3"/>
+        <path d="M 362.97774 2179.5 L 504.97774 2179.5 C 508.29145 2179.5 510.97774 2182.1863 510.97774 2185.5 L 510.97774 2304.9946 C 510.97774 2308.3083 508.29145 2310.9946 504.97774 2310.9946 L 362.97774 2310.9946 C 359.66404 2310.9946 356.97774 2308.3083 356.97774 2304.9946 L 356.97774 2185.5 C 356.97774 2182.1863 359.66404 2179.5 362.97774 2179.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(366.97774 2212.2473)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="28.9375" y="17" xml:space="preserve">Electronic </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="9.273438" y="39" xml:space="preserve">medical record </tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="44.984375" y="61" xml:space="preserve">(EMR)</tspan>
+        </text>
+      </g>
+      <g id="Graphic_75">
+        <path d="M 39.25 1804.5 L 221.25 1804.5 C 224.5637 1804.5 227.25 1807.1863 227.25 1810.5 L 227.25 1879.5 C 227.25 1882.8137 224.5637 1885.5 221.25 1885.5 L 39.25 1885.5 C 35.93629 1885.5 33.25 1882.8137 33.25 1879.5 L 33.25 1810.5 C 33.25 1807.1863 35.93629 1804.5 39.25 1804.5 Z" fill="#ffe0bc"/>
+        <path d="M 39.25 1804.5 L 221.25 1804.5 C 224.5637 1804.5 227.25 1807.1863 227.25 1810.5 L 227.25 1879.5 C 227.25 1882.8137 224.5637 1885.5 221.25 1885.5 L 39.25 1885.5 C 35.93629 1885.5 33.25 1882.8137 33.25 1879.5 L 33.25 1810.5 C 33.25 1807.1863 35.93629 1804.5 39.25 1804.5 Z" stroke="#012b36" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(43.25 1823)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="13.292969" y="17" xml:space="preserve">Admission forecast</tspan>
+          <tspan font-family="Open Sans" font-weight="bold" font-size="16" fill="black" x="45.464844" y="39" xml:space="preserve">dashboard</tspan>
+        </text>
+      </g>
+      <g id="Line_77">
+        <line x1="130.25" y1="1885.5" x2="130.7731" y2="1911.1027" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_79">
+        <line x1="-207.25" y1="2373" x2="-185.15" y2="2373" marker-end="url(#StickArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_78">
+        <text transform="translate(-299.25 2365)" fill="black">
+          <tspan font-family="Open Sans" font-weight="bold" font-size="12" fill="black" x="0" y="13" xml:space="preserve">depends upon</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>
