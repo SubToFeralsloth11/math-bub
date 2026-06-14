@@ -192,6 +192,16 @@ For every topic you generate content for, follow these rules:
    contain correct answers. Placeholder questions (with sentinel values like
    "(answer to be filled)") are not acceptable — every question must be fully
    answerable.
+8. **Never copy source images verbatim.** Source images are reference
+   material that tells you which concepts warrant a visual, not assets
+   to copy into `public/figures/`. They are usually blurry scans, photo
+   snapshots, or screenshots with chrome and inconsistent labelling.
+   Use the `openai-image` skill to generate a fresh, clean,
+   StudyBub-style figure for every concept that benefits from one. A
+   regenerated figure can be tightly focused on the learning objective,
+   properly labelled, accessibility-friendly, and visually consistent
+   with the rest of the track. See "Generating figures with the
+   openai-image skill" below.
 
 #### Topic-to-track grouping
 
@@ -232,41 +242,155 @@ ratio of difficulty levels to generate.
 | Section (e.g. "Term 1")               | Content grouping | Groups topics by term; topics within a term share a curriculum phase |
 | Curriculum-plan topic line            | Lesson           | One lesson per topic; use exercise number as title prefix            |
 | Exercise-table row                    | Difficulty guide | Calibrate question count and difficulty per lesson                   |
-| Embedded image in page                | Figure           | Copy PNG to `public/figures/`, reference by filename stem            |
+| Embedded image in page                | Figure seed      | Identify the concept; generate a fresh figure with `openai-image` |
 
 #### Image examination and figure usage
 
-Every image extracted from OneNote must be examined and either used or
-explicitly discarded with a reason. This is not optional — images carry
-curriculum structure, worked examples, and exercise layouts that inform
-content generation.
+Every image extracted from OneNote must be examined. This is not optional
+— images carry curriculum structure, worked examples, and exercise
+layouts that inform content generation. But they are **reference
+material**, not assets. Do not copy PNGs into `public/figures/`. The
+StudyBub figures are *generated* by the `openai-image` skill, inspired
+by what the source image conveys but redrawn in the project's clean,
+textbook style.
 
 **Examination process:**
 
 1. Open each PNG in `/tmp/onenote-extraction/` (use `open` or the read tool
    to view it).
-2. Record: page source, what the image shows, which topic it relates to.
+2. Record: page source, what the image shows, which topic it relates to,
+   and the underlying concept that the image is trying to convey.
 3. Classify each image:
-   - **curriculum-planner** — term/week overview tables. Use as a Figure in
-     the first learnCard of the track's first lesson so the learner can see
-     the curriculum roadmap.
-   - **worked-example** — handwritten or typeset solution steps. Incorporate
-     into a learnCard as a Figure alongside the generated worked example.
-   - **diagram** — geometry shapes, number lines, graphs. Use as a Figure in
-     practice or mastery questions that reference the diagram.
+   - **curriculum-planner** — term/week overview tables. Identify the
+     concept it represents (e.g. "the term's topic sequence"). This
+     concept, if useful to the learner, becomes a freshly generated
+     figure (typically a topic-overview or roadmap figure for the first
+     lesson of the track). Do not copy the planner image itself.
+   - **worked-example** — handwritten or typeset solution steps. Identify
+     the worked example concept (e.g. "subtracting a negative on the
+     number line"). Re-author the worked example as StudyBub text in a
+     learnCard and, if it benefits visually, generate a clean
+     re-illustration. Do not copy the original handwriting or scan.
+   - **diagram** — geometry shapes, number lines, graphs. Identify the
+     underlying concept. Generate a clean, StudyBub-style version with
+     the openai-image skill — do not copy the source PNG, which is often
+     low resolution, off-style, or cropped.
    - **exercise-layout** — formatted exercise tables or question lists.
-     Reference these when calibrating question difficulty and volume.
+     Use these to calibrate question difficulty and volume. Do not
+     incorporate them as figures; their information is structural, not
+     visual.
    - **ui-chrome** — OneNote toolbar icons, navigation buttons. Discard.
-4. For each kept image, copy the PNG to `public/figures/` and create a
-   `Figure` object with a descriptive `alt` and `textFallback`.
-5. Wire the Figure into at least one learnCard or question.
+   - **photo-of-textbook** — photographs of textbook pages. The text
+     itself is the source material; the photo is noise. Extract the
+     concept and discard the image.
+4. For each *concept* the source image represents, decide whether a
+   freshly generated figure would add learning or engagement value. If
+   yes, write a `Figure` entry in the relevant track file and generate
+   the image as described in "Generating figures with the openai-image
+   skill" below. If no, discard the concept.
+5. Wire each generated Figure into at least one learnCard or question.
 
-**Images that must not be silently ignored:**
+**Images that must not be silently ignored (but also must not be copied):**
 
-- The Term Maths Planner (curriculum roadmap).
-- Any image containing worked solutions or step-by-step reasoning.
-- Diagrams of geometric shapes, number lines, or graphs.
-- Exercise tables with difficulty columns.
+- The Term Maths Planner (curriculum roadmap) — the concept is "term
+  topic sequence"; the image is a blurry photo or OneNote screenshot.
+  Generate a clean replacement or skip if not needed.
+- Worked-example images — the concept is the procedure being taught;
+  the image is a scan. Re-author the procedure in text and, if visual
+  value warrants, generate a fresh illustration.
+- Diagram images of geometric shapes, number lines, or graphs — the
+  concept is the labelled diagram; the image is a low-resolution photo
+  or hand-drawn sketch. Generate a clean replacement in StudyBub style.
+- Exercise tables with difficulty columns — the data is structural; do
+  not incorporate them as figures.
+
+#### Generating figures with the openai-image skill
+
+OneNote content is mostly text and tends to be sparse on diagrams. Most
+lessons you generate will not have a source image at all. For those
+lessons, decide which concepts would benefit from an accompanying
+illustration, then generate it using the `openai-image` skill at
+`.agents/skills/openai-image/`. See `public/figures/README.md` for the
+project's authoring convention.
+
+**When to generate a figure for a lesson:**
+
+- The concept is geometric, graphical, or spatial (shapes, angles,
+  transformations, number lines, area diagrams, coordinate grids, Venn
+  diagrams, bar/line graphs).
+- A worked example would be clearer with a visual (labelled diagram of a
+  triangle with the Pythagorean triple marked, a perimeter broken into
+  segments, a number line showing the jumps when subtracting a negative).
+- The lesson is about interpreting a chart, table, or visual pattern.
+- The first lesson of a track would benefit from a topic-overview figure
+  (e.g. "the four operations on the number line", "the family of
+  quadrilaterals").
+
+**When NOT to generate a figure:**
+
+- A lesson whose concept is purely procedural or symbolic (e.g. expanding
+  brackets, simplifying fractions, substitution). A Figure is rarely
+  worth the generation cost here.
+- Decorative or motivational imagery. StudyBub is a study tool, not a
+  picture book.
+- Anything that duplicates an existing figure in `public/figures/`.
+
+**Generation workflow:**
+
+1. Write a `Figure` entry in the track file with a descriptive `id` (kebab
+   case), `alt` (accessibility description), and `textFallback` (text shown
+   if the image is missing). The `id` is the asset filename stem.
+2. Compose a focused text prompt for the openai-image skill. Use the
+   project's standard style: white background, bold labels, clean textbook
+   style with no decorative shading. See existing figures in
+   `public/figures/` (e.g. `tenochtitlan.webp`, `congruent-triangles-sss.webp`)
+   for the established look. Be specific about composition: what is on the
+   page, what labels appear, what colours distinguish which elements.
+3. Generate the image:
+   ```bash
+   op run -- uv run /Users/gri306/Code/studybub/.agents/skills/openai-image/scripts/generate.py \
+     "your prompt here" -o /tmp/onenote-extraction/<id>.png --size 1024x1024 --quality medium
+   ```
+   Use a generous timeout: `--quality medium` is 180 s, `--quality high` is
+   300 s. Start with `--quality medium` and only escalate to high if the
+   medium-quality result is not legible.
+4. Convert to WebP for web delivery (the existing convention in
+   `public/figures/`):
+   ```bash
+   cwebp -q 80 /tmp/onenote-extraction/<id>.png -o /Users/gri306/Code/studybub/public/figures/<id>.webp
+   ```
+   Keep the original PNG alongside the WebP so the `Figure` component can
+   fall back to it (see `public/figures/README.md` for the file-naming
+   convention). PNG fallback is also useful if regeneration is needed.
+5. Reference the figure from a learnCard (`learnCard.figure`) or a question
+   (`question.figure`) — not both with the same figure unless the reuse is
+   intentional.
+6. Export the figure as part of a `*Figures` array at the bottom of the
+   track file (e.g. `export const trackNameFigures: Figure[] = [...]`) and
+   wire that array into `src/content/content.test.ts` so the manifest check
+   passes. Match the convention used by `spanishConquestFigures` and
+   `biologyFigures`.
+
+**Prompting tips for maths figures:**
+
+- Specify "white background", "textbook illustration", "no shadow" and
+  "no decorative elements" to get clean diagrams.
+- For shapes, name the shape, its key parts, and the labels that should
+  appear (e.g. "a right-angled triangle with vertices labelled A, B, C, the
+  right angle at B, the hypotenuse from A to C, side lengths a, b, c
+  marked").
+- For number lines, specify the range, the marked points, and any
+  annotations (e.g. "a number line from -10 to 10, with the integers
+  marked and arrows showing the jump from -3 to +5").
+- For coordinate planes, specify the visible quadrant, scale, and any
+  plotted points or lines.
+
+**Don't generate every figure at once.** Generate figures in batches as
+you write the lessons that use them. If a generation fails or produces a
+poor result, refine the prompt and retry. The `textFallback` in the
+`Figure` definition means the track remains fully usable even before the
+image is generated, so you can write the track first and generate the
+images second.
 
 #### Lesson structure
 
@@ -327,13 +451,20 @@ After creating new track files, complete these steps:
    to `src/content/badges.ts` for each new track.
 2. **Wire imports** — import each new track in `src/content/index.ts` and add
    it to the `tracks` array.
-3. **Run validation** — execute `validateContent(appContent)` and confirm zero
+3. **Generate figures** — for any figure referenced in the new lessons
+   that is not already in `public/figures/`, generate it with the
+   `openai-image` skill, convert to WebP, and confirm the file is in
+   place. See "Generating figures with the openai-image skill" above.
+4. **Wire figure manifests** — export the new track's figures as a
+   `*Figures` array and add it to the `figuresManifest` array in
+   `src/content/content.test.ts` so the manifest check passes.
+5. **Run validation** — execute `validateContent(appContent)` and confirm zero
    issues.
-4. **Check references** — verify every `subjectId`, `passBadgeId`, and badge
+6. **Check references** — verify every `subjectId`, `passBadgeId`, and badge
    `criterion` resolves to a real entity.
-5. **Fix existing labels** — if the notebook shows existing tracks have wrong
+7. **Fix existing labels** — if the notebook shows existing tracks have wrong
    year labels, correct them now.
-6. **TypeScript check** — run `npx tsc --noEmit` to confirm no type errors.
+8. **TypeScript check** — run `npx tsc --noEmit` to confirm no type errors.
 
 #### Content file template
 

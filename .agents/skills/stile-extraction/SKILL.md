@@ -285,6 +285,15 @@ tasks. Nevertheless, do not copy it verbatim. Instead:
 5. **Respect the source.** Every lesson and boss challenge must carry a
    `sourceRef` linking back to the Stile subject. Use `aiProvenance` to
    declare AI involvement and list all Stile lessons and external sources used.
+6. **Never copy source images verbatim.** Stile screenshots, embedded
+   photographs, and third-party illustrations are reference material,
+   not assets to reuse. They carry Stile chrome, third-party
+   copyright, and inconsistent visual style. Use the `openai-image`
+   skill to generate a fresh, StudyBub-style figure for every concept
+   that benefits from one. A regenerated figure can be tightly focused
+   on the learning objective, properly labelled, accessibility-friendly,
+   and visually consistent with the rest of the track. See "Generating
+   figures with the openai-image skill" below.
 
 ### Structural mapping
 
@@ -363,33 +372,156 @@ The `sourceRef` should reference the Stile subject and term
 ### Image handling
 
 Unlike OneNote, Stile images cannot be downloaded as separate files (they are
-embedded in the React app). Instead:
+embedded in the React app). Screenshots of Stile pages are reference
+material — they help you identify which concepts warrant a visual — but
+they are **not** to be copied into `public/figures/`. Stile screenshots
+carry the Stile chrome, embedded third-party images (often copyrighted),
+and styling that is inconsistent with StudyBub. The StudyBub figures are
+*generated* by the `openai-image` skill, inspired by the concept the
+source image conveys but redrawn in the project's clean, textbook style.
+
+Workflow:
 
 1. Take full-page screenshots of every lesson.
 2. Examine each screenshot and describe every content image it contains
-   (diagrams, maps, timelines, photographs, infographics).
-3. For images that carry educational content, find equivalent public-domain or
-   Creative Commons alternatives, or create text descriptions as `textFallback`
-   values.
-4. Record which images would benefit from being recreated as Figures in the
-   StudyBub content.
+   (diagrams, maps, timelines, photographs, infographics). For each
+   image, record the underlying concept the image is trying to convey.
+3. For each concept that would benefit from a StudyBub figure, use the
+   `openai-image` skill to generate a fresh illustration. Do not look
+   for "equivalent public-domain or Creative Commons alternatives" and do
+   not embed Stile screenshots — generate a new figure every time. See
+   "Generating figures with the openai-image skill" below.
+4. If a concept cannot be cleanly redrawn (e.g. a famous photograph of
+   a real artefact whose appearance is the point of the question), use
+   a thorough `textFallback` in the `Figure` definition and skip image
+   generation. The question remains answerable.
+5. Record the decision per concept: "generated as `<id>.webp`" or
+   "text-only via `textFallback`".
+
+#### Generating figures with the openai-image skill
+
+Stile content is image-rich — it contains historical scenes, maps, social
+hierarchy diagrams, artefact photographs, and source illustrations. Many
+of these cannot be re-used in StudyBub (they are embedded screenshots, or
+copyrighted photos of artefacts). The standard approach is to regenerate
+the educational figure from scratch using the `openai-image` skill at
+`.agents/skills/openai-image/`. See `public/figures/README.md` for the
+project's authoring convention and the existing
+`spanishConquestFigures` array in `src/content/tracks/spanishConquest.ts`
+for worked examples.
+
+**When to generate a figure for a lesson:**
+
+- The source has a clear, educationally useful image (a map, a social
+  hierarchy diagram, a labelled illustration of an artefact, a timeline)
+  that you cannot reuse directly.
+- The concept is spatial, structural, or chronological and would be
+  clearer with a visual (e.g. a map of the Aztec Empire, a flowchart of
+  the Spanish conquest sequence, a diagram of the three social classes).
+- A worked example, primary source, or assessment source is being
+  re-presented in StudyBub and would benefit from a labelled illustration.
+- A first lesson of the track would benefit from a topic-overview image
+  that sets the scene (a stylised map of the region, a title plate).
+
+**When NOT to generate a figure:**
+
+- The source is a photograph of a real person or place that you cannot
+  accurately recreate. A poor rendering of a historical figure can be
+  misleading. Use a `textFallback` instead.
+- The concept is purely textual or conceptual (e.g. "explain why the
+  Spanish were able to defeat the Aztecs"). A Figure is rarely worth the
+  generation cost here.
+- Decorative or motivational imagery. StudyBub is a study tool, not a
+  picture book.
+- Anything that duplicates an existing figure in `public/figures/`.
+
+**Generation workflow:**
+
+1. Write a `Figure` entry in the track file with a descriptive `id` (kebab
+   case), `alt` (accessibility description), and `textFallback` (text shown
+   if the image is missing). The `id` is the asset filename stem.
+2. Compose a focused text prompt for the openai-image skill. Use the
+   project's standard style: white background, bold labels, clean textbook
+   style with no decorative shading. See existing figures in
+   `public/figures/` (e.g. `tenochtitlan.webp`, `aztec-hierarchy.webp`,
+   `cortes-moctezuma.webp`) for the established look. Be specific about
+   composition: what is on the page, what labels appear, what colours
+   distinguish which elements.
+3. Generate the image:
+   ```bash
+   op run -- uv run /Users/gri306/Code/studybub/.agents/skills/openai-image/scripts/generate.py \
+     "your prompt here" -o /tmp/stile-extraction/<id>.png --size 1024x1024 --quality medium
+   ```
+   Use a generous timeout: `--quality medium` is 180 s, `--quality high` is
+   300 s. Start with `--quality medium` and only escalate to high if the
+   medium-quality result is not legible.
+4. Convert to WebP for web delivery (the existing convention in
+   `public/figures/`):
+   ```bash
+   cwebp -q 80 /tmp/stile-extraction/<id>.png -o /Users/gri306/Code/studybub/public/figures/<id>.webp
+   ```
+   Keep the original PNG alongside the WebP so the `Figure` component can
+   fall back to it (see `public/figures/README.md` for the file-naming
+   convention). PNG fallback is also useful if regeneration is needed.
+5. Reference the figure from a learnCard (`learnCard.figure`) or a question
+   (`question.figure`) — not both with the same figure unless the reuse is
+   intentional.
+6. Export the figure as part of a `*Figures` array at the bottom of the
+   track file (e.g. `export const trackNameFigures: Figure[] = [...]`) and
+   wire that array into `src/content/content.test.ts` so the manifest check
+   passes. Match the convention used by `spanishConquestFigures` and
+   `biologyFigures`.
+
+**Prompting tips for historical/social-studies figures:**
+
+- Specify "white background", "textbook illustration", "no shadow" and
+  "no decorative elements" to get clean diagrams. Historical scenes can
+  be slightly more stylised (e.g. a hand-coloured woodcut style for
+  colonial-era content) but stay close to the textbook convention so
+  figures look consistent across tracks.
+- For maps, name the region, the key locations to label, and any borders
+  or features to emphasise. Avoid generating modern political boundaries
+  that anachronistically project onto a historical scene.
+- For social hierarchies and diagrams, name the levels/parts and the
+  labels that should appear. Specify the relative sizes if hierarchy
+  matters (e.g. "pyramid shape, emperor largest at top, slaves smallest
+  at bottom").
+- For scenes, name the people involved, their clothing, the setting, and
+  any props (e.g. "Hernán Cortés in Spanish armour meeting Moctezuma II
+  in feathered headdress and gold jewellery, in a courtyard of
+  Tenochtitlan, with Malinche translating"). Avoid generating recognisable
+  modern faces or contemporary clothing.
+
+**Don't generate every figure at once.** Generate figures in batches as
+you write the lessons that use them. If a generation fails or produces a
+poor result, refine the prompt and retry. The `textFallback` in the
+`Figure` definition means the track remains fully usable even before the
+image is generated, so you can write the track first and generate the
+images second.
 
 ### Integration checklist (after creating content)
 
 1. **Create subject** — add a new subject file in `src/content/subjects/` if
    the subject area does not already exist.
 2. **Create track** — write the track file in `src/content/tracks/`.
-3. **Add badges** — add `track-complete:<id>` and `boss-pass:<id>` badges to
+3. **Generate figures** — for any figure referenced in the new lessons
+   that is not already in `public/figures/`, generate it with the
+   `openai-image` skill, convert to WebP, and confirm the file is in
+   place. See "Generating figures with the openai-image skill" above.
+4. **Wire figure manifests** — export the new track's figures as a
+   `*Figures` array and add it to the `figuresManifest` array in
+   `src/content/content.test.ts` so the manifest check passes.
+5. **Add badges** — add `track-complete:<id>` and `boss-pass:<id>` badges to
    `src/content/badges.ts`.
-4. **Wire imports** — import the new subject and track in `src/content/index.ts`
+6. **Wire imports** — import the new subject and track in `src/content/index.ts`
    and add them to their respective arrays.
-5. **Run validation** — `bun test src/domain/content/validateContent.test.ts`
+7. **Run validation** — `bun test src/domain/content/validateContent.test.ts`
    and confirm all tests pass.
-6. **Run integration tests** — `bun test src/content/content.test.ts` and
+8. **Run integration tests** — `bun test src/content/content.test.ts` and
    confirm all tests pass.
-7. **TypeScript check** — `npx tsc --noEmit` and confirm no type errors.
-8. **Dev server** — start the dev server and confirm no content validation
-   errors appear in the console.
+9. **TypeScript check** — `npx tsc --noEmit` and confirm no type errors.
+10. **Dev server** — start the dev server and confirm no content validation
+    errors appear in the console.
 
 ## Key constraints and limitations
 
