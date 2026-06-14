@@ -177,7 +177,7 @@ const lengthAndPerimeter: Lesson = {
     },
     {
       id: "4a-p5",
-      type: "shortText",
+      type: "numeric",
       prompt: [
         t(
           "A rectangle is 15 m long and 8 m wide. What is its perimeter? Give the number with units.",
@@ -188,7 +188,8 @@ const lengthAndPerimeter: Lesson = {
         t("Using P = 2(l + w) can be faster: add first, then double."),
       ],
       xp: 15,
-      accepted: ["46 m", "46m", "46"],
+      accepted: ["46"],
+      unit: "m",
     },
     {
       id: "4a-p6",
@@ -210,7 +211,7 @@ const lengthAndPerimeter: Lesson = {
     },
     {
       id: "4a-p7",
-      type: "shortText",
+      type: "numeric",
       prompt: [
         t(
           "A rectangle has perimeter 56 cm and width 12 cm. What is its length? Give a number with units.",
@@ -221,7 +222,8 @@ const lengthAndPerimeter: Lesson = {
         m(String.raw`2l + 24 = 56 \implies 2l = 32 \implies l = 16 \text{ cm}`),
       ],
       xp: 15,
-      accepted: ["16 cm", "16cm", "16"],
+      accepted: ["16"],
+      unit: "cm",
     },
     {
       id: "4a-p8",
@@ -840,7 +842,7 @@ const area: Lesson = {
     },
     {
       id: "4c-p7",
-      type: "shortText",
+      type: "numeric",
       prompt: [
         t(
           "A rectangle is 6 m long and 4 m wide. What is its area? Give the number with units.",
@@ -848,7 +850,8 @@ const area: Lesson = {
       ],
       explanation: [m(String.raw`A = 6 \times 4 = 24 \text{ m}^2`)],
       xp: 15,
-      accepted: ["24 m2", "24 m^2", "24m2", "24m^2", "24"],
+      accepted: ["24"],
+      unit: "m2",
     },
     {
       id: "4c-p8",
@@ -1149,7 +1152,7 @@ const areaOfCircles: Lesson = {
     },
     {
       id: "4e-p6",
-      type: "shortText",
+      type: "numeric",
       prompt: [
         t("A circle has circumference 31.4 cm. Find its area. Use"),
         m(String.raw`\pi \approx 3.14`),
@@ -1161,7 +1164,8 @@ const areaOfCircles: Lesson = {
         t("When given circumference, find the radius first, then use A = πr²."),
       ],
       xp: 15,
-      accepted: ["78.5 cm2", "78.5 cm^2", "78.5cm2", "78.5"],
+      accepted: ["78.5"],
+      unit: "cm2",
     },
     {
       id: "4e-p7",
@@ -1463,7 +1467,7 @@ const sectorsAndComposite: Lesson = {
     },
     {
       id: "4f-p5",
-      type: "shortText",
+      type: "numeric",
       prompt: [
         t("A sector has radius 5 cm and angle 120°. Find its area. Use"),
         m(String.raw`\pi \approx 3.14`),
@@ -1478,7 +1482,8 @@ const sectorsAndComposite: Lesson = {
         ),
       ],
       xp: 15,
-      accepted: ["26.17 cm2", "26.17 cm^2", "26.17cm2", "26.17"],
+      accepted: ["26.17"],
+      unit: "cm2",
     },
     {
       id: "4f-p6",
