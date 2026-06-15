@@ -103,9 +103,7 @@ const germanPlaces: Lesson = {
         t(
           "Das Museum befindet sich in der Adelaide Street. — The museum is situated in Adelaide Street.",
         ),
-        t(
-          "Der See liegt in dem Wald. — The lake is located in the forest.",
-        ),
+        t("Der See liegt in dem Wald. — The lake is located in the forest."),
         t(
           "Das Stadion liegt in der Müllerstraße. — The stadium is located in Müllerstraße.",
         ),
@@ -131,9 +129,7 @@ const germanPlaces: Lesson = {
     {
       id: "places-p1",
       type: "mcq",
-      prompt: [
-        t("What is the gender of the German word for 'museum'?"),
-      ],
+      prompt: [t("What is the gender of the German word for 'museum'?")],
       explanation: [
         t(
           "Das Museum is neuter. Nouns ending in -um (like Museum, Stadion, Zentrum) are usually neuter. The article is das, and in the dative case after in it becomes dem: in dem Museum.",
@@ -152,9 +148,7 @@ const germanPlaces: Lesson = {
       id: "places-p2",
       type: "fillInTheBlank",
       prompt: [
-        t(
-          "Complete the sentence: Das Schloss ___ in der Stadt. (is located)",
-        ),
+        t("Complete the sentence: Das Schloss ___ in der Stadt. (is located)"),
       ],
       explanation: [
         t(
@@ -168,11 +162,7 @@ const germanPlaces: Lesson = {
     {
       id: "places-p3",
       type: "matching",
-      prompt: [
-        t(
-          "Match each German place with its English meaning.",
-        ),
-      ],
+      prompt: [t("Match each German place with its English meaning.")],
       explanation: [
         t(
           "Building your place vocabulary is the foundation for describing a city. Let's review: der Flughafen = the airport, die Kathedrale = the cathedral, das Einkaufszentrum = the shopping centre, der Bahnhof = the train station, das Rathaus = the town hall, der See = the lake. Notice the compound words: Einkaufszentrum (shopping centre) and Rathaus (town hall) are built from simpler German words.",
@@ -249,8 +239,18 @@ const germanPlaces: Lesson = {
       ],
       xp: 15,
       options: [
-        { id: "a", label: [t("In takes dative for static location (where something is)")] },
-        { id: "b", label: [t("Stadt is always feminine so it uses der after prepositions")] },
+        {
+          id: "a",
+          label: [
+            t("In takes dative for static location (where something is)"),
+          ],
+        },
+        {
+          id: "b",
+          label: [
+            t("Stadt is always feminine so it uses der after prepositions"),
+          ],
+        },
         { id: "c", label: [t("In always takes the dative case regardless")] },
         { id: "d", label: [t("It is just an exception to memorise")] },
       ],
@@ -276,7 +276,9 @@ const germanPlaces: Lesson = {
       id: "places-p7",
       type: "mcq",
       prompt: [
-        t("The German word Flughafen (airport) is a compound of which two words?"),
+        t(
+          "The German word Flughafen (airport) is a compound of which two words?",
+        ),
       ],
       explanation: [
         t(
@@ -295,11 +297,7 @@ const germanPlaces: Lesson = {
     {
       id: "places-p8",
       type: "shortText",
-      prompt: [
-        t(
-          "Translate into German: 'The train station is in the city.'",
-        ),
-      ],
+      prompt: [t("Translate into German: 'The train station is in the city.'")],
       explanation: [
         t(
           "Der Bahnhof liegt in der Stadt. Bahnhof is masculine (der Bahnhof). For static location with in, we use the dative case: die Stadt becomes der Stadt. Der Bahnhof befindet sich in der Stadt is also correct — befindet sich is a slightly more formal way of saying 'is located'.",
@@ -335,9 +333,7 @@ const germanPlaces: Lesson = {
       id: "places-m2",
       type: "matching",
       prompt: [
-        t(
-          "Match each location description to the correct German noun.",
-        ),
+        t("Match each location description to the correct German noun."),
       ],
       explanation: [
         t(
@@ -455,12 +451,8 @@ const germanSights: Lesson = {
         t(
           "The structure is: Man kann + (object) + (infinitive verb). The main verb always goes to the end of the clause.",
         ),
-        t(
-          "Man kann das Schloss besuchen. — One can visit the castle.",
-        ),
-        t(
-          "Man kann den Dom sehen. — One can see the cathedral.",
-        ),
+        t("Man kann das Schloss besuchen. — One can visit the castle."),
+        t("Man kann den Dom sehen. — One can see the cathedral."),
         t(
           "Man kann in dem Park spazieren gehen. — One can go for a walk in the park.",
         ),
@@ -479,12 +471,8 @@ const germanSights: Lesson = {
         t(
           "To ask where something is located, use: Wo liegt ...? or Wo befindet sich ...?",
         ),
-        t(
-          "Wo liegt Neuschwanstein? — Where is Neuschwanstein located?",
-        ),
-        t(
-          "Neuschwanstein liegt in Bayern. — Neuschwanstein is in Bavaria.",
-        ),
+        t("Wo liegt Neuschwanstein? — Where is Neuschwanstein located?"),
+        t("Neuschwanstein liegt in Bayern. — Neuschwanstein is in Bavaria."),
         t(
           "Wo befindet sich das Brandenburger Tor? — Where is the Brandenburg Gate situated?",
         ),
@@ -523,11 +511,7 @@ const germanSights: Lesson = {
     {
       id: "sights-p2",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete: Man kann das Schloss ___ . (visit)",
-        ),
-      ],
+      prompt: [t("Complete: Man kann das Schloss ___ . (visit)")],
       explanation: [
         t(
           "Man kann das Schloss besuchen. Besuchen means 'to visit'. In a man kann sentence, the second verb always goes to the end. This is because können is a modal verb, and in German modal constructions, the main infinitive is placed at the end of the clause.",
@@ -573,7 +557,10 @@ const germanSights: Lesson = {
       ],
       xp: 15,
       options: [
-        { id: "a", label: [t("It is the accusative case — direct object of sehen")] },
+        {
+          id: "a",
+          label: [t("It is the accusative case — direct object of sehen")],
+        },
         { id: "b", label: [t("All objects after man kann take den")] },
         { id: "c", label: [t("Dom is irregular in the accusative")] },
         { id: "d", label: [t("It is a mistake; it should be der Dom")] },
@@ -583,11 +570,7 @@ const germanSights: Lesson = {
     {
       id: "sights-p5",
       type: "matching",
-      prompt: [
-        t(
-          "Match each German sight to the city where it is found.",
-        ),
-      ],
+      prompt: [t("Match each German sight to the city where it is found.")],
       explanation: [
         t(
           "Das Brandenburger Tor is in Berlin — it's the iconic neoclassical gate that symbolised division and later reunification. Der Kölner Dom is in Köln (Cologne) — the massive Gothic cathedral on the Rhine. Das Heidelberger Schloss is in Heidelberg — the famous Renaissance castle ruins overlooking the Neckar River. Die Frauenkirche is in Dresden — the Baroque church rebuilt after WWII destruction. The Reeperbahn is in Hamburg — the famous entertainment district.",
@@ -626,9 +609,7 @@ const germanSights: Lesson = {
       id: "sights-p6",
       type: "shortText",
       prompt: [
-        t(
-          "Translate into German: 'One can go for a walk in the park.'",
-        ),
+        t("Translate into German: 'One can go for a walk in the park.'"),
       ],
       explanation: [
         t(
@@ -666,11 +647,7 @@ const germanSights: Lesson = {
     {
       id: "sights-p8",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete: Man ___ das Museum besuchen. (can)",
-        ),
-      ],
+      prompt: [t("Complete: Man ___ das Museum besuchen. (can)")],
       explanation: [
         t(
           "Man kann das Museum besuchen. Kann is the third-person singular form of können (to be able to / can). The pronoun man always takes the third-person singular verb form, the same as er/sie/es: man kann, man geht, man sieht. This is a fixed pattern — man never takes a plural verb.",
@@ -705,11 +682,7 @@ const germanSights: Lesson = {
     {
       id: "sights-m2",
       type: "matching",
-      prompt: [
-        t(
-          "Match each sight with its German location description.",
-        ),
-      ],
+      prompt: [t("Match each sight with its German location description.")],
       explanation: [
         t(
           "Neuschwanstein liegt in Bayern — the fairy-tale castle in the Bavarian Alps. Der Kölner Dom liegt in Köln, in der Nähe vom Rhein — the cathedral near the Rhine. Das Brandenburger Tor befindet sich in Berlin — the famous gate in the capital. Das Heidelberger Schloss befindet sich in der Altstadt — the castle ruins in Heidelberg's old town. Die Berliner Mauer liegt in der Bernauer Straße — the Wall memorial on Bernauer Street.",
@@ -867,9 +840,7 @@ const germanPrepositions: Lesson = {
     {
       id: "prep-p1",
       type: "matching",
-      prompt: [
-        t("Match each transport mode with its German name."),
-      ],
+      prompt: [t("Match each transport mode with its German name.")],
       explanation: [
         t(
           "der Bus = the bus (masculine), die Straßenbahn = the tram (feminine — note the -en ending is unusual for feminine), die Fähre = the ferry (feminine — -e ending), das Fahrrad = the bicycle (neuter — compound of fahren + Rad), das Flugzeug = the aeroplane (neuter — compound of Flug + Zeug), zu Fuß = on foot (phrase, not a noun — uses zu, not mit).",
@@ -888,11 +859,7 @@ const germanPrepositions: Lesson = {
     {
       id: "prep-p2",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete: Ich fahre ___ dem Bus nach Brisbane. (with / by)",
-        ),
-      ],
+      prompt: [t("Complete: Ich fahre ___ dem Bus nach Brisbane. (with / by)")],
       explanation: [
         t(
           "Ich fahre mit dem Bus nach Brisbane. Mit always takes the dative case: mit dem Bus (masculine), mit der Straßenbahn (feminine), mit dem Fahrrad (neuter). Nach is used for cities and countries without articles. The verb fahren (to travel / to go by vehicle) is commonly used with transport.",
@@ -905,11 +872,7 @@ const germanPrepositions: Lesson = {
     {
       id: "prep-p3",
       type: "mcq",
-      prompt: [
-        t(
-          "Which preposition would you use for 'to Germany'?",
-        ),
-      ],
+      prompt: [t("Which preposition would you use for 'to Germany'?")],
       explanation: [
         t(
           "Nach Deutschland. Nach is used with countries and cities that have no article (neuter countries and most cities): nach Australien, nach Österreich, nach Berlin, nach München. But countries with articles use in + accusative: in die Schweiz (to Switzerland), in die USA (to the USA), in den Iran (to Iran).",
@@ -927,11 +890,7 @@ const germanPrepositions: Lesson = {
     {
       id: "prep-p4",
       type: "shortText",
-      prompt: [
-        t(
-          "Translate into German: 'It takes 20 minutes by bus.'",
-        ),
-      ],
+      prompt: [t("Translate into German: 'It takes 20 minutes by bus.'")],
       explanation: [
         t(
           "Es dauert 20 Minuten mit dem Bus. The structure: Es dauert + time + mit + dative transport. You could also omit mit dem Bus if the context is clear: Es dauert 20 Minuten. Minuten is plural and takes no article after numbers in this construction. If specifying an exact number plus a half, use: Es dauert eineinhalb Stunden or Es dauert 90 Minuten.",
@@ -958,7 +917,14 @@ const germanPrepositions: Lesson = {
       ],
       xp: 15,
       options: [
-        { id: "a", label: [t("Zu is for specific places; nach is for cities and countries without articles")] },
+        {
+          id: "a",
+          label: [
+            t(
+              "Zu is for specific places; nach is for cities and countries without articles",
+            ),
+          ],
+        },
         { id: "b", label: [t("They are interchangeable; both are correct")] },
         { id: "c", label: [t("Zu is formal; nach is informal")] },
         { id: "d", label: [t("Zu is only used with people, not places")] },
@@ -968,11 +934,7 @@ const germanPrepositions: Lesson = {
     {
       id: "prep-p6",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete: Der See liegt ___ dem Wald. (in)",
-        ),
-      ],
+      prompt: [t("Complete: Der See liegt ___ dem Wald. (in)")],
       explanation: [
         t(
           "Der See liegt in dem Wald. In with a static location takes the dative: der Wald → dem Wald (masculine dative). The contraction im (in + dem) is more common in spoken German: Der See liegt im Wald. This pattern applies to all two-way prepositions describing static location: use dative.",
@@ -986,9 +948,7 @@ const germanPrepositions: Lesson = {
       id: "prep-p7",
       type: "matching",
       prompt: [
-        t(
-          "Match each German preposition phrase with its English meaning.",
-        ),
+        t("Match each German preposition phrase with its English meaning."),
       ],
       explanation: [
         t(
@@ -1087,10 +1047,23 @@ const germanPrepositions: Lesson = {
       ],
       xp: 18,
       options: [
-        { id: "a", label: [t("It is accusative because gehen expresses movement toward a destination")] },
+        {
+          id: "a",
+          label: [
+            t(
+              "It is accusative because gehen expresses movement toward a destination",
+            ),
+          ],
+        },
         { id: "b", label: [t("Stadt is always die after any preposition")] },
-        { id: "c", label: [t("In always takes accusative with feminine nouns")] },
-        { id: "d", label: [t("It is a fixed expression with no grammatical rule")] },
+        {
+          id: "c",
+          label: [t("In always takes accusative with feminine nouns")],
+        },
+        {
+          id: "d",
+          label: [t("It is a fixed expression with no grammatical rule")],
+        },
       ],
       correctOptionId: "a",
     },
@@ -1202,11 +1175,7 @@ const germanStory: Lesson = {
     {
       id: "story-p1",
       type: "mcq",
-      prompt: [
-        t(
-          "What does Ingrid want to do in her free time?",
-        ),
-      ],
+      prompt: [t("What does Ingrid want to do in her free time?")],
       explanation: [
         t(
           "In ihrer Freizeit will Ingrid einen Drachen fliegen. Will means 'wants to' (from wollen). Einen Drachen is 'a dragon' in the accusative case (der Drache → einen Drachen). Fliegen means 'to fly'. The whole sentence means: Ingrid wants to fly a dragon in her free time. After the modal verb will, the main verb fliegen goes to the end.",
@@ -1284,9 +1253,7 @@ const germanStory: Lesson = {
       id: "story-p5",
       type: "matching",
       prompt: [
-        t(
-          "Match each German verb from the story with its English meaning.",
-        ),
+        t("Match each German verb from the story with its English meaning."),
       ],
       explanation: [
         t(
@@ -1306,30 +1273,19 @@ const germanStory: Lesson = {
     {
       id: "story-p6",
       type: "shortText",
-      prompt: [
-        t(
-          "Translate into German: 'She goes to the airport.'",
-        ),
-      ],
+      prompt: [t("Translate into German: 'She goes to the airport.'")],
       explanation: [
         t(
           "Sie geht zum Flughafen. Zum is zu + dem (to the). Flughafen is masculine (der Flughafen), so the dative after zu is dem, and the contraction zum is standard. The verb gehen (to go) is used for going on foot or generally going somewhere.",
         ),
       ],
       xp: 12,
-      accepted: [
-        "sie geht zum flughafen",
-        "sie geht zu dem flughafen",
-      ],
+      accepted: ["sie geht zum flughafen", "sie geht zu dem flughafen"],
     },
     {
       id: "story-p7",
       type: "mcq",
-      prompt: [
-        t(
-          "At the end of the story, what makes Ingrid happy?",
-        ),
-      ],
+      prompt: [t("At the end of the story, what makes Ingrid happy?")],
       explanation: [
         t(
           "Am Ende geht Ingrid in ihrer Freizeit zum Rugby-Spiel und sie ist glücklich. After travelling to Frankfurt, Munich, and Barcelona searching for a real dragon, Ingrid discovers that she is happy just going to the rugby game. The story has a gentle message about finding joy in ordinary activities rather than chasing fantastical adventures. Das Rugby-Spiel means 'the rugby game'.",
@@ -1347,11 +1303,7 @@ const germanStory: Lesson = {
     {
       id: "story-p8",
       type: "fillInTheBlank",
-      prompt: [
-        t(
-          "Complete: ___ gibt keinen echten Drachen im Zoo. (there)",
-        ),
-      ],
+      prompt: [t("Complete: ___ gibt keinen echten Drachen im Zoo. (there)")],
       explanation: [
         t(
           "Es gibt keinen echten Drachen im Zoo. Es gibt is the fixed expression for 'there is/are'. Keinen echten Drachen is the accusative form — keinen is the masculine accusative of kein (no/not a), and echten (real) takes the -en adjective ending in the accusative masculine. The sentence means: There is no real dragon in the zoo.",
@@ -1433,11 +1385,7 @@ const germanStory: Lesson = {
     {
       id: "story-m3",
       type: "shortText",
-      prompt: [
-        t(
-          "Translate into German: 'She flies by plane to Barcelona.'",
-        ),
-      ],
+      prompt: [t("Translate into German: 'She flies by plane to Barcelona.'")],
       explanation: [
         t(
           "Sie fliegt mit dem Flugzeug nach Barcelona. Mit dem Flugzeug means 'by plane' (literally 'with the aeroplane'). Nach Barcelona uses nach because Barcelona is a city without an article. The verb fliegen conjugates to fliegt for er/sie/es. Alternative: Sie fliegt nach Barcelona — omitting mit dem Flugzeug is fine if the mode of transport is implied by the verb fliegen itself.",
@@ -1460,7 +1408,8 @@ const germanCityDescription: Lesson = {
   id: "german-city-description",
   order: 5,
   title: "Meine Stadt: describing a city in German",
-  sourceRef: "Week 5: Was kann man in Brisbane machen + Week 6/7: Exam practice (Stile)",
+  sourceRef:
+    "Week 5: Was kann man in Brisbane machen + Week 6/7: Exam practice (Stile)",
   aiProvenance: {
     tool: "Claude",
     sources: [
@@ -1505,9 +1454,7 @@ const germanCityDescription: Lesson = {
         t(
           "4. Say what you can do: Man kann [activity] und [activity]. / Man kann dort [verb phrase].",
         ),
-        t(
-          "5. Give distance: [Place A] ist [distance] von [Place B] entfernt.",
-        ),
+        t("5. Give distance: [Place A] ist [distance] von [Place B] entfernt."),
         t(
           "6. Give travel time: Mit [transport] dauert es [time] von [place] zum/zur [place].",
         ),
@@ -1555,9 +1502,7 @@ const germanCityDescription: Lesson = {
       id: "city-p1",
       type: "mcq",
       prompt: [
-        t(
-          "What does 'Es gibt viele Sehenswürdigkeiten in der Stadt' mean?",
-        ),
+        t("What does 'Es gibt viele Sehenswürdigkeiten in der Stadt' mean?"),
       ],
       explanation: [
         t(
@@ -1577,9 +1522,7 @@ const germanCityDescription: Lesson = {
       id: "city-p2",
       type: "fillInTheBlank",
       prompt: [
-        t(
-          "Complete: Das Museum ___ 500 Meter vom Bahnhof entfernt. (is)",
-        ),
+        t("Complete: Das Museum ___ 500 Meter vom Bahnhof entfernt. (is)"),
       ],
       explanation: [
         t(
@@ -1681,21 +1624,14 @@ const germanCityDescription: Lesson = {
     {
       id: "city-p6",
       type: "shortText",
-      prompt: [
-        t(
-          "How would you say 'My city is called Stuttgart' in German?",
-        ),
-      ],
+      prompt: [t("How would you say 'My city is called Stuttgart' in German?")],
       explanation: [
         t(
           "Meine Stadt heißt Stuttgart. Meine is the feminine possessive pronoun (die Stadt is feminine). Heißt is the third-person singular of heißen (to be called). An alternative is Stuttgart ist meine Stadt (Stuttgart is my city), but Meine Stadt heißt Stuttgart is the more natural way to name a city in a description.",
         ),
       ],
       xp: 10,
-      accepted: [
-        "meine stadt heisst stuttgart",
-        "meine stadt heißt stuttgart",
-      ],
+      accepted: ["meine stadt heisst stuttgart", "meine stadt heißt stuttgart"],
     },
     {
       id: "city-p7",
@@ -1711,7 +1647,11 @@ const germanCityDescription: Lesson = {
         ),
       ],
       xp: 10,
-      template: [t("Die Reise von der Bushaltestelle bis ___ Porsche Museum dauert 30 Minuten mit dem Bus.")],
+      template: [
+        t(
+          "Die Reise von der Bushaltestelle bis ___ Porsche Museum dauert 30 Minuten mit dem Bus.",
+        ),
+      ],
       accepted: ["zum", "zu dem"],
     },
     {
@@ -1752,13 +1692,7 @@ const germanCityDescription: Lesson = {
         ),
       ],
       xp: 18,
-      accepted: [
-        "meine stadt",
-        "heißt",
-        "heisst",
-        "man kann",
-        "entfernt",
-      ],
+      accepted: ["meine stadt", "heißt", "heisst", "man kann", "entfernt"],
     },
     {
       id: "city-m2",
@@ -1836,7 +1770,8 @@ const germanCityWriting: Lesson = {
   id: "german-city-writing",
   order: 6,
   title: "Eine deutsche Stadt: writing about a German city",
-  sourceRef: "Week 7 L1: Formative assessment + Week 8-9: Assessment 2026 (Stile)",
+  sourceRef:
+    "Week 7 L1: Formative assessment + Week 8-9: Assessment 2026 (Stile)",
   aiProvenance: {
     tool: "Claude",
     sources: [
@@ -1942,7 +1877,9 @@ const germanCityWriting: Lesson = {
         ),
       ],
       xp: 10,
-      template: [t("Die Kathedrale ist nicht weit ___ dem Hilton Hotel entfernt.")],
+      template: [
+        t("Die Kathedrale ist nicht weit ___ dem Hilton Hotel entfernt."),
+      ],
       accepted: ["von"],
     },
     {
@@ -1968,11 +1905,7 @@ const germanCityWriting: Lesson = {
     {
       id: "writing-p4",
       type: "matching",
-      prompt: [
-        t(
-          "Match each German question word to its English equivalent.",
-        ),
-      ],
+      prompt: [t("Match each German question word to its English equivalent.")],
       explanation: [
         t(
           "Wo? = Where? (location — dative question). Wohin? = Where to? (destination — accusative question). Wie? = How? (manner or means). Wie lange? = How long? (duration). Wie weit? = How far? (distance). Was? = What? (thing or action). These question words are essential for both reading comprehension questions and for asking about cities.",
@@ -1991,11 +1924,7 @@ const germanCityWriting: Lesson = {
     {
       id: "writing-p5",
       type: "mcq",
-      prompt: [
-        t(
-          "Why is the reflection task written in English, not German?",
-        ),
-      ],
+      prompt: [t("Why is the reflection task written in English, not German?")],
       explanation: [
         t(
           "The reflection task assesses your understanding of the connection between language, culture, and identity. Writing it in English allows you to express complex ideas about history, cultural values, and the meaning of place names at a depth that would not be possible at Year 8 German level. The German language skills are assessed through the map and the German paragraph. The reflection tests a different skill: cultural awareness.",
@@ -2003,9 +1932,22 @@ const germanCityWriting: Lesson = {
       ],
       xp: 10,
       options: [
-        { id: "a", label: [t("It assesses cultural understanding rather than German language skills")] },
-        { id: "b", label: [t("The assessment doesn't allow German for the reflection")] },
-        { id: "c", label: [t("German doesn't have words for cultural concepts")] },
+        {
+          id: "a",
+          label: [
+            t(
+              "It assesses cultural understanding rather than German language skills",
+            ),
+          ],
+        },
+        {
+          id: "b",
+          label: [t("The assessment doesn't allow German for the reflection")],
+        },
+        {
+          id: "c",
+          label: [t("German doesn't have words for cultural concepts")],
+        },
         { id: "d", label: [t("It's a mistake; it should be in German")] },
       ],
       correctOptionId: "a",
@@ -2049,16 +1991,18 @@ const germanCityWriting: Lesson = {
         ),
       ],
       xp: 10,
-      template: [t("Man kann in Stuttgart die Kathedrale, das Porsche Museum und das Schlossplatz ___ .")],
+      template: [
+        t(
+          "Man kann in Stuttgart die Kathedrale, das Porsche Museum und das Schlossplatz ___ .",
+        ),
+      ],
       accepted: ["besichtigen", "besuchen"],
     },
     {
       id: "writing-p8",
       type: "mcq",
       prompt: [
-        t(
-          "A German street named Goethestraße is most likely named after:",
-        ),
+        t("A German street named Goethestraße is most likely named after:"),
       ],
       explanation: [
         t(
@@ -2067,7 +2011,10 @@ const germanCityWriting: Lesson = {
       ],
       xp: 12,
       options: [
-        { id: "a", label: [t("Johann Wolfgang von Goethe, a famous German writer")] },
+        {
+          id: "a",
+          label: [t("Johann Wolfgang von Goethe, a famous German writer")],
+        },
         { id: "b", label: [t("A type of German food")] },
         { id: "c", label: [t("A German car manufacturer")] },
         { id: "d", label: [t("A region in northern Germany")] },
@@ -2167,11 +2114,7 @@ const challengeQuestions: Question[] = [
   {
     id: "ger-boss-1",
     type: "mcq",
-    prompt: [
-      t(
-        "Which sentence correctly uses the man kann structure?",
-      ),
-    ],
+    prompt: [t("Which sentence correctly uses the man kann structure?")],
     explanation: [
       t(
         "Man kann das Schloss besuchen is correct. In a man kann sentence, the modal verb kann is in second position and the main verb (besuchen) goes to the end of the clause. Option b is wrong because besuchen is not at the end. Option c is wrong because kann is not conjugated correctly (man always takes third-person singular). Option d is wrong because the word order is English, not German.",
@@ -2228,11 +2171,7 @@ const challengeQuestions: Question[] = [
   {
     id: "ger-boss-4",
     type: "matching",
-    prompt: [
-      t(
-        "Match each German preposition with its correct use.",
-      ),
-    ],
+    prompt: [t("Match each German preposition with its correct use.")],
     explanation: [
       t(
         "Nach is used with cities and countries without articles (nach Berlin, nach Deutschland). Zu is used with specific places and buildings (zu der Eisdiele → zur Eisdiele). Mit is for 'by' a mode of transport, always dative (mit dem Bus). In with dative is for static location (in der Stadt — in the city). Von ... bis zu is from ... to (von dem Bahnhof bis zu dem Museum). Mastering these distinctions is essential for accurate German.",
@@ -2282,8 +2221,14 @@ const challengeQuestions: Question[] = [
     ],
     xp: 20,
     options: [
-      { id: "a", label: [t("German main clauses follow verb-second (V2) word order")] },
-      { id: "b", label: [t("Fliegen is an irregular verb that always goes second")] },
+      {
+        id: "a",
+        label: [t("German main clauses follow verb-second (V2) word order")],
+      },
+      {
+        id: "b",
+        label: [t("Fliegen is an irregular verb that always goes second")],
+      },
       { id: "c", label: [t("Mit dem Flugzeug occupies the first position")] },
       { id: "d", label: [t("It is a question, not a statement")] },
     ],

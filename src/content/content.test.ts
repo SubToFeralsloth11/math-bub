@@ -15,12 +15,12 @@ import { biologyFigures } from "./tracks/biology";
 import { decimalsFigures } from "./tracks/decimals";
 import { earthScienceRocksFigures } from "./tracks/earthScienceRocks";
 import { geometryFigures } from "./tracks/geometry";
+import { germanWirReisenFigures } from "./tracks/germanWirReisen";
 import { integerOperationsFigures } from "./tracks/integerOperations";
 import { perimeterAndAreaFigures } from "./tracks/perimeterAndArea";
 import { pythagorasFigures } from "./tracks/pythagoras";
 import { quadrilateralsFigures } from "./tracks/quadrilaterals";
 import { spanishConquestFigures } from "./tracks/spanishConquest";
-import { germanWirReisenFigures } from "./tracks/germanWirReisen";
 import { timeFigures } from "./tracks/time";
 import { volumeFigures } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
@@ -71,12 +71,12 @@ describe("authored content", () => {
         ...decimalsFigures,
         ...earthScienceRocksFigures,
         ...geometryFigures,
+        ...germanWirReisenFigures,
         ...integerOperationsFigures,
         ...perimeterAndAreaFigures,
         ...pythagorasFigures,
         ...quadrilateralsFigures,
         ...spanishConquestFigures,
-        ...germanWirReisenFigures,
         ...timeFigures,
         ...volumeFigures,
       ].map((figure) => figure.id),

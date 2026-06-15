@@ -19,12 +19,12 @@ import { biologyTrack } from "./tracks/biology";
 import { decimalsTrack } from "./tracks/decimals";
 import { earthScienceRocksTrack } from "./tracks/earthScienceRocks";
 import { geometryTrack } from "./tracks/geometry";
+import { germanWirReisenTrack } from "./tracks/germanWirReisen";
 import { integerOperationsTrack } from "./tracks/integerOperations";
 import { perimeterAndAreaTrack } from "./tracks/perimeterAndArea";
 import { pythagorasTrack } from "./tracks/pythagoras";
 import { quadrilateralsTrack } from "./tracks/quadrilaterals";
 import { spanishConquestTrack } from "./tracks/spanishConquest";
-import { germanWirReisenTrack } from "./tracks/germanWirReisen";
 import { timeTrack } from "./tracks/time";
 import { volumeTrack } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
@@ -47,12 +47,12 @@ export const appContent: AppContent = {
     decimalsTrack,
     earthScienceRocksTrack,
     geometryTrack,
+    germanWirReisenTrack,
     integerOperationsTrack,
     perimeterAndAreaTrack,
     pythagorasTrack,
     quadrilateralsTrack,
     spanishConquestTrack,
-    germanWirReisenTrack,
     timeTrack,
     volumeTrack,
   ],

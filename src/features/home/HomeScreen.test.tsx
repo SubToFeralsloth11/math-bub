@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { HomeScreen } from "./HomeScreen";
@@ -30,12 +30,10 @@ describe("HomeScreen", () => {
     );
     expect(screen.getByText(/2 tracks/)).toBeInTheDocument();
 
-    // HSS has 1 track.
-    expect(screen.getByRole("link", { name: /HSS/i })).toHaveAttribute(
-      "href",
-      "/subject/hss",
-    );
-    expect(screen.getByText(/1 track/)).toBeInTheDocument();
+    // HSS has 1 track (Languages also has 1, so scope to the HSS card).
+    const hssLink = screen.getByRole("link", { name: /HSS/i });
+    expect(hssLink).toHaveAttribute("href", "/subject/hss");
+    expect(within(hssLink).getByText(/1 track/)).toBeInTheDocument();
   });
 
   it("offers links to badges and a reset control", () => {
