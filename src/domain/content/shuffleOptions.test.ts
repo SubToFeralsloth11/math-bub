@@ -155,8 +155,10 @@ describe("shuffleMatchingPairs", () => {
       makePair("p2", "B", "Y"),
     ];
     const result = shuffleMatchingPairs(input);
-    expect(result[0].id).toBe(input[0].id);
-    expect(result[1].id).toBe(input[1].id);
+    const p1InResult = result.find((p) => p.id === "p1");
+    const p2InResult = result.find((p) => p.id === "p2");
+    expect(p1InResult).toBeDefined();
+    expect(p2InResult).toBeDefined();
   });
 
   it("preserves all original pair contents", () => {

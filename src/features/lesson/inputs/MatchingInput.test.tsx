@@ -116,8 +116,9 @@ describe("MatchingInput - foundational render", () => {
 });
 
 describe("MatchingInput - US1 pair creation", () => {
-  // T008: Right column shuffled.
-  it("renders the right column in a different order from the input pairs", () => {
+  // T008: Right column is rendered (the shuffle is verified in
+  // shuffleOptions.test.ts with deterministic random).
+  it("renders all right-column items from the matching pairs", () => {
     render(
       <MatchingInput
         pairs={pairs3}
@@ -127,21 +128,10 @@ describe("MatchingInput - US1 pair creation", () => {
       />,
     );
 
-    // Get all right-column items.
-    const rightItems = screen
-      .getAllByRole("button")
-      .filter(
-        (el) =>
-          (el.textContent?.includes("ray") ?? false) ||
-          (el.textContent?.includes("kee") ?? false) ||
-          (el.textContent?.includes("ulu") ?? false),
-      );
-    const rightTexts = rightItems.map((el) => el.textContent);
-    // The original input order for right items is "X-ray", "Yankee", "Zulu".
-    const inputOrder = ["X-ray", "Yankee", "Zulu"];
-    // They should NOT all be in the same order (shuffled).
-    const sameOrder = rightTexts.every((text, i) => text === inputOrder[i]);
-    expect(sameOrder).toBe(false);
+    // All three right items should be present, regardless of order.
+    expect(screen.getByText("X-ray")).toBeInTheDocument();
+    expect(screen.getByText("Yankee")).toBeInTheDocument();
+    expect(screen.getByText("Zulu")).toBeInTheDocument();
   });
 
   // T009: Right column stable across re-renders.

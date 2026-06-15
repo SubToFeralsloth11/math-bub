@@ -147,7 +147,7 @@ export function MatchingInput({
       >
         {connections.length === 0 && (
           <span className="text-sm text-muted italic">
-            No pairs yet. Tap a scientist, then a contribution.
+            No pairs yet. Tap an item from each column.
           </span>
         )}
         {connections.map((c) => {
@@ -236,7 +236,7 @@ export function MatchingInput({
                       ? "ring-2 ring-brand bg-brand-soft"
                       : "bg-card hover:ring-2 hover:ring-hairline"
                   }`}
-                  aria-label={`Scientist: ${firstText(pair.left)}`}
+                  aria-label={`Left: ${firstText(pair.left)}`}
                 >
                   <RichBlocks blocks={pair.left} />
                 </button>
@@ -257,7 +257,7 @@ export function MatchingInput({
                     ? "bg-card hover:ring-2 hover:ring-hairline"
                     : "bg-card opacity-100"
                 }`}
-                aria-label={`Contribution: ${firstText(item.content)}`}
+                aria-label={`Right: ${firstText(item.content)}`}
               >
                 <RichBlocks blocks={item.content} />
               </button>
