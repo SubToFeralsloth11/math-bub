@@ -75,28 +75,22 @@ export function MatchingInput({
 
   function handleRightClick(rightId: string) {
     if (revealed || !selectedLeft) return;
-
-    // Don't create a new connection if the same left-right pair already exists.
-    const alreadySame = connections.some(
-      (c) => c.leftId === selectedLeft && c.rightId === rightId,
-    );
-    if (alreadySame) {
-      setSelectedLeft(null);
-      return;
-    }
-
-    // Remove any existing connection for this left (the learner is re-pairing).
-    const remaining = connections.filter((c) => c.leftId !== selectedLeft);
-
-    const count = nextNumber.current;
-    nextNumber.current += 1;
-    const connection: Connection = {
-      leftId: selectedLeft,
-      rightId,
-      number: count,
-      colour: MATCHING_PAIR_COLOURS[(count - 1) % MATCHING_PAIR_COLOURS.length],
-    };
-    setConnections([...remaining, connection]);
+    setConnections((prev) => {
+      // Filter out any existing pair for this left (re-pairing in case the
+      // learner taps a grid right after already pairing this left via the
+      // pair-box replace path).
+      const remaining = prev.filter((c) => c.leftId !== selectedLeft);
+      const count = nextNumber.current;
+      nextNumber.current += 1;
+      const connection: Connection = {
+        leftId: selectedLeft,
+        rightId,
+        number: count,
+        colour:
+          MATCHING_PAIR_COLOURS[(count - 1) % MATCHING_PAIR_COLOURS.length],
+      };
+      return [...remaining, connection];
+    });
     setSelectedLeft(null);
   }
 
