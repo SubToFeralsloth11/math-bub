@@ -39,8 +39,12 @@ describe("initProgressState", () => {
 });
 
 describe("progress reducer - foundational actions", () => {
-  it("RESET returns a clean default state", () => {
-    const dirty = initProgressState({ ...defaultState(), xp: 500 });
+  it("RESET returns a clean default state with empty activeDates", () => {
+    const dirty = initProgressState({
+      ...defaultState(),
+      xp: 500,
+      activeDates: ["2026-06-05", "2026-06-06"],
+    });
     const next = reducer(dirty, { type: "RESET" });
     expect(next.saved).toEqual(defaultState());
   });
@@ -52,6 +56,65 @@ describe("progress reducer - foundational actions", () => {
     };
     const next = reducer(withCelebration, { type: "DISMISS_CELEBRATION" });
     expect(next.celebration).toEqual({ levelUpTo: null, newBadges: [] });
+  });
+});
+
+describe("progress reducer - active dates recording", () => {
+  it("records the active date on ANSWER_CORRECT", () => {
+    const state = initProgressState(defaultState());
+    const next = reducer(state, {
+      type: "ANSWER_CORRECT",
+      xp: 10,
+      today: "2026-06-07",
+    });
+    expect(next.saved.activeDates).toEqual(["2026-06-07"]);
+  });
+
+  it("does not duplicate the same date on multiple ANSWER_CORRECT actions", () => {
+    const state = initProgressState({
+      ...defaultState(),
+      activeDates: ["2026-06-07"],
+    });
+    const next = reducer(state, {
+      type: "ANSWER_CORRECT",
+      xp: 10,
+      today: "2026-06-07",
+    });
+    expect(next.saved.activeDates).toEqual(["2026-06-07"]);
+  });
+
+  it("records the active date on COMPLETE_LESSON", () => {
+    const state = initProgressState(defaultState());
+    const next = reducer(state, {
+      type: "COMPLETE_LESSON",
+      lessonId: "alg-5g",
+      accuracy: 1,
+      passThreshold: 0.8,
+      today: "2026-06-08",
+    });
+    expect(next.saved.activeDates).toEqual(["2026-06-08"]);
+  });
+
+  it("records the active date on COMPLETE_CHALLENGE", () => {
+    const state = initProgressState(defaultState());
+    const next = reducer(state, {
+      type: "COMPLETE_CHALLENGE",
+      challengeId: "algebra-boss",
+      score: 8,
+      total: 10,
+      bonusXp: 120,
+      today: "2026-06-09",
+    });
+    expect(next.saved.activeDates).toEqual(["2026-06-09"]);
+  });
+
+  it("does not record a date on DISMISS_CELEBRATION", () => {
+    const state = initProgressState({
+      ...defaultState(),
+      activeDates: ["2026-06-07"],
+    });
+    const next = reducer(state, { type: "DISMISS_CELEBRATION" });
+    expect(next.saved.activeDates).toEqual(["2026-06-07"]);
   });
 });
 

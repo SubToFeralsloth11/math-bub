@@ -10,6 +10,7 @@
  */
 
 import { defaultState, type SavedState } from "../domain/persistence/schema";
+import { recordActiveDate } from "../domain/progress/activity";
 import { earnedBadgeIds } from "../domain/progress/badges";
 import { nextStreak } from "../domain/progress/streak";
 import { addXp, isLevelUp, levelFor } from "../domain/progress/xp";
@@ -93,6 +94,28 @@ function awardBadges(content: AppContent, state: ProgressState): ProgressState {
  * @param content - The authored content used by content-dependent rules.
  * @returns A pure reducer function `(state, action) => state`.
  */
+/**
+ * Applies the daily progress side effects (streak and active-date recording)
+ * to a saved state, returning the updated saved state.
+ *
+ * @param saved - The current saved state.
+ * @param today - The local date of the activity (`YYYY-MM-DD`).
+ * @returns The saved state with updated streak and active dates.
+ */
+function applyDailyProgress(saved: SavedState, today: string): SavedState {
+  return {
+    ...saved,
+    streak: nextStreak(saved.streak, today),
+    activeDates: recordActiveDate(saved.activeDates, today),
+  };
+}
+
+/**
+ * Creates the progress reducer, closed over the authored content.
+ *
+ * @param content - The authored content used by content-dependent rules.
+ * @returns A pure reducer function `(state, action) => state`.
+ */
 export function createProgressReducer(content: AppContent) {
   /**
    * The progress reducer.
@@ -119,9 +142,8 @@ export function createProgressReducer(content: AppContent) {
         const leveledUp = isLevelUp(state.saved.xp, xp);
         const next: ProgressState = {
           saved: {
-            ...state.saved,
+            ...applyDailyProgress(state.saved, action.today),
             xp,
-            streak: nextStreak(state.saved.streak, action.today),
           },
           celebration: leveledUp
             ? { ...state.celebration, levelUpTo: levelFor(xp) }
@@ -142,8 +164,7 @@ export function createProgressReducer(content: AppContent) {
         const next: ProgressState = {
           ...state,
           saved: {
-            ...state.saved,
-            streak: nextStreak(state.saved.streak, action.today),
+            ...applyDailyProgress(state.saved, action.today),
             lessons: {
               ...state.saved.lessons,
               [action.lessonId]: { completed, bestAccuracy },
@@ -163,9 +184,8 @@ export function createProgressReducer(content: AppContent) {
         const leveledUp = isLevelUp(state.saved.xp, xp);
         const next: ProgressState = {
           saved: {
-            ...state.saved,
+            ...applyDailyProgress(state.saved, action.today),
             xp,
-            streak: nextStreak(state.saved.streak, action.today),
             challenges: {
               ...state.saved.challenges,
               [action.challengeId]: {
