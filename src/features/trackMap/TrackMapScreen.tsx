@@ -55,7 +55,9 @@ function LessonNode({
             🔒
           </span>
         </div>
-        <span className="max-w-24 text-xs text-muted">{lesson.title}</span>
+        <span className="max-w-24 text-center text-xs text-muted">
+          {lesson.title}
+        </span>
       </div>
     );
   }
@@ -78,7 +80,7 @@ function LessonNode({
         </span>
       </Link>
       <span
-        className={`max-w-24 text-xs font-semibold ${complete ? "text-ink" : "text-brand"}`}
+        className={`max-w-24 text-center text-xs font-semibold ${complete ? "text-ink" : "text-brand"}`}
       >
         {lesson.title}
       </span>
