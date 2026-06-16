@@ -44,4 +44,6 @@ Every change MUST pass all automated quality gates before it can be considered c
 
 All five gate groups must succeed before a deploy to GitHub Pages is triggered on the `main` branch. No code that fails any gate may be deployed.
 
+**Local enforcement.** `bun run check` runs all five gates in dependency order (lint → format → jscpd → unit tests + coverage → type-check + build → e2e). Every commit pushed to `main` MUST have passed `bun run check` locally first. No exceptions.
+
 **Rationale:** Automated gates prevent regressions, enforce consistent style, catch type errors and dead code, and ensure the learner never encounters a broken build. Making them non-negotiable removes the temptation to skip checks under time pressure.
