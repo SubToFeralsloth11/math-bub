@@ -327,7 +327,7 @@ const germanPlaces: Lesson = {
       ],
       xp: 15,
       template: [t("___ Flughafen liegt in ___ Stadt.")],
-      accepted: ["der der", "der, der", "der / der"],
+      accepted: ["der|||der"],
     },
     {
       id: "places-m2",

@@ -23,6 +23,18 @@ describe("markFillInTheBlank", () => {
     });
   });
 
+  it("marks multi-blank answer correct when joined values match", () => {
+    const q = fitb(["der|||der"]);
+    expect(markFillInTheBlank(q, "der|||der")).toEqual({ status: "correct" });
+  });
+
+  it("marks multi-blank answer incorrect when joined values differ", () => {
+    const q = fitb(["der|||der"]);
+    expect(markFillInTheBlank(q, "die|||der")).toEqual({
+      status: "incorrect",
+    });
+  });
+
   it("marks case-insensitive match correct", () => {
     expect(markFillInTheBlank(fitb(["mitochondria"]), "Mitochondria")).toEqual({
       status: "correct",

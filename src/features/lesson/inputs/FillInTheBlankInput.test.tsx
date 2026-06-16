@@ -8,6 +8,10 @@ const template = [
   { kind: "text" as const, text: "___ is the powerhouse of the cell." },
 ];
 
+const multiBlankTemplate = [
+  { kind: "text" as const, text: "___ Flughafen liegt in ___ Stadt." },
+];
+
 describe("FillInTheBlankInput", () => {
   it("renders template with gap input", () => {
     render(
@@ -77,5 +81,83 @@ describe("FillInTheBlankInput", () => {
     expect(
       screen.getByRole("textbox", { name: /fill in the blank/i }),
     ).toBeDisabled();
+  });
+
+  describe("multiple blanks", () => {
+    it("renders two input fields for two blanks", () => {
+      render(
+        <FillInTheBlankInput
+          template={multiBlankTemplate}
+          value=""
+          onChange={vi.fn()}
+          onSubmit={vi.fn()}
+          revealed={false}
+        />,
+      );
+
+      expect(
+        screen.getByRole("textbox", { name: "Fill in the blank 1" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("textbox", { name: "Fill in the blank 2" }),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Flughafen liegt in")).toBeInTheDocument();
+      expect(screen.getByText("Stadt.")).toBeInTheDocument();
+    });
+
+    it("joins multiple blank values with ||| delimiter", () => {
+      const onChange = vi.fn();
+      const { rerender } = render(
+        <FillInTheBlankInput
+          template={multiBlankTemplate}
+          value=""
+          onChange={onChange}
+          onSubmit={vi.fn()}
+          revealed={false}
+        />,
+      );
+
+      const input1 = screen.getByRole("textbox", {
+        name: "Fill in the blank 1",
+      });
+      fireEvent.change(input1, { target: { value: "der" } });
+      expect(onChange).toHaveBeenLastCalledWith("der|||");
+
+      // Simulate the parent updating the value prop after onChange.
+      rerender(
+        <FillInTheBlankInput
+          template={multiBlankTemplate}
+          value="der|||"
+          onChange={onChange}
+          onSubmit={vi.fn()}
+          revealed={false}
+        />,
+      );
+
+      const input2 = screen.getByRole("textbox", {
+        name: "Fill in the blank 2",
+      });
+      fireEvent.change(input2, { target: { value: "der" } });
+      expect(onChange).toHaveBeenLastCalledWith("der|||der");
+    });
+
+    it("restores values from joined string", () => {
+      render(
+        <FillInTheBlankInput
+          template={multiBlankTemplate}
+          value="der|||der"
+          onChange={vi.fn()}
+          onSubmit={vi.fn()}
+          revealed={false}
+        />,
+      );
+
+      expect(
+        screen.getByRole("textbox", { name: "Fill in the blank 1" }),
+      ).toHaveValue("der");
+      expect(
+        screen.getByRole("textbox", { name: "Fill in the blank 2" }),
+      ).toHaveValue("der");
+    });
   });
 });
