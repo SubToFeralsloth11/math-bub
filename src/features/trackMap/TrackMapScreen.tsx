@@ -174,7 +174,7 @@ export function TrackMapScreen() {
                 state={lessonState(track, lesson, state.saved)}
                 accent={accent}
               />
-              <span aria-hidden className="my-2 h-8 w-1 rounded bg-hairline" />
+              <span aria-hidden className="my-2 h-8 w-1 rounded bg-muted/25" />
             </li>
           ))}
           <li>

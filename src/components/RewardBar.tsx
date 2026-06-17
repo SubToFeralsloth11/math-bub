@@ -46,7 +46,7 @@ export function RewardBar() {
   const closePopover = () => setOpenPopover(null);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex min-w-0 items-center gap-1 pr-1 sm:gap-2">
       <Popover
         open={openPopover === "streak"}
         onClose={closePopover}

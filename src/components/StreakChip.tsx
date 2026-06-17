@@ -34,7 +34,7 @@ export function StreakChip({
         onClick={onClick}
         type={onClick ? "button" : undefined}
       >
-        <span aria-hidden>🔥</span> Start a streak
+        <span aria-hidden>🔥</span> Streak
       </Tag>
     );
   }

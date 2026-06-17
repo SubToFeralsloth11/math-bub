@@ -22,7 +22,7 @@ export function XpBar({ xp, showLabel = false }: Readonly<XpBarProps>) {
   return (
     <div className="flex flex-col gap-1">
       <div
-        className="h-2.5 w-28 overflow-hidden rounded-pill bg-cream-deep"
+        className="h-2.5 w-32 min-w-0 max-w-full shrink overflow-hidden rounded-pill bg-cream-deep"
         role="progressbar"
         aria-label="XP toward next level"
         aria-valuenow={percent}

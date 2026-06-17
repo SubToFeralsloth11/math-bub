@@ -23,8 +23,8 @@ interface AppHeaderProps {
  */
 export function AppHeader({ back, title, right }: Readonly<AppHeaderProps>) {
   return (
-    <header className="mx-auto flex w-full max-w-5xl items-center gap-4 px-5 py-4">
-      <div className="flex flex-1 items-center gap-3">
+    <header className="mx-auto flex w-full max-w-5xl items-center gap-4 px-5 py-4 [padding-right:max(1.25rem,env(safe-area-inset-right))] [padding-left:max(1.25rem,env(safe-area-inset-left))]">
+      <div className="flex items-center gap-3">
         {back ? (
           <Link
             to={back.to}
@@ -35,23 +35,25 @@ export function AppHeader({ back, title, right }: Readonly<AppHeaderProps>) {
         ) : (
           <Link
             to="/"
-            className="flex items-center gap-2 font-display text-xl font-bold text-ink"
+            className="flex shrink-0 items-center gap-2 font-display text-xl font-bold text-ink"
           >
             <span aria-hidden>🫧</span> StudyBub
           </Link>
         )}
       </div>
       {title ? (
-        <h1 className="flex-1 text-center font-display text-lg font-semibold text-ink">
+        <h1 className="min-w-0 flex-1 truncate text-center font-display text-lg font-semibold text-ink">
           {title}
         </h1>
-      ) : null}
-      <div className="flex flex-1 items-center justify-end gap-2">
+      ) : (
+        <div className="flex-1" />
+      )}
+      <div className="flex shrink-0 items-center justify-end gap-1 overflow-hidden sm:gap-2">
         <Link
           to="/settings"
           aria-label="Settings"
           title="Settings"
-          className="rounded-lg p-1.5 text-ink/60 transition hover:bg-cream-deep hover:text-ink"
+          className="hidden rounded-lg p-1.5 text-ink/60 transition hover:bg-cream-deep hover:text-ink sm:block"
         >
           ⚙
         </Link>

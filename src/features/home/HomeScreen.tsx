@@ -67,7 +67,7 @@ export function HomeScreen() {
           device.
         </p>
 
-        <div className="mt-7 flex flex-col gap-4">
+        <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {content.subjects.map((subject) => (
             <div key={subject.id} className="animate-bub-rise">
               <SubjectCard subject={subject} />

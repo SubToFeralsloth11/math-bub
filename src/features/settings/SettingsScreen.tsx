@@ -85,9 +85,12 @@ export function SettingsScreen() {
                 type="text"
                 value={baseUrl}
                 onChange={(e) => setBaseUrl(e.target.value)}
-                placeholder="https://api.openai.com/v1/chat/completions"
+                placeholder="https://api.openai.com/v1"
                 className="rounded-lg border border-hairline bg-cream px-3 py-2 text-ink placeholder:text-ink/40 focus:border-brand focus:outline-none"
               />
+              <span className="text-xs text-muted">
+                Example: https://api.openai.com/v1/chat/completions
+              </span>
             </label>
 
             <label className="flex flex-col gap-1">

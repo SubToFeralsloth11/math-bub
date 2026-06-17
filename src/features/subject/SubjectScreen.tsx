@@ -90,7 +90,7 @@ export function SubjectScreen() {
           </div>
         </div>
 
-        <div className="mt-7 flex flex-col gap-4">
+        <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {tracks.length === 0 ? (
             <p className="text-muted">No tracks yet — check back soon.</p>
           ) : (
