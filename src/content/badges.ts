@@ -244,4 +244,36 @@ export const badges: Badge[] = [
     criterion: "boss-pass:three-d-coordinates",
     icon: "🏆",
   },
+  {
+    id: "algebraic-fractions-adding-master",
+    title: "Fraction adder",
+    description:
+      "Finish every Algebraic Fractions: Adding and Subtracting lesson",
+    criterion: "track-complete:algebraic-fractions-adding",
+    icon: "➕",
+  },
+  {
+    id: "boss-algebraic-fractions-adding",
+    title: "Adding fractions boss slayer",
+    description:
+      "Pass the Algebraic Fractions: Adding and Subtracting boss challenge",
+    criterion: "boss-pass:algebraic-fractions-adding",
+    icon: "🏆",
+  },
+  {
+    id: "algebraic-fractions-multiplying-master",
+    title: "Fraction multiplier",
+    description:
+      "Finish every Algebraic Fractions: Multiplying and Dividing lesson",
+    criterion: "track-complete:algebraic-fractions-multiplying",
+    icon: "✖️",
+  },
+  {
+    id: "boss-algebraic-fractions-multiplying",
+    title: "Multiplying fractions boss slayer",
+    description:
+      "Pass the Algebraic Fractions: Multiplying and Dividing boss challenge",
+    criterion: "boss-pass:algebraic-fractions-multiplying",
+    icon: "🏆",
+  },
 ];

@@ -15,6 +15,8 @@ import { languagesSubject } from "./subjects/languages";
 import { mathsSubject } from "./subjects/maths";
 import { scienceSubject } from "./subjects/science";
 import { algebraTrack } from "./tracks/algebra";
+import { algebraicFractionsAddingTrack } from "./tracks/algebraicFractionsAdding";
+import { algebraicFractionsMultiplyingTrack } from "./tracks/algebraicFractionsMultiplying";
 import { biologyTrack } from "./tracks/biology";
 import { decimalsTrack } from "./tracks/decimals";
 import { earthScienceRocksTrack } from "./tracks/earthScienceRocks";
@@ -44,6 +46,8 @@ export const appContent: AppContent = {
   subjects: [languagesSubject, hssSubject, mathsSubject, scienceSubject],
   tracks: [
     algebraTrack,
+    algebraicFractionsAddingTrack,
+    algebraicFractionsMultiplyingTrack,
     biologyTrack,
     decimalsTrack,
     earthScienceRocksTrack,

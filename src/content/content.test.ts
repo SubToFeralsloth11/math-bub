@@ -11,6 +11,8 @@ import {
   tracksForSubject,
 } from "./index";
 import { algebraFigures } from "./tracks/algebra";
+import { algebraicFractionsAddingFigures } from "./tracks/algebraicFractionsAdding";
+import { algebraicFractionsMultiplyingFigures } from "./tracks/algebraicFractionsMultiplying";
 import { biologyFigures } from "./tracks/biology";
 import { decimalsFigures } from "./tracks/decimals";
 import { earthScienceRocksFigures } from "./tracks/earthScienceRocks";
@@ -68,6 +70,8 @@ describe("authored content", () => {
     const manifestIds = new Set(
       [
         ...algebraFigures,
+        ...algebraicFractionsAddingFigures,
+        ...algebraicFractionsMultiplyingFigures,
         ...biologyFigures,
         ...decimalsFigures,
         ...earthScienceRocksFigures,
@@ -106,7 +110,7 @@ describe("authored content", () => {
 
   it("tracksForSubject returns tracks belonging to a subject", () => {
     const mathsTracks = tracksForSubject("maths");
-    expect(mathsTracks.length).toBe(10);
+    expect(mathsTracks.length).toBe(12);
     const ids = mathsTracks.map((t) => t.id);
     expect(ids).toContain("algebra");
   });
