@@ -25,6 +25,7 @@ import { perimeterAndAreaTrack } from "./tracks/perimeterAndArea";
 import { pythagorasTrack } from "./tracks/pythagoras";
 import { quadrilateralsTrack } from "./tracks/quadrilaterals";
 import { spanishConquestTrack } from "./tracks/spanishConquest";
+import { threeDCoordinatesTrack } from "./tracks/threeDCoordinates";
 import { timeTrack } from "./tracks/time";
 import { volumeTrack } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
@@ -53,6 +54,7 @@ export const appContent: AppContent = {
     pythagorasTrack,
     quadrilateralsTrack,
     spanishConquestTrack,
+    threeDCoordinatesTrack,
     timeTrack,
     volumeTrack,
   ],

@@ -16,12 +16,12 @@ describe("HomeScreen", () => {
       screen.getByRole("heading", { name: /choose a subject/i }),
     ).toBeInTheDocument();
 
-    // Maths has 9 tracks.
+    // Maths has 10 tracks.
     expect(screen.getByRole("link", { name: /Maths/i })).toHaveAttribute(
       "href",
       "/subject/maths",
     );
-    expect(screen.getByText(/9 tracks/)).toBeInTheDocument();
+    expect(screen.getByText(/10 tracks/)).toBeInTheDocument();
 
     // Science has 2 tracks.
     expect(screen.getByRole("link", { name: /Science/i })).toHaveAttribute(

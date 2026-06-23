@@ -13,6 +13,7 @@
 
 import { chromium } from "playwright";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import type { Frame } from "playwright";
 
 const SESSION_FILE =
   process.env.HOME + "/.agent-browser/sessions/onenote-default.json";
@@ -57,6 +58,30 @@ interface ExtractedNotebook {
   }[];
 }
 
+/** Global set of seen image src URLs for cross-page deduplication. */
+const seenSrcs = new Map<string, number>();
+const downloadedSrcs = new Set<string>();
+
+/** Re-acquire the WOPI frame, with retries. */
+async function getWopiFrame(mainPage: any): Promise<Frame | null> {
+  for (let i = 0; i < 10; i++) {
+    const wf = mainPage
+      .frames()
+      .find((f: Frame) => f.url().includes("officeapps.live.com"));
+    if (wf) {
+      try {
+        // Verify the frame is alive with a simple eval.
+        await wf.evaluate(() => document.title);
+        return wf;
+      } catch {
+        // Frame detached; try again.
+      }
+    }
+    await sleep(1500);
+  }
+  return null;
+}
+
 async function main() {
   // -----------------------------------------------------------------------
   // Setup
@@ -72,25 +97,24 @@ async function main() {
     process.exit(1);
   }
 
-  const browser = await chromium.launch({ headless: false, slowMo: 50 });
+  const browser = await chromium.launch({ headless: true, slowMo: 50 });
   const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
     storageState,
   });
-  const page = await context.newPage();
+  const mainPage = await context.newPage();
 
   // -----------------------------------------------------------------------
   // Open notebook
   // -----------------------------------------------------------------------
   console.log("Opening notebook...");
-  await page.goto(NOTEBOOK_URL, {
+  await mainPage.goto(NOTEBOOK_URL, {
     waitUntil: "domcontentloaded",
     timeout: 30_000,
   });
-  console.log("Title:", await page.title());
+  console.log("Title:", await mainPage.title());
 
-  await sleep(3000);
-  const wopiFrame = await waitForWopiFrame(page);
+  let wopiFrame = await getWopiFrame(mainPage);
   if (!wopiFrame) {
     console.error("WOPI frame not found.");
     await browser.close();
@@ -101,14 +125,18 @@ async function main() {
   // -----------------------------------------------------------------------
   // Diagnostic
   // -----------------------------------------------------------------------
-  await dumpStructure(wopiFrame);
+  try {
+    await dumpStructure(wopiFrame);
+  } catch {
+    console.log("  Diagnostic skipped (frame detached).");
+  }
 
   // -----------------------------------------------------------------------
   // Extract all sections and pages
   // -----------------------------------------------------------------------
   const result: ExtractedNotebook = {
     notebookUrl: NOTEBOOK_URL,
-    notebookTitle: await page.title(),
+    notebookTitle: await mainPage.title(),
     sections: [],
   };
 
@@ -129,12 +157,27 @@ async function main() {
 
   for (const sectionName of sections) {
     console.log(`\n--- Section: ${sectionName} ---`);
+
+    // Re-acquire frame before each section.
+    wopiFrame = await getWopiFrame(mainPage);
+    if (!wopiFrame) {
+      console.log("  WOPI frame lost; skipping remaining sections.");
+      break;
+    }
+
     const clicked = await clickSection(wopiFrame, sectionName);
     if (!clicked) {
       console.log("  Skipping (could not click).");
       continue;
     }
-    await sleep(3000);
+    await sleep(4000);
+
+    // Re-acquire after clicking (the frame URL changes).
+    wopiFrame = await getWopiFrame(mainPage);
+    if (!wopiFrame) {
+      console.log("  WOPI frame lost after section click.");
+      continue;
+    }
 
     const pageNames = await getPages(wopiFrame);
     console.log(`  ${pageNames.length} pages:`, pageNames);
@@ -143,25 +186,36 @@ async function main() {
 
     for (const pageName of pageNames) {
       console.log(`    Extracting: "${pageName}"`);
+
+      wopiFrame = await getWopiFrame(mainPage);
+      if (!wopiFrame) {
+        console.log("      WOPI frame lost; skipping remaining pages.");
+        break;
+      }
+
       const pageClicked = await clickPage(wopiFrame, pageName);
       if (!pageClicked) {
         console.log("      Skipping (could not click).");
         continue;
       }
-      await sleep(3000);
+      await sleep(4000);
+
+      wopiFrame = await getWopiFrame(mainPage);
+      if (!wopiFrame) {
+        console.log("      WOPI frame lost after page click.");
+        continue;
+      }
 
       const content = await getPageContent(wopiFrame);
       const images = await extractImages(
         wopiFrame,
-        page,
+        mainPage,
         sectionName,
         pageName,
       );
       const url = wopiFrame.url();
 
-      console.log(
-        `      ${content.length} chars, ${images.length} images. URL: ${url.slice(0, 80)}`,
-      );
+      console.log(`      ${content.length} chars, ${images.length} images.`);
 
       pages.push({
         sectionName,
@@ -207,18 +261,7 @@ async function main() {
 // Frame helpers
 // ---------------------------------------------------------------------------
 
-async function waitForWopiFrame(page: any) {
-  for (let index = 0; index < 20; index++) {
-    await sleep(1000);
-    const wf = page
-      .frames()
-      .find((f: any) => f.url().includes("officeapps.live.com"));
-    if (wf) return wf;
-  }
-  return null;
-}
-
-async function dumpStructure(frame: any) {
+async function dumpStructure(frame: Frame) {
   console.log("\n=== Diagnostic: WOPI frame structure ===");
   const structure = await frame.$$eval(
     '[role="navigation"], [role="tablist"], [role="tree"], [role="tabpanel"]',
@@ -243,81 +286,76 @@ async function dumpStructure(frame: any) {
 // Section/page navigation
 // ---------------------------------------------------------------------------
 
-async function getSections(frame: any): Promise<string[]> {
-  const names = await frame.$$eval(
-    '[role="navigation"] [role="tab"], [role="tree"] [role="treeitem"], [role="navigation"] [role="treeitem"]',
-    (els: Element[]) => [
-      ...new Set(
-        els
-          .map((element) => (element.textContent || "").trim())
-          .filter((t) => t.length > 1 && t.length < 80),
-      ),
-    ],
-  );
-  if (names.length > 0) return names;
-  return [];
-}
-
-async function clickSection(frame: any, name: string): Promise<boolean> {
-  const clicked = await frame.evaluate((sectionName: string) => {
-    const trees = document.querySelectorAll(
-      '[role="navigation"] [role="tree"]',
-    );
-    const sectionTree = trees[0];
-    if (!sectionTree) return false;
-    const items = sectionTree.querySelectorAll('[role="treeitem"]');
-    for (const item of items) {
-      if (item.textContent?.trim() === sectionName) {
-        (item as HTMLElement).click();
-        return true;
+async function clickSection(frame: Frame, name: string): Promise<boolean> {
+  try {
+    const clicked = await frame.evaluate((sectionName: string) => {
+      const trees = document.querySelectorAll(
+        '[role="navigation"] [role="tree"]',
+      );
+      const sectionTree = trees[0];
+      if (!sectionTree) return false;
+      const items = sectionTree.querySelectorAll('[role="treeitem"]');
+      for (const item of items) {
+        if (item.textContent?.trim() === sectionName) {
+          (item as HTMLElement).click();
+          return true;
+        }
       }
-    }
-    return false;
-  }, name);
-  if (clicked) return true;
+      return false;
+    }, name);
+    if (clicked) return true;
+  } catch {}
+
+  // CSS selector fallback.
   try {
     const element = await frame.$(`[role="treeitem"]:has-text("${name}")`);
     if (element) {
-      await element.click({ timeout: 3000 });
+      await element.click({ timeout: 5000 });
       return true;
     }
   } catch {}
   return false;
 }
 
-async function getPages(frame: any): Promise<string[]> {
-  const pages = await frame.evaluate(() => {
-    const trees = document.querySelectorAll(
-      '[role="navigation"] [role="tree"]',
-    );
-    const pageTree = trees[1];
-    if (!pageTree) return [] as string[];
-    const items = pageTree.querySelectorAll('[role="treeitem"]');
-    return [...items]
-      .map((element) => (element.textContent || "").trim())
-      .filter((t) => t.length > 0 && t.length < 120);
-  });
-  if (pages.length > 0) return pages;
+async function getPages(frame: Frame): Promise<string[]> {
+  try {
+    const pages = await frame.evaluate(() => {
+      const trees = document.querySelectorAll(
+        '[role="navigation"] [role="tree"]',
+      );
+      const pageTree = trees[1];
+      if (!pageTree) return [] as string[];
+      const items = pageTree.querySelectorAll('[role="treeitem"]');
+      return [...items]
+        .map((element) => (element.textContent || "").trim())
+        .filter((t) => t.length > 0 && t.length < 120);
+    });
+    if (pages.length > 0) return pages;
+  } catch {}
 
-  const allItems = await frame.$$eval('[role="treeitem"]', (els: Element[]) =>
-    els
-      .map((element) => (element.textContent || "").trim())
-      .filter((t) => t.length > 1 && t.length < 120),
-  );
-  const exclude = new Set([
-    "Welcome",
-    "_Content Library",
-    "Collaboration Space",
-    "GRIMES, Thomas (tgrim43)",
-  ]);
-  return allItems.filter((n) => !exclude.has(n));
+  // Broad fallback.
+  try {
+    const allItems = await frame.$$eval('[role="treeitem"]', (els: Element[]) =>
+      els
+        .map((element) => (element.textContent || "").trim())
+        .filter((t) => t.length > 1 && t.length < 120),
+    );
+    const exclude = new Set([
+      "Welcome",
+      "_Content Library",
+      "Collaboration Space",
+      "GRIMES, Thomas (tgrim43)",
+    ]);
+    return allItems.filter((n) => !exclude.has(n));
+  } catch {
+    return [];
+  }
 }
 
-async function clickPage(frame: any, name: string): Promise<boolean> {
+async function clickPage(frame: Frame, name: string): Promise<boolean> {
   const selectors = [
     `[role="tree"]:nth-of-type(2) [role="treeitem"]:has-text("${name}")`,
     `[role="treeitem"]:has-text("${name}")`,
-    `:has-text("${name}")`,
   ];
   for (const sel of selectors) {
     try {
@@ -328,12 +366,13 @@ async function clickPage(frame: any, name: string): Promise<boolean> {
       }
     } catch {}
   }
+
   // JS click fallback.
   try {
-    await frame.evaluate((name: string) => {
+    await frame.evaluate((targetName: string) => {
       const items = document.querySelectorAll('[role="treeitem"]');
       for (const item of items) {
-        if (item.textContent?.trim() === name) {
+        if (item.textContent?.trim() === targetName) {
           (item as HTMLElement).click();
           return;
         }
@@ -349,12 +388,9 @@ async function clickPage(frame: any, name: string): Promise<boolean> {
 // Content extraction
 // ---------------------------------------------------------------------------
 
-async function getPageContent(frame: any): Promise<string> {
+async function getPageContent(frame: Frame): Promise<string> {
   try {
-    // Get text from contenteditable regions (OneNote's page canvas).
-    // Then clean up toolbar/header text that bleeds into the full body text.
     const rawText = await frame.evaluate(() => {
-      // Get content from the page canvas area first.
       const selects = [
         ".OutlineElement",
         "#PageContent",
@@ -370,7 +406,6 @@ async function getPageContent(frame: any): Promise<string> {
           if (text && text.length > 50) return text;
         }
       }
-      // Fallback: all contenteditable regions.
       const editables = document.querySelectorAll('[contenteditable="true"]');
       const texts: string[] = [];
       for (const element of editables) {
@@ -383,8 +418,8 @@ async function getPageContent(frame: any): Promise<string> {
 
     // Strip known toolbar/header prefixes that appear on every page.
     const prefixesToStrip = [
-      /^2026 - Year 8 Maths[\s\S]*?Share\s*\(Ctrl\+Alt\+C,[\s\S]*?\)/, // Header block
-      /^\s*Page Contents\s*/, // Navigation header
+      /^2026 - Year 8 Maths[\s\S]*?Share\s*\(Ctrl\+Alt\+C,[\s\S]*?\)/,
+      /^\s*Page Contents\s*/,
     ];
     let cleaned = rawText;
     for (const pattern of prefixesToStrip) {
@@ -400,44 +435,37 @@ async function getPageContent(frame: any): Promise<string> {
 // Image extraction
 // ---------------------------------------------------------------------------
 
-/** Global set of seen image src URLs for cross-page deduplication. */
-const seenSrcs = new Map<string, number>(); // src → count of pages it appears on.
-const downloadedSrcs = new Set<string>(); // src → already downloaded.
-
-/**
- * Finds all images visible in the current OneNote page, downloads them,
- * and returns metadata for each. Filters out WOPI UI chrome that appears
- * on every page.
- */
 async function extractImages(
-  wopiFrame: any,
-  page: any,
+  wopiFrame: Frame,
+  mainPage: any,
   sectionName: string,
   pageName: string,
 ): Promise<ExtractedImage[]> {
-  // Find <img> elements, excluding known UI classes and inline icon patterns.
-  const imageData = await wopiFrame.$$eval(
-    'img:not([class*="icon"]):not([class*="ribbon"]):not([class*="toolbar"]):not([class*="nav"]):not([class*="brand"]):not([class*="logo"])',
-    (imgs: HTMLImageElement[]) =>
-      imgs
-        .filter(
-          (img) =>
-            img.naturalWidth > 60 &&
-            img.naturalHeight > 60 &&
-            // Exclude inline data URIs that are tiny (UI sprites).
-            !(img.src.startsWith("data:image/svg") && img.naturalWidth < 100),
-        )
-        .map((img) => ({
-          src: img.src,
-          alt: img.alt || "",
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-        })),
-  );
+  let imageData: { src: string; alt: string; width: number; height: number }[];
+  try {
+    imageData = await wopiFrame.$$eval(
+      'img:not([class*="icon"]):not([class*="ribbon"]):not([class*="toolbar"]):not([class*="nav"]):not([class*="brand"]):not([class*="logo"])',
+      (imgs: HTMLImageElement[]) =>
+        imgs
+          .filter(
+            (img) =>
+              img.naturalWidth > 60 &&
+              img.naturalHeight > 60 &&
+              !(img.src.startsWith("data:image/svg") && img.naturalWidth < 100),
+          )
+          .map((img) => ({
+            src: img.src,
+            alt: img.alt || "",
+            width: img.naturalWidth,
+            height: img.naturalHeight,
+          })),
+    );
+  } catch {
+    return [];
+  }
 
   if (imageData.length === 0) return [];
 
-  // Mark all src URLs as seen for deduplication.
   for (const img of imageData) {
     seenSrcs.set(img.src, (seenSrcs.get(img.src) || 0) + 1);
   }
@@ -452,16 +480,11 @@ async function extractImages(
     const filename = `${prefix}__img${String(index).padStart(3, "0")}.${extension}`;
     const filepath = `${OUTPUT_DIR}/${filename}`;
 
-    // Skip if this src appears too many times (likely UI chrome that's copied
-    // into every page's DOM, like the OneNote sidebar decoration).
-    // We evaluate this AFTER all pages are processed in finalDeduplicate.
-
     try {
       if (img.src.startsWith("data:")) {
         const base64 = img.src.split(",")[1];
         if (base64) {
           const buf = Buffer.from(base64, "base64");
-          // Skip data URIs that are too small (UI sprites).
           if (buf.length < 500) continue;
           writeFileSync(filepath, buf);
           images.push({
@@ -494,10 +517,9 @@ async function extractImages(
           }
         } catch {}
       } else {
-        // Skip if already downloaded (dedup).
         if (downloadedSrcs.has(img.src)) continue;
         try {
-          const resp = await page.request.get(img.src, { timeout: 10_000 });
+          const resp = await mainPage.request.get(img.src, { timeout: 10_000 });
           if (resp.ok()) {
             const buf = await resp.body();
             if (buf.length < 500) continue;
@@ -534,13 +556,7 @@ async function extractImages(
   return images;
 }
 
-/**
- * After all pages are processed, deduplicates images whose src URL appears
- * on multiple pages. Keeps the first occurrence, removes subsequent copies.
- * These are typically WOPI UI chrome rendered redundantly in the DOM.
- */
 function deduplicateAcrossPages(result: ExtractedNotebook) {
-  // src URLs that appear on more than 1 page = duplicated across pages.
   const multiPageSrcs = new Set<string>();
   for (const [source, count] of seenSrcs) {
     if (count > 1) multiPageSrcs.add(source);
@@ -552,10 +568,10 @@ function deduplicateAcrossPages(result: ExtractedNotebook) {
     for (const pageData of section.pages) {
       const before = pageData.images.length;
       pageData.images = pageData.images.filter((img) => {
-        if (!multiPageSrcs.has(img.src)) return true; // Unique - keep.
-        if (firstSeen.has(img.src)) return false; // Already kept - remove.
+        if (!multiPageSrcs.has(img.src)) return true;
+        if (firstSeen.has(img.src)) return false;
         firstSeen.add(img.src);
-        return true; // First occurrence - keep.
+        return true;
       });
       removed += before - pageData.images.length;
     }
@@ -567,9 +583,6 @@ function deduplicateAcrossPages(result: ExtractedNotebook) {
   }
 }
 
-/**
- * Guesses a file extension from an image URL.
- */
 function guessExtension(source: string): string {
   if (source.startsWith("data:image/png")) return "png";
   if (
@@ -580,14 +593,13 @@ function guessExtension(source: string): string {
   if (source.startsWith("data:image/gif")) return "gif";
   if (source.startsWith("data:image/webp")) return "webp";
   if (source.startsWith("data:image/svg")) return "svg";
-  // Try URL path extension.
   const m = source.match(/\.(\w+)(?:\?|$)/);
   if (m) {
     const e = m[1].toLowerCase();
     if (["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"].includes(e))
       return e;
   }
-  return "png"; // Default.
+  return "png";
 }
 
 main().catch((error) => {

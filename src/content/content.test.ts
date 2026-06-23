@@ -21,6 +21,7 @@ import { perimeterAndAreaFigures } from "./tracks/perimeterAndArea";
 import { pythagorasFigures } from "./tracks/pythagoras";
 import { quadrilateralsFigures } from "./tracks/quadrilaterals";
 import { spanishConquestFigures } from "./tracks/spanishConquest";
+import { threeDCoordinatesFigures } from "./tracks/threeDCoordinates";
 import { timeFigures } from "./tracks/time";
 import { volumeFigures } from "./tracks/volume";
 import { validateContent } from "../domain/content/validateContent";
@@ -77,6 +78,7 @@ describe("authored content", () => {
         ...pythagorasFigures,
         ...quadrilateralsFigures,
         ...spanishConquestFigures,
+        ...threeDCoordinatesFigures,
         ...timeFigures,
         ...volumeFigures,
       ].map((figure) => figure.id),
@@ -104,7 +106,7 @@ describe("authored content", () => {
 
   it("tracksForSubject returns tracks belonging to a subject", () => {
     const mathsTracks = tracksForSubject("maths");
-    expect(mathsTracks.length).toBe(9);
+    expect(mathsTracks.length).toBe(10);
     const ids = mathsTracks.map((t) => t.id);
     expect(ids).toContain("algebra");
   });

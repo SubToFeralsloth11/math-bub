@@ -230,4 +230,18 @@ export const badges: Badge[] = [
     criterion: "boss-pass:german-wir-reisen",
     icon: "🏆",
   },
+  {
+    id: "three-d-coordinates-master",
+    title: "3D explorer",
+    description: "Finish every 3D Coordinate Systems lesson",
+    criterion: "track-complete:three-d-coordinates",
+    icon: "🧭",
+  },
+  {
+    id: "boss-three-d-coordinates",
+    title: "3D coordinates boss slayer",
+    description: "Pass the 3D Coordinates boss challenge",
+    criterion: "boss-pass:three-d-coordinates",
+    icon: "🏆",
+  },
 ];
