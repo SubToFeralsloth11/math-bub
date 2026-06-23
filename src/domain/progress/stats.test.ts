@@ -11,6 +11,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { localDateIso } from "./dates";
 import {
   computeLongestStreak,
   computeFirstLogin,
@@ -135,7 +136,7 @@ describe("computeLongestStreak", () => {
 });
 
 describe("computeFirstLogin", () => {
-  const today = new Date().toISOString().split("T")[0];
+  const today = localDateIso();
 
   it("should return today's date for empty array", () => {
     expect(computeFirstLogin([])).toBe(today);

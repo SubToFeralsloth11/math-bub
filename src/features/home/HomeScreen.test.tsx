@@ -16,19 +16,17 @@ describe("HomeScreen", () => {
       screen.getByRole("heading", { name: /choose a subject/i }),
     ).toBeInTheDocument();
 
-    // Maths has 10 tracks.
+    // Maths has 12 tracks.
     expect(screen.getByRole("link", { name: /Maths/i })).toHaveAttribute(
       "href",
       "/subject/maths",
     );
-    expect(screen.getByText(/10 tracks/)).toBeInTheDocument();
+    expect(screen.getByText(/12 tracks/)).toBeInTheDocument();
 
-    // Science has 2 tracks.
-    expect(screen.getByRole("link", { name: /Science/i })).toHaveAttribute(
-      "href",
-      "/subject/science",
-    );
-    expect(screen.getByText(/2 tracks/)).toBeInTheDocument();
+    // Science has 2 tracks (use within to avoid matching "12 tracks" from Maths).
+    const scienceLink = screen.getByRole("link", { name: /Science/i });
+    expect(scienceLink).toHaveAttribute("href", "/subject/science");
+    expect(within(scienceLink).getByText(/2 tracks/)).toBeInTheDocument();
 
     // HSS has 1 track (Languages also has 1, so scope to the HSS card).
     const hssLink = screen.getByRole("link", { name: /HSS/i });
