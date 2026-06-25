@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 800 260" width="800" height="260">
+  <defs>
+    <marker id="arrowhead" orient="auto" overflow="visible" markerUnits="strokeWidth" viewBox="-1 -3 7 6" markerWidth="7" markerHeight="6">
+      <path d="M 4.8 0 L 0 0 M 0 -1.8 L 4.8 0 L 0 1.8" fill="none" stroke="#2d2d2d" stroke-width="1"/>
+    </marker>
+  </defs>
+  <g id="diagram" fill="none" stroke="none">
+    <title>Spanish Conquest of the Aztecs timeline</title>
+
+    <!-- Title -->
+    <text x="400" y="30" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="16" fill="#1a1a1a">Spanish Conquest of the Aztecs — Timeline</text>
+
+    <!-- Main timeline line -->
+    <line x1="60" y1="100" x2="740" y2="100" stroke="#2d2d2d" stroke-width="3" marker-end="url(#arrowhead)" stroke-linecap="round"/>
+
+    <!-- 1325: Founding of Tenochtitlan -->
+    <line x1="90" y1="90" x2="90" y2="110" stroke="#2d2d2d" stroke-width="2"/>
+    <text x="90" y="82" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="12" fill="#1a1a1a">1325</text>
+    <text x="90" y="130" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Tenochtitlan</text>
+    <text x="90" y="144" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">founded</text>
+
+    <!-- 1428: Triple Alliance -->
+    <line x1="190" y1="90" x2="190" y2="110" stroke="#2d2d2d" stroke-width="2"/>
+    <text x="190" y="82" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="12" fill="#1a1a1a">1428</text>
+    <text x="190" y="130" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Triple Alliance</text>
+    <text x="190" y="144" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">formed</text>
+
+    <!-- 1492: Columbus (context) -->
+    <line x1="290" y1="90" x2="290" y2="110" stroke="#2d2d2d" stroke-width="2"/>
+    <text x="290" y="82" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="12" fill="#1a1a1a">1492</text>
+    <text x="290" y="130" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Columbus reaches</text>
+    <text x="290" y="144" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">the Americas</text>
+
+    <!-- 1519: Cortés arrives -->
+    <line x1="430" y1="80" x2="430" y2="120" stroke="#ffb3ba" stroke-width="2.5"/>
+    <text x="430" y="72" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="13" fill="#ff4d5a">1519</text>
+    <text x="430" y="140" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Cortés arrives</text>
+    <text x="430" y="154" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">Spanish enter</text>
+    <text x="430" y="166" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">Tenochtitlan</text>
+
+    <!-- 1520: Noche Triste -->
+    <line x1="550" y1="90" x2="550" y2="110" stroke="#ffb3ba" stroke-width="2"/>
+    <text x="550" y="82" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="12" fill="#1a1a1a">1520</text>
+    <text x="550" y="130" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">La Noche Triste</text>
+    <text x="550" y="144" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="10" fill="#686868">Spanish driven out</text>
+
+    <!-- 1521: Fall of Tenochtitlan -->
+    <line x1="670" y1="80" x2="670" y2="120" stroke="#ffb3ba" stroke-width="2.5"/>
+    <text x="670" y="72" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="13" fill="#ff4d5a">1521</text>
+    <text x="670" y="140" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Fall of</text>
+    <text x="670" y="154" text-anchor="middle" font-family="Open Sans, sans-serif" font-size="11" fill="#1a1a1a">Tenochtitlan</text>
+
+    <!-- Era labels -->
+    <text x="140" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="11" fill="#bae1ff">Pre-Columbian era</text>
+    <text x="560" y="195" text-anchor="middle" font-family="Open Sans, sans-serif" font-weight="bold" font-size="11" fill="#ffb3ba">Spanish conquest</text>
+    <line x1="330" y1="185" x2="330" y2="205" stroke="#686868" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- Legend -->
+    <g id="legend" transform="translate(60, 225)">
+      <rect x="0" y="0" width="12" height="12" rx="2" fill="#bae1ff" stroke="#2d2d2d" stroke-width="1"/>
+      <text x="18" y="10" font-family="Open Sans, sans-serif" font-size="10" fill="#1a1a1a">Aztec civilisation</text>
+      <rect x="150" y="0" width="12" height="12" rx="2" fill="#ffb3ba" stroke="#2d2d2d" stroke-width="1"/>
+      <text x="168" y="10" font-family="Open Sans, sans-serif" font-size="10" fill="#1a1a1a">Conquest period</text>
+    </g>
+  </g>
+</svg>
