@@ -1,17 +1,15 @@
 /**
- * Versioned persisted-state schema for MathBub, plus the pure load/recover/migrate
- * logic. Storage I/O lives in `storage.ts`; everything here is pure and tested
- * with plain values (see contracts/persistence.md).
+ * Versioned persisted-state schema for StudyBub, plus the pure
+ * load/recover logic. Persistence is handled server-side via the
+ * progress server functions; the schema definition and parseSavedState
+ * are shared between client and server.
  *
  * @module domain/persistence/schema
  */
 
 import type { BadgeId } from "../content/types";
 
-/** The previous localStorage key - used for one-way migration. */
-export const OLD_STORAGE_KEY = "mathbub.progress.v1";
-
-/** The localStorage key under which progress is stored. */
+/** The localStorage key under which progress is stored (fallback during SSR hydration). */
 export const STORAGE_KEY = "studybub.progress.v1";
 
 /** The current schema version. */

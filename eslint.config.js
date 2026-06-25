@@ -23,6 +23,8 @@ export default tseslint.config(
       "playwright-report",
       "test-results",
       ".agents",
+      ".output",
+      ".vinxi",
       "src/routeTree.gen.ts",
     ],
   },
@@ -148,9 +150,9 @@ export default tseslint.config(
     },
   },
 
-  // Top-level server entry point (process.exit is intentional here).
+  // Production server entry point (process.exit is intentional here).
   {
-    files: ["server.ts"],
+    files: ["scripts/server.ts"],
     languageOptions: {
       globals: { ...globals.node },
     },

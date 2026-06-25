@@ -195,7 +195,82 @@ function importProgress(
 
   // Handle optional AI config file.
   if (_aiConfigFile) {
-    console.log("AI config import is not yet implemented.");
+    importAiConfig(db, userId, _aiConfigFile, user.display_name);
+  }
+}
+
+/**
+ * Imports AI config from a JSON file into the database for a user.
+ * The config is validated and encrypted before storage.
+ *
+ * @param db - The database instance.
+ * @param userId - The target user ID.
+ * @param aiConfigFile - Path to the AI config JSON file.
+ * @param displayName - The user's display name for messages.
+ */
+async function importAiConfig(
+  db: Database,
+  userId: string,
+  aiConfigFile: string,
+  displayName: string,
+): Promise<void> {
+  const { encryptAiConfig } = await import("../src/server/encryption");
+
+  const raw = readFileSync(aiConfigFile, "utf8");
+  if (!raw || raw.trim() === "") {
+    console.error("Error: AI config file is empty.");
+    process.exit(1);
+  }
+
+  let config: unknown;
+  try {
+    config = JSON.parse(raw);
+  } catch {
+    console.error("Error: AI config file contains malformed JSON.");
+    process.exit(1);
+  }
+
+  if (
+    typeof config !== "object" ||
+    config === null ||
+    typeof (config as Record<string, unknown>).baseUrl !== "string" ||
+    typeof (config as Record<string, unknown>).apiKey !== "string" ||
+    typeof (config as Record<string, unknown>).model !== "string"
+  ) {
+    console.error(
+      "Error: AI config file does not contain a valid config " +
+        "(requires baseUrl, apiKey, and model).",
+    );
+    process.exit(1);
+  }
+
+  const aiConfig = config as {
+    baseUrl: string;
+    apiKey: string;
+    model: string;
+  };
+
+  try {
+    const encrypted = await encryptAiConfig(aiConfig);
+    const now = new Date().toISOString();
+
+    db.run(
+      "UPDATE users SET ai_config_encrypted = ?, ai_config_iv = ?, " +
+        "ai_config_auth_tag = ?, updated_at = ? WHERE id = ?",
+      [encrypted.ciphertext, encrypted.iv, encrypted.authTag, now, userId],
+    );
+
+    console.log(
+      `AI config imported for ${displayName}: ` +
+        `model ${aiConfig.model}, endpoint ${aiConfig.baseUrl}.`,
+    );
+  } catch (error_) {
+    console.error(
+      "Error: Failed to encrypt AI config. " +
+        "Ensure ENCRYPTION_KEY is set in the environment. ",
+      error_ instanceof Error ? error_.message : "",
+    );
+    process.exit(1);
   }
 }
 

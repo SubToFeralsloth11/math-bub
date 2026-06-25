@@ -15,5 +15,23 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [tailwindcss(), tanstackStart(), nitro(), viteReact()],
+  ssr: {
+    // Bun built-in modules are resolved at runtime by the Bun server,
+    // not by Vite's ESM loader. Externalising them prevents Vite from
+    // failing to resolve the `bun:` protocol during SSR module graph
+    // traversal.
+    external: ["bun:sqlite"],
+    noExternal: true,
+  },
+  plugins: [
+    tailwindcss(),
+    tanstackStart({
+      router: {
+        // Ignore test files so they don't trigger route generation warnings.
+        routeFileIgnorePattern: String.raw`\.test\.(ts|tsx)$`,
+      },
+    }),
+    nitro(),
+    viteReact(),
+  ],
 });
