@@ -21,7 +21,6 @@ export default defineConfig({
     // failing to resolve the `bun:` protocol during SSR module graph
     // traversal.
     external: ["bun:sqlite"],
-    noExternal: true,
   },
   plugins: [
     tailwindcss(),

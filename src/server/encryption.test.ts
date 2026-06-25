@@ -97,7 +97,7 @@ describe("decryptAiConfig", () => {
     // Flip a bit in the ciphertext.
     const tamperedCiphertext =
       encrypted.ciphertext.slice(0, -2) +
-      (Number.parseInt(encrypted.ciphertext.slice(-2), 16) ^ 0xFF)
+      (Number.parseInt(encrypted.ciphertext.slice(-2), 16) ^ 0xff)
         .toString(16)
         .padStart(2, "0");
     await expect(
@@ -109,7 +109,7 @@ describe("decryptAiConfig", () => {
     const encrypted = await encryptAiConfig(sampleConfig);
     const tamperedAuthTag =
       encrypted.authTag.slice(0, -2) +
-      (Number.parseInt(encrypted.authTag.slice(-2), 16) ^ 0xFF)
+      (Number.parseInt(encrypted.authTag.slice(-2), 16) ^ 0xff)
         .toString(16)
         .padStart(2, "0");
     await expect(
@@ -121,7 +121,7 @@ describe("decryptAiConfig", () => {
     const encrypted = await encryptAiConfig(sampleConfig);
     const tamperedIv =
       encrypted.iv.slice(0, -2) +
-      (Number.parseInt(encrypted.iv.slice(-2), 16) ^ 0xFF)
+      (Number.parseInt(encrypted.iv.slice(-2), 16) ^ 0xff)
         .toString(16)
         .padStart(2, "0");
     await expect(

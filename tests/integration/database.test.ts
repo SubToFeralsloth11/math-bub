@@ -229,11 +229,10 @@ describe("Database - progress persistence (T027)", () => {
     };
 
     const now = new Date().toISOString();
-    database.run("UPDATE users SET progress_json = ?, updated_at = ? WHERE id = ?", [
-      JSON.stringify(saved),
-      now,
-      "user-1",
-    ]);
+    database.run(
+      "UPDATE users SET progress_json = ?, updated_at = ? WHERE id = ?",
+      [JSON.stringify(saved), now, "user-1"],
+    );
 
     const row = database
       .query("SELECT progress_json FROM users WHERE id = ?")
@@ -263,11 +262,10 @@ describe("Database - progress persistence (T027)", () => {
 
     const fresh = defaultState();
     const now = new Date().toISOString();
-    database.run("UPDATE users SET progress_json = ?, updated_at = ? WHERE id = ?", [
-      JSON.stringify(fresh),
-      now,
-      "user-1",
-    ]);
+    database.run(
+      "UPDATE users SET progress_json = ?, updated_at = ? WHERE id = ?",
+      [JSON.stringify(fresh), now, "user-1"],
+    );
 
     const row = database
       .query("SELECT progress_json FROM users WHERE id = ?")

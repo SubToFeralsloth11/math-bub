@@ -32,6 +32,7 @@ export async function generateRegistrationOptions(
   return genRegOptions({
     rpName: RP_NAME,
     rpID: rpId,
+    userID: new TextEncoder().encode(user.id),
     userName: user.displayName,
     userDisplayName: user.displayName,
     attestationType: "none",
@@ -39,7 +40,6 @@ export async function generateRegistrationOptions(
       residentKey: "preferred",
       userVerification: "preferred",
     },
-    // Convert the user ID to a Uint8Array for WebAuthn.
     supportedAlgorithmIDs: [-7, -257], // ES256 and RS256.
   });
 }

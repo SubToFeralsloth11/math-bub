@@ -8,7 +8,6 @@ import {
 } from "../../domain/persistence/schema";
 import { getDatabase } from "../../server/db";
 
-
 /**
  * Loads the authenticated user's progress state from the database.
  */

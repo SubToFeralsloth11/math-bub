@@ -1,8 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// Playwright configuration for end-to-end tests. The dev server is started
-// automatically and reused locally so the suite can run with a single command.
-const port = 5173;
+/**
+ * Playwright configuration for StudyBub end-to-end tests.
+ *
+ * The TanStack Start dev server runs on port 3000 and is started
+ * automatically via the webServer config. Tests run against the dev
+ * server for fast feedback.
+ */
+const port = 3000;
 const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
