@@ -3,8 +3,11 @@ import {
   HeadContent,
   Outlet,
   Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
+  redirect,
 } from "@tanstack/react-router";
+
+import { getCurrentUser } from "./api/auth";
 
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { appContent } from "../content";
@@ -13,11 +16,34 @@ import { ProgressProvider } from "../state/progressContext";
 import "../index.css";
 
 /**
- * The root route for StudyBub. Renders the full HTML document shell with meta
- * tags, CSS, fonts, and context providers. Child routes render inside the
- * outlet.
+ * The router context passed to all child routes via the root route.
  */
-export const Route = createRootRoute({
+interface RouterContext {
+  /** The authenticated user, or null if not signed in. */
+  user: { id: string; displayName: string } | null;
+}
+
+/**
+ * The root route for StudyBub. Renders the full HTML document shell with meta
+ * tags, CSS, fonts, and context providers. The `beforeLoad` hook enforces
+ * authentication - unauthenticated users are redirected to `/login`.
+ */
+export const Route = createRootRouteWithContext<RouterContext>()({
+  beforeLoad: async ({ location }) => {
+    const user = await getCurrentUser();
+
+    // Allow unauthenticated access to login and invite pages.
+    const isPublicPath =
+      location.pathname === "/login" ||
+      location.pathname.startsWith("/invite/");
+
+    if (!user && !isPublicPath) {
+      throw redirect({ to: "/login" });
+    }
+
+    return { user };
+  },
+
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -27,8 +53,7 @@ export const Route = createRootRoute({
       },
       {
         name: "description",
-        content:
-          "StudyBub - a playful, gamified learning platform.",
+        content: "StudyBub - a playful, gamified learning platform.",
       },
       { title: "StudyBub" },
     ],

@@ -16,6 +16,9 @@ export default defineConfig({
       server: {
         preset: "bun",
       },
+      router: {
+        routeFileIgnorePattern: "(\\.test\\.)|(^api/)",
+      },
     }),
     viteReact(),
   ],
