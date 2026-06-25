@@ -1,22 +1,30 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+/**
+ * Tests for the QuestionView component with short-text AI marking.
+ *
+ * Mocks the AI config server functions to verify marking behaviour with
+ * and without AI configuration.
+ *
+ * @module features/lesson/QuestionView.test
+ * @author John Grimes
+ */
 
-import { QuestionView } from "./QuestionView";
-import { renderApp } from "../../test/renderApp";
-
-import type { AiConfig } from "../../domain/persistence/aiConfig";
-import type { ShortTextQuestion } from "../../domain/content/types";
-
-// Mock the AI config server functions so the AiConfigProvider can load
-// config without a real server.
+// Mock declarations must come before all imports for Vitest hoisting.
 vi.mock("../../server/api/aiConfig", () => ({
   loadAiConfig: vi.fn().mockResolvedValue(null),
   saveAiConfig: vi.fn().mockResolvedValue({ ok: true }),
   clearAiConfig: vi.fn().mockResolvedValue({ ok: true }),
 }));
 
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { QuestionView } from "./QuestionView";
 import { loadAiConfig } from "../../server/api/aiConfig";
+import { renderApp } from "../../test/renderApp";
+
+import type { ShortTextQuestion } from "../../domain/content/types";
+import type { AiConfig } from "../../domain/persistence/aiConfig";
 
 /** A short-text question fixture. */
 function shortTextQ(overrides?: Partial<ShortTextQuestion>): ShortTextQuestion {
@@ -49,7 +57,6 @@ describe("QuestionView — short-text AI marking", () => {
   });
 
   it("shows loading state on submit when AI is configured", async () => {
-    // Pre-load a valid AI config so AI marking kicks in.
     vi.mocked(loadAiConfig).mockResolvedValue(validConfig);
 
     const user = userEvent.setup();
@@ -64,7 +71,6 @@ describe("QuestionView — short-text AI marking", () => {
     await user.type(screen.getByRole("textbox"), "4");
     await user.click(screen.getByRole("button", { name: /check answer/i }));
 
-    // "Judging your answer…" should appear on the submit button.
     expect(
       screen.getByRole("button", { name: /judging your answer/i }),
     ).toBeInTheDocument();

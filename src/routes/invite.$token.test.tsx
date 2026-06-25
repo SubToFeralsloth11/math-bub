@@ -5,37 +5,38 @@
  * @author John Grimes
  */
 
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import React from "react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
-
-// Mock the server functions used by the invite screen.
+// Mock declarations must come before all imports for Vitest hoisting.
 vi.mock("../server/api/auth", () => ({
   getPasskeyRegistrationOptions: vi.fn(),
   verifyPasskeyRegistration: vi.fn(),
 }));
 
-// Mock @simplewebauthn/browser.
 vi.mock("@simplewebauthn/browser", () => ({
   startRegistration: vi.fn(),
 }));
 
 import { startRegistration } from "@simplewebauthn/browser";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { Route } from "./invite.$token";
 import {
   getPasskeyRegistrationOptions,
   verifyPasskeyRegistration,
 } from "../server/api/auth";
-import { Route } from "./invite.$token";
 
 // Render helper that accesses the route's component via its options.
-const InviteComponent =
-  (Route.options as { component: React.ComponentType }).component;
+const InviteComponent = (Route.options as { component: React.ComponentType })
+  .component;
 
 // Mock the route's useParams so we can render the component outside of a
 // router context and still have the token param available.
 beforeEach(() => {
-  vi.spyOn(Route, "useParams").mockReturnValue({ token: "test-token-123" } as any);
+  vi.spyOn(Route, "useParams").mockReturnValue({
+    token: "test-token-123",
+  } as any);
 });
 
 describe("InviteScreen", () => {
@@ -113,9 +114,7 @@ describe("InviteScreen", () => {
     render(<InviteComponent />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Invalid invitation link."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Invalid invitation link.")).toBeInTheDocument();
     });
     expect(
       screen.queryByRole("button", { name: /register/i }),

@@ -6,24 +6,8 @@ import {
   type SavedState,
 } from "../../domain/persistence/schema";
 import { getDatabase } from "../../server/db";
-import { useAppSession } from "../../server/session";
 
-/**
- * Retrieves the authenticated user's ID from the session, throwing a 401
- * error if no session exists.
- *
- * @returns The authenticated user's ID.
- * @throws If the user is not authenticated.
- */
-async function requireUserId(): Promise<string> {
-  const session = await useAppSession();
-  const sessionData = session.data as Record<string, unknown>;
-  const userId = sessionData.userId as string | undefined;
-  if (!userId) {
-    throw new Error("Sign in required.");
-  }
-  return userId;
-}
+import { requireUserId } from "./requireUserId";
 
 /**
  * Loads the authenticated user's progress state from the database.

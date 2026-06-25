@@ -2,25 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { getDatabase } from "../../server/db";
 import { decryptAiConfig, encryptAiConfig } from "../../server/encryption";
-import { useAppSession } from "../../server/session";
+
+import { requireUserId } from "./requireUserId";
 
 import type { AiConfig } from "../../domain/persistence/aiConfig";
-
-/**
- * Retrieves the authenticated user's ID from the session.
- *
- * @returns The authenticated user's ID.
- * @throws If the user is not authenticated.
- */
-async function requireUserId(): Promise<string> {
-  const session = await useAppSession();
-  const sessionData = session.data as Record<string, unknown>;
-  const userId = sessionData.userId as string | undefined;
-  if (!userId) {
-    throw new Error("Sign in required.");
-  }
-  return userId;
-}
 
 /**
  * Validates that an unknown value matches the AiConfig shape.

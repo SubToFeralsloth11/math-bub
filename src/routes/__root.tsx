@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import {
   HeadContent,
   Outlet,
@@ -7,12 +6,13 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
-import { getCurrentUser } from "../server/api/auth";
-
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { appContent } from "../content";
+import { getCurrentUser } from "../server/api/auth";
 import { AiConfigProvider } from "../state/aiConfigContext";
 import { ProgressProvider } from "../state/progressContext";
+
+import type { ReactNode } from "react";
 import "../index.css";
 
 /**
@@ -46,7 +46,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
   head: () => ({
     meta: [
-      { charSet: "utf-8" },
+      { charSet: "utf8" },
       {
         name: "viewport",
         content: "width=device-width, initial-scale=1.0",

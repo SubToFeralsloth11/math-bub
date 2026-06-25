@@ -10,7 +10,6 @@
 
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, { use } from "react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 // Mock the server functions used by the AI config provider.
@@ -44,10 +43,7 @@ function Consumer() {
       <span data-testid="config">
         {aiConfig ? JSON.stringify(aiConfig) : "null"}
       </span>
-      <button
-        data-testid="save"
-        onClick={() => setAiConfig(validConfig)}
-      >
+      <button data-testid="save" onClick={() => setAiConfig(validConfig)}>
         Save Config
       </button>
       <button data-testid="clear" onClick={() => setAiConfig(null)}>

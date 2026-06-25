@@ -10,10 +10,7 @@
  * @author John Grimes
  */
 
-import { render, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
-
-// Mock the server functions.
+// Mock declarations must come before all imports for Vitest hoisting.
 const mockLoadProgress = vi.fn();
 const mockSaveProgress = vi.fn();
 const mockResetProgress = vi.fn();
@@ -24,7 +21,10 @@ vi.mock("../server/api/progress", () => ({
   resetProgress: (...args: unknown[]) => mockResetProgress(...args),
 }));
 
-import React, { use, useEffect } from "react";
+import { render, waitFor } from "@testing-library/react";
+import { useEffect } from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+
 import { ProgressProvider, useProgress } from "./progressContext";
 import { defaultState } from "../domain/persistence/schema";
 
@@ -43,7 +43,7 @@ function ProgressReader({
 }: {
   onState: (saveStatus: string, xp: number) => void;
 }) {
-  const { state, saveStatus, dispatch } = useProgress();
+  const { state, saveStatus } = useProgress();
 
   useEffect(() => {
     onState(saveStatus, state.saved.xp);
@@ -111,7 +111,8 @@ describe("ProgressProvider - server-backed persistence", () => {
     await waitFor(() => {
       // Should end up with default state.
       const hasDefault = states.some(
-        (s) => s.xp === 0 && (s.saveStatus === "saved" || s.saveStatus === "idle"),
+        (s) =>
+          s.xp === 0 && (s.saveStatus === "saved" || s.saveStatus === "idle"),
       );
       expect(hasDefault).toBe(true);
     });

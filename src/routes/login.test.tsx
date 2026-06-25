@@ -5,27 +5,26 @@
  * @author John Grimes
  */
 
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
-
-// Mock the server functions used by the login screen.
+// Mock declarations must come before all imports for Vitest hoisting.
 vi.mock("../server/api/auth", () => ({
   getPasskeyAuthenticationOptions: vi.fn(),
   verifyPasskeyAuthentication: vi.fn(),
 }));
 
-// Mock @simplewebauthn/browser to avoid WebAuthn API calls.
 vi.mock("@simplewebauthn/browser", () => ({
   startAuthentication: vi.fn(),
 }));
 
 import { startAuthentication } from "@simplewebauthn/browser";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+
+import { LoginScreen } from "./login";
 import {
   getPasskeyAuthenticationOptions,
   verifyPasskeyAuthentication,
 } from "../server/api/auth";
-import { LoginScreen } from "./login";
 
 describe("LoginScreen", () => {
   it("renders the StudyBub heading and sign-in button", () => {
@@ -79,9 +78,7 @@ describe("LoginScreen", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Passkey not recognised."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Passkey not recognised.")).toBeInTheDocument();
     });
   });
 
@@ -117,8 +114,6 @@ describe("LoginScreen", () => {
       screen.getByRole("button", { name: /sign in with passkey/i }),
     );
 
-    expect(
-      screen.getByRole("button", { name: /signing in/i }),
-    ).toBeDisabled();
+    expect(screen.getByRole("button", { name: /signing in/i })).toBeDisabled();
   });
 });
