@@ -3,6 +3,8 @@ import { defineConfig } from "vitest/config";
 
 // Vitest configuration: jsdom environment for component tests, v8 coverage with
 // the project-mandated 80% thresholds, and a shared setup file for jest-dom matchers.
+// Server-side tests (src/server/, scripts/) use the "bun" pool via a Vitest workspace
+// to access Bun APIs like bun:sqlite.
 export default defineConfig({
   plugins: [react()],
   test: {
@@ -11,6 +13,7 @@ export default defineConfig({
     passWithNoTests: true,
     setupFiles: ["./tests/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
+    exclude: ["src/server/**/*.test.ts", "scripts/**/*.test.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],
