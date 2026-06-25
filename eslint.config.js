@@ -191,6 +191,7 @@ export default tseslint.config(
     rules: {
       "unicorn/no-process-exit": "off",
       "unicorn/prevent-abbreviations": "off",
+      "unicorn/no-null": "off",
     },
   },
 );

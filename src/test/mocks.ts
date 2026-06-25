@@ -18,15 +18,13 @@ vi.mock("../server/api/progress", () => ({
     const raw = localStorage.getItem("studybub.progress.v1");
     return Promise.resolve(parseSavedState(raw));
   }),
-  saveProgress: vi.fn(
-    (data: { state: unknown }) => {
-      localStorage.setItem(
-        "studybub.progress.v1",
-        JSON.stringify(data.state),
-      );
-      return Promise.resolve({ ok: true });
-    },
-  ),
+  saveProgress: vi.fn((args: { data: { state: unknown } }) => {
+    localStorage.setItem(
+      "studybub.progress.v1",
+      JSON.stringify(args.data.state),
+    );
+    return Promise.resolve({ ok: true });
+  }),
   resetProgress: vi.fn(() => {
     localStorage.removeItem("studybub.progress.v1");
     return Promise.resolve(defaultState());
@@ -47,15 +45,13 @@ vi.mock("../server/api/aiConfig", () => ({
     }
     return null;
   }),
-  saveAiConfig: vi.fn(
-    (data: { config: unknown }) => {
-      localStorage.setItem(
-        "studybub.aiConfig.v1",
-        JSON.stringify(data.config),
-      );
-      return Promise.resolve({ ok: true });
-    },
-  ),
+  saveAiConfig: vi.fn((args: { data: { config: unknown } }) => {
+    localStorage.setItem(
+      "studybub.aiConfig.v1",
+      JSON.stringify(args.data.config),
+    );
+    return Promise.resolve({ ok: true });
+  }),
   clearAiConfig: vi.fn(() => {
     localStorage.removeItem("studybub.aiConfig.v1");
     return Promise.resolve({ ok: true });

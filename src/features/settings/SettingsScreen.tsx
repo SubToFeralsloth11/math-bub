@@ -6,7 +6,7 @@
  * @author John Grimes
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { AppHeader } from "../../components/AppHeader";
 import { Button } from "../../components/Button";
@@ -37,7 +37,9 @@ function getInitialValues(): {
  * @returns The rendered settings screen.
  */
 export function SettingsScreen() {
-  const { aiConfig, setAiConfig } = useAiConfig();
+  const { aiConfig, setAiConfig, loading } = useAiConfig();
+  const hydrated = useRef(false);
+
   const [baseUrl, setBaseUrl] = useState(
     aiConfig?.baseUrl ?? getInitialValues().baseUrl,
   );
@@ -47,6 +49,16 @@ export function SettingsScreen() {
   const [model, setModel] = useState(
     aiConfig?.model ?? getInitialValues().model,
   );
+
+  // Populate form fields once the config is loaded from the server.
+  useEffect(() => {
+    if (!loading && aiConfig && !hydrated.current) {
+      setBaseUrl(aiConfig.baseUrl);
+      setApiKey(aiConfig.apiKey);
+      setModel(aiConfig.model);
+      hydrated.current = true;
+    }
+  }, [loading, aiConfig]);
   const [showKey, setShowKey] = useState(false);
   const [saved, setSaved] = useState(false);
 

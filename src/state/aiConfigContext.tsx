@@ -75,11 +75,9 @@ export function AiConfigProvider({
   async function setAiConfig(config: AiConfig | null): Promise<void> {
     setAiConfigState(config);
     try {
-      if (config) {
-        await saveAiConfigServer({ data: { config } });
-      } else {
-        await clearAiConfigServer();
-      }
+      await (config
+        ? saveAiConfigServer({ data: { config } })
+        : clearAiConfigServer());
     } catch {
       // Persistence failed silently.
     }

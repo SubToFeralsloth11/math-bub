@@ -15,7 +15,11 @@ import {
   type ProgressAction,
   type ProgressState,
 } from "./progressReducer";
-import { defaultState, parseSavedState, type SavedState } from "../domain/persistence/schema";
+import {
+  defaultState,
+  parseSavedState,
+  type SavedState,
+} from "../domain/persistence/schema";
 import {
   loadProgress as loadProgressServer,
   saveProgress as saveProgressServer,

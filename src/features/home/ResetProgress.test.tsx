@@ -30,9 +30,7 @@ describe("ResetProgress", () => {
     expect(globalThis.localStorage.getItem(STORAGE_KEY)).not.toBeNull();
 
     // Confirming clears the stored progress (async via server function).
-    await user.click(
-      screen.getByRole("button", { name: /reset everything/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /reset everything/i }));
 
     // Wait for the async reset and re-save to complete.
     await waitFor(
