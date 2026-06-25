@@ -23,6 +23,7 @@ export default tseslint.config(
       "playwright-report",
       "test-results",
       ".agents",
+      "src/routeTree.gen.ts",
     ],
   },
 
@@ -150,6 +151,22 @@ export default tseslint.config(
     },
     rules: {
       "unicorn/prefer-module": "off",
+    },
+  },
+
+  // Server-side code (database, encryption, WebAuthn helpers, routes/api/).
+  {
+    files: ["src/server/**/*.ts", "src/routes/api/**/*.ts"],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+  },
+
+  // CLI scripts run under Bun.
+  {
+    files: ["scripts/**/*.ts"],
+    languageOptions: {
+      globals: { ...globals.node },
     },
   },
 );

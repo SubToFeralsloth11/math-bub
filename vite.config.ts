@@ -1,11 +1,22 @@
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-// Vite configuration for the StudyBub single-page application.
-// React Fast Refresh and Tailwind v4 are wired in via plugins; no PostCSS step is needed.
-// Base is "/" because the app is served from a custom domain (syntaxrewrite.com).
+// TanStack Start configuration for StudyBub.
+// React plugin must come after tanstackStart per TanStack Start conventions.
+// The Bun server preset is configured via the tanstackStart options.
 export default defineConfig({
-  base: "/",
-  plugins: [react(), tailwindcss()],
+  server: {
+    port: 3000,
+  },
+  plugins: [
+    tailwindcss(),
+    tanstackStart({
+      server: {
+        preset: "bun",
+      },
+    }),
+    viteReact(),
+  ],
 });
