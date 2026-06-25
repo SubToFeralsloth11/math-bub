@@ -8,19 +8,12 @@
  * @author John Grimes
  */
 
-// Mock declarations must come before all imports for Vitest hoisting.
-vi.mock("../../server/api/aiConfig", () => ({
-  loadAiConfig: vi.fn().mockResolvedValue(null),
-  saveAiConfig: vi.fn().mockResolvedValue({ ok: true }),
-  clearAiConfig: vi.fn().mockResolvedValue({ ok: true }),
-}));
-
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { QuestionView } from "./QuestionView";
-import { loadAiConfig } from "../../server/api/aiConfig";
+import { setMockAiConfig, clearMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 import type { ShortTextQuestion } from "../../domain/content/types";
@@ -53,14 +46,15 @@ describe("QuestionView — short-text AI marking", () => {
   beforeEach(() => {
     onAnswered.mockClear();
     onContinue.mockClear();
-    vi.mocked(loadAiConfig).mockResolvedValue(null);
+    clearMockProgress();
+    setMockAiConfig(null);
   });
 
   it("shows loading state on submit when AI is configured", async () => {
-    vi.mocked(loadAiConfig).mockResolvedValue(validConfig);
+    setMockAiConfig(validConfig);
 
     const user = userEvent.setup();
-    renderApp(
+    await renderApp(
       <QuestionView
         question={shortTextQ()}
         onAnswered={onAnswered}
@@ -78,7 +72,7 @@ describe("QuestionView — short-text AI marking", () => {
 
   it("shows aiNotConfigured when no config is saved", async () => {
     const user = userEvent.setup();
-    renderApp(
+    await renderApp(
       <QuestionView
         question={shortTextQ()}
         onAnswered={onAnswered}
@@ -95,10 +89,10 @@ describe("QuestionView — short-text AI marking", () => {
   });
 
   it("disables submit button during loading for short-text", async () => {
-    vi.mocked(loadAiConfig).mockResolvedValue(validConfig);
+    setMockAiConfig(validConfig);
 
     const user = userEvent.setup();
-    renderApp(
+    await renderApp(
       <QuestionView
         question={shortTextQ()}
         onAnswered={onAnswered}

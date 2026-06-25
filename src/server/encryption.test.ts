@@ -6,7 +6,7 @@ import {
   decryptAiConfig,
   encryptAiConfig,
   resetEncryptionKey,
-} from "./encryption";
+} from "./encryption.server";
 
 import type { AiConfig } from "../domain/persistence/aiConfig";
 

@@ -7,6 +7,7 @@ vi.mock("canvas-confetti", () => ({ default: () => Promise.resolve() }));
 
 import { LessonScreen } from "./LessonScreen";
 import { findLesson } from "../../content";
+import { clearMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 import type { Question } from "../../domain/content/types";
@@ -14,10 +15,10 @@ import type { Question } from "../../domain/content/types";
 const LESSON_ID = "alg-5g-expanding";
 const lesson = findLesson("algebra", LESSON_ID)!;
 
-function renderLesson() {
+async function renderLesson() {
   return renderApp(<LessonScreen />, {
     route: `/lesson/algebra/${LESSON_ID}`,
-    path: "/lesson/:trackId/:lessonId",
+    path: "lesson/$trackId/$lessonId",
   });
 }
 
@@ -64,21 +65,18 @@ async function answerCorrectly(
 
 // Advances through all learn cards to reach the practice phase.
 async function advanceToPractice(user: ReturnType<typeof userEvent.setup>) {
-  // The lesson has 3 learn cards; click "Next" twice, then "Start practice".
-  // Use getByText for the button label to avoid the getByRole / name regex
-  // interacting with jsdom getComputedStyle failures in error paths.
   await user.click(screen.getByRole("button", { name: "Next →" }));
   await user.click(screen.getByRole("button", { name: "Next →" }));
   await user.click(screen.getByRole("button", { name: "Start practice →" }));
 }
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("LessonScreen", () => {
-  it("shows learn cards before any practice question", () => {
-    renderLesson();
+  it("shows learn cards before any practice question", async () => {
+    await renderLesson();
     expect(
       screen.getByText(/key idea: the distributive law/i),
     ).toBeInTheDocument();
@@ -89,7 +87,7 @@ describe("LessonScreen", () => {
 
   it("advances from the last learn card into practice", async () => {
     const user = userEvent.setup();
-    renderLesson();
+    await renderLesson();
     await advanceToPractice(user);
     // The first practice question is an expression-type question with a
     // textbox input, not radio buttons.
@@ -98,7 +96,7 @@ describe("LessonScreen", () => {
 
   it("reveals a worked explanation on a wrong answer", async () => {
     const user = userEvent.setup();
-    renderLesson();
+    await renderLesson();
     await advanceToPractice(user);
 
     // The first practice question is an expression-type. Type a wrong answer.
@@ -114,7 +112,7 @@ describe("LessonScreen", () => {
 
   it("routes to the completion screen after passing the mastery check", async () => {
     const user = userEvent.setup();
-    renderLesson();
+    await renderLesson();
 
     await advanceToPractice(user);
 

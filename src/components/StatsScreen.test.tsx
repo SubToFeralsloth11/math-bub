@@ -4,25 +4,26 @@
  * @author John Grimes
  */
 
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { screen } from "@testing-library/react";
 import { describe, expect, it, beforeEach } from "vitest";
 
 import { StatsScreen } from "./StatsScreen";
 import { defaultState, type SavedState } from "../domain/persistence/schema";
 import { ProgressProvider } from "../state/progressContext";
+import { setMockProgress, clearMockProgress } from "../test/mocks";
+import { renderInRouter } from "../test/renderApp";
 
 import type { AppContent } from "../domain/content/types";
 
 const emptyContent: AppContent = { subjects: [], tracks: [], badges: [] };
 
 /**
- * Seeds localStorage with the given state before the provider hydrates.
+ * Seeds the mock server response with the given saved state.
  *
  * @param saved - The saved state to seed.
  */
 function seedProgress(saved: SavedState): void {
-  localStorage.setItem("studybub.progress.v1", JSON.stringify(saved));
+  setMockProgress(saved);
 }
 
 /**
@@ -31,32 +32,30 @@ function seedProgress(saved: SavedState): void {
  * @param content - Optional content to provide to ProgressProvider.
  * @returns The render result.
  */
-function renderStatsScreen(content: AppContent = emptyContent) {
-  return render(
-    <MemoryRouter>
-      <ProgressProvider content={content}>
-        <StatsScreen />
-      </ProgressProvider>
-    </MemoryRouter>,
+async function renderStatsScreen(content: AppContent = emptyContent) {
+  return renderInRouter(
+    <ProgressProvider content={content}>
+      <StatsScreen />
+    </ProgressProvider>,
   );
 }
 
 describe("StatsScreen", () => {
   beforeEach(() => {
-    localStorage.clear();
+    clearMockProgress();
   });
 
-  it("renders the page heading", () => {
+  it("renders the page heading", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       "My Progress",
     );
   });
 
-  it("renders six stat cards with correct labels", () => {
+  it("renders six stat cards with correct labels", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("Level")).toBeInTheDocument();
     expect(screen.getByText("Total XP")).toBeInTheDocument();
@@ -66,81 +65,81 @@ describe("StatsScreen", () => {
     expect(screen.getByText("Lessons Completed")).toBeInTheDocument();
   });
 
-  it("displays the correct level for the learner's XP", () => {
+  it("displays the correct level for the learner's XP", async () => {
     seedProgress({ ...defaultState(), xp: 120 });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     // 120 XP = Level 2 (level 2 starts at 50 XP, level 3 at 150 XP).
     expect(screen.getByText("Level 2")).toBeInTheDocument();
   });
 
-  it("displays formatted XP", () => {
+  it("displays formatted XP", async () => {
     seedProgress({ ...defaultState(), xp: 250 });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("250")).toBeInTheDocument();
   });
 
-  it("formats large XP with thousands separators", () => {
+  it("formats large XP with thousands separators", async () => {
     seedProgress({ ...defaultState(), xp: 1_234_567 });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("1,234,567")).toBeInTheDocument();
   });
 
-  it("displays the current streak count", () => {
+  it("displays the current streak count", async () => {
     seedProgress({
       ...defaultState(),
       streak: { count: 3, lastActiveDate: "2026-06-16" },
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("🔥 3-day streak")).toBeInTheDocument();
   });
 
-  it("shows no streak message when streak is zero", () => {
+  it("shows no streak message when streak is zero", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("🔥 0-day streak")).toBeInTheDocument();
   });
 
-  it("displays the longest streak", () => {
+  it("displays the longest streak", async () => {
     seedProgress({
       ...defaultState(),
       activeDates: ["2026-06-14", "2026-06-15", "2026-06-16"],
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     // Three consecutive dates = longest streak of 3.
     expect(screen.getByText(/Longest: 🔥 3 days/)).toBeInTheDocument();
   });
 
-  it("displays zero for longest streak when there are no active dates", () => {
+  it("displays zero for longest streak when there are no active dates", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText(/Longest: 🔥 0 days/)).toBeInTheDocument();
   });
 
-  it("displays badge progress", () => {
+  it("displays badge progress", async () => {
     seedProgress({
       ...defaultState(),
       badges: ["badge-1", "badge-2", "badge-3"],
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("3 of 30 badges")).toBeInTheDocument();
   });
 
-  it("displays zero badges when none earned", () => {
+  it("displays zero badges when none earned", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("0 of 30 badges")).toBeInTheDocument();
   });
 
-  it("displays lessons completed count", () => {
+  it("displays lessons completed count", async () => {
     seedProgress({
       ...defaultState(),
       lessons: {
@@ -149,32 +148,32 @@ describe("StatsScreen", () => {
         "lesson-3": { completed: false, bestAccuracy: 0 },
       },
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("2 lessons completed")).toBeInTheDocument();
   });
 
-  it("displays zero lessons completed when none done", () => {
+  it("displays zero lessons completed when none done", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("0 lessons completed")).toBeInTheDocument();
   });
 
-  it("displays the level message subtitle", () => {
+  it("displays the level message subtitle", async () => {
     seedProgress({ ...defaultState(), xp: 120 });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     // Level 2 is in range 1-4, so the message is "Just starting your journey".
     expect(screen.getByText("Just starting your journey")).toBeInTheDocument();
   });
 
-  it("displays first login and active days in the summary", () => {
+  it("displays first login and active days in the summary", async () => {
     seedProgress({
       ...defaultState(),
       activeDates: ["2026-06-01", "2026-06-15"],
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("First login")).toBeInTheDocument();
     expect(screen.getByText("Active days")).toBeInTheDocument();
@@ -183,31 +182,31 @@ describe("StatsScreen", () => {
     expect(screen.getByText("2")).toBeInTheDocument();
   });
 
-  it("renders the progress summary heading", () => {
+  it("renders the progress summary heading", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("Progress Summary")).toBeInTheDocument();
   });
 
-  it("renders the level progress heading", () => {
+  it("renders the level progress heading", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("Level Progress")).toBeInTheDocument();
   });
 
-  it("renders the XP progress bar", () => {
+  it("renders the XP progress bar", async () => {
     seedProgress({ ...defaultState(), xp: 100 });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     const progressBar = screen.getByRole("progressbar");
     expect(progressBar).toBeInTheDocument();
   });
 
-  it("renders icons for each stat card", () => {
+  it("renders icons for each stat card", async () => {
     seedProgress(defaultState());
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("🎯")).toBeInTheDocument();
     expect(screen.getByText("⭐")).toBeInTheDocument();
@@ -216,24 +215,24 @@ describe("StatsScreen", () => {
     expect(screen.getByText(/🔥 \d-day streak/)).toBeInTheDocument();
   });
 
-  it("redirects when badges exceed 30 (migration guard)", () => {
+  it("redirects when badges exceed 30 (migration guard)", async () => {
     seedProgress({
       ...defaultState(),
       badges: Array.from({ length: 31 }, (_, i) => `badge-${i}`),
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     // The component redirects to /badges, so the stats content should not be
     // visible.
     expect(screen.queryByText("My Progress")).not.toBeInTheDocument();
   });
 
-  it("shows the current streak with fire emoji prefix", () => {
+  it("shows the current streak with fire emoji prefix", async () => {
     seedProgress({
       ...defaultState(),
       streak: { count: 5, lastActiveDate: "2026-06-16" },
     });
-    renderStatsScreen();
+    await renderStatsScreen();
 
     expect(screen.getByText("🔥 5-day streak")).toBeInTheDocument();
   });

@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 
-import { getDatabase, initSchema, resetDatabase } from "./db";
+import { getDatabase, initSchema, resetDatabase } from "./db.server";
 
 describe("getDatabase", () => {
   afterEach(() => {

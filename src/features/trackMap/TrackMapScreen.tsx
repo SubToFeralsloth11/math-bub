@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 import { AppHeader } from "../../components/AppHeader";
 import { NotFound } from "../../components/NotFound";
@@ -66,7 +66,8 @@ function LessonNode({
   return (
     <div className="flex flex-col items-center gap-2">
       <Link
-        to={`/lesson/${trackId}/${lesson.id}`}
+        to="/lesson/$trackId/$lessonId"
+        params={{ trackId, lessonId: lesson.id }}
         aria-label={`${label} (${state})`}
         className={`${NODE_BASE} ${complete ? "text-white" : "bg-card text-ink"} hover:-translate-y-0.5`}
         style={
@@ -126,7 +127,8 @@ function BossNode({ track, unlocked, accent }: Readonly<BossNodeProps>) {
   }
   return (
     <Link
-      to={`/challenge/${track.id}`}
+      to="/challenge/$trackId"
+      params={{ trackId: track.id }}
       aria-label="Boss challenge (available)"
       className="flex size-32 flex-col items-center justify-center rounded-bub text-center font-display font-semibold text-white shadow-bub transition hover:-translate-y-0.5"
       style={{ backgroundColor: accent }}

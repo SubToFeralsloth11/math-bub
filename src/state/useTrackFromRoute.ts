@@ -4,7 +4,7 @@
  * @module state/useTrackFromRoute
  */
 
-import { useParams } from "react-router-dom";
+import { useParams } from "@tanstack/react-router";
 
 import { useProgress } from "./progressContext";
 
@@ -25,7 +25,7 @@ interface ResolvedTrack {
  * @returns The resolved track (or undefined) and the progress state.
  */
 export function useTrackFromRoute(): ResolvedTrack {
-  const { trackId } = useParams();
+  const { trackId } = useParams({ strict: false });
   const { state, content } = useProgress();
   const track = content.tracks.find((candidate) => candidate.id === trackId);
   return { track, state };

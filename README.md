@@ -1,11 +1,11 @@
-# MathBub
+# StudyBub
 
-MathBub is a single-learner, browser-based maths learning platform. It teaches
-Time (Year 4), Algebra (Year 8) and Geometry (Year 10) through a gamified
-learn → practise → master loop laid out on per-track progress maps, with XP,
-levels, daily streaks, milestone badges, and end-of-track practice-paper boss
-challenges. It runs entirely in the browser, with progress saved to local
-storage; there is no backend and no network access at runtime.
+StudyBub is a single-learner, full-stack learning platform built with TanStack
+Start and Bun. It teaches maths, science, languages, and humanities through a
+gamified learn → practise → master loop laid out on per-track progress maps,
+with XP, levels, daily streaks, milestone badges, and end-of-track boss
+challenges. Progress is stored server-side in SQLite; authentication uses
+passkeys (WebAuthn).
 
 ## Getting started
 
@@ -13,45 +13,134 @@ This project uses [bun](https://bun.sh) for package management and scripts.
 
 ```bash
 bun install
+```
+
+### Environment variables
+
+Copy the example file and fill in the values:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+
+| Variable         | Purpose                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| `ENCRYPTION_KEY` | 64 hex characters (32 bytes) for AES-256-GCM encryption of AI configs. Generate with `openssl rand -hex 32`. |
+| `SESSION_SECRET` | At least 32 random characters for signing session cookies. Generate with `openssl rand -hex 32`.             |
+
+Optional:
+
+| Variable   | Purpose                                 |
+| ---------- | --------------------------------------- |
+| `NODE_ENV` | Set to `production` for secure cookies. |
+
+### Database
+
+The SQLite database file (`studybub.db`) is created automatically on first run
+in the project root. Run the migration script to initialise the schema and
+create invitation tokens:
+
+```bash
+bun run scripts/migrate.ts invite --name "Learner Name" --base-url http://localhost:3000
+```
+
+The script prints an invitation link. Open it in a browser to register a
+passkey and create your account. Each token is single-use.
+
+### Development
+
+```bash
 bun run dev
 ```
 
-The app opens at the address Vite prints (by default `http://localhost:5173`).
+The app opens at `http://localhost:3000`.
+
+### Production build
+
+```bash
+bun run build
+bun run start
+```
+
+The `build` script type-checks and builds the client and server bundles (Nitro
+with the Bun preset). The `start` script runs the production server on
+`http://localhost:3000`.
 
 ## Scripts
 
-| Script                     | Purpose                                       |
-| -------------------------- | --------------------------------------------- |
-| `bun run dev`              | Start the Vite dev server.                    |
-| `bun run build`            | Type-check and build for production.          |
-| `bun run preview`          | Preview the production build.                 |
-| `bun run lint`             | Run ESLint.                                   |
-| `bun run lint:fix`         | Run ESLint with autofix.                      |
-| `bun run format`           | Format with Prettier.                         |
-| `bun run format:check`     | Check formatting.                             |
-| `bun run lint:duplication` | Detect copy-paste duplication with jscpd.     |
-| `bun run test`             | Run the unit and component tests once.        |
-| `bun run test:watch`       | Run the tests in watch mode.                  |
-| `bun run test:coverage`    | Run the tests with coverage (80% thresholds). |
-| `bun run test:e2e`         | Run the Playwright end-to-end tests.          |
+| Script                     | Purpose                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------- |
+| `bun run dev`              | Start the Vite + TanStack Start dev server.                                                  |
+| `bun run build`            | Type-check and build for production.                                                         |
+| `bun run start`            | Start the production Bun server.                                                             |
+| `bun run preview`          | Preview the production build.                                                                |
+| `bun run lint`             | Run ESLint.                                                                                  |
+| `bun run lint:fix`         | Run ESLint with autofix.                                                                     |
+| `bun run format`           | Format with Prettier.                                                                        |
+| `bun run format:check`     | Check formatting.                                                                            |
+| `bun run lint:duplication` | Detect copy-paste duplication with jscpd.                                                    |
+| `bun run test`             | Run the unit and component tests once.                                                       |
+| `bun run test:watch`       | Run the tests in watch mode.                                                                 |
+| `bun run test:coverage`    | Run the tests with coverage (80% thresholds).                                                |
+| `bun run test:e2e`         | Run the Playwright end-to-end tests.                                                         |
+| `bun run check`            | Run all quality gates: lint, format, duplication, tests + coverage, type-check + build, e2e. |
 
 The Playwright tests start the dev server automatically. Install the browser
 once with `bunx playwright install chromium` before the first run.
 
+## CLI tool
+
+The `scripts/migrate.ts` script provides user management and progress
+migration:
+
+```bash
+# Create a new user and generate an invitation link
+bun run scripts/migrate.ts invite --name "Oscar" --base-url http://localhost:3000
+
+# Import progress from a JSON file (e.g., from localStorage export)
+bun run scripts/migrate.ts import --user-id "abc123" --progress-file progress.json
+
+# Import progress with AI config
+bun run scripts/migrate.ts import --user-id "abc123" --progress-file progress.json --ai-config-file aiConfig.json
+```
+
+### Extracting localStorage data from browser DevTools
+
+1. Open the StudyBub app in your browser.
+2. Open DevTools (F12) and go to the Console tab.
+3. Run: `copy(localStorage.getItem("studybub.progress.v1"))`
+4. Paste into a file (e.g., progress.json).
+5. (Optional) For AI config: `copy(localStorage.getItem("studybub.aiConfig.v1"))`
+
 ## Architecture
 
 The code is split into a pure, framework-free domain layer and a thin React
-layer:
+layer, with server-side persistence via TanStack Start server functions:
 
 - `src/domain/` - pure logic with no React: answer marking and algebraic
   equivalence (`marking/`), XP/levels, streaks, unlocking and badges
-  (`progress/`), versioned persistence (`persistence/`), and content types and
-  validation (`content/`). All of this is unit-tested.
+  (`progress/`), versioned persistence schemas (`persistence/`), and content
+  types and validation (`content/`). All of this is unit-tested.
 - `src/content/` - the authored learning content as typed TypeScript data.
-- `src/state/` - a single progress `Context` backed by a pure `useReducer` that
-  composes the domain functions, hydrated from and persisted to local storage.
+- `src/state/` - React context providers for progress and AI config, backed
+  by pure reducers that compose the domain functions. State is hydrated from
+  and persisted to the server-side database.
+- `src/server/` - TanStack Start server functions (progress, auth, AI config),
+  the SQLite database layer, session management, WebAuthn integration, and
+  AES-256-GCM encryption for API keys.
 - `src/components/` and `src/features/` - shared presentational components and
-  the seven screens.
+  the screen components.
+- `src/routes/` - file-based TanStack Router route definitions.
+
+Progress is stored server-side in SQLite. The client never accesses the
+database directly - all persistence goes through `createServerFn` RPC calls
+that enforce authentication via session cookies.
+
+Authentication uses passkeys (WebAuthn). New users are created via single-use
+invitation tokens generated by the CLI tool. Sessions are HTTP-only signed
+cookies with a 7-day expiry.
 
 Maths is typeset with KaTeX (with a plain-text fallback), and algebraic answers
 are marked by parsing with mathjs and testing equivalence via deterministic

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 import { ResetProgress } from "./ResetProgress";
 import { AppHeader } from "../../components/AppHeader";
@@ -19,7 +19,8 @@ function SubjectCard({ subject }: Readonly<SubjectCardProps>) {
 
   return (
     <Link
-      to={`/subject/${subject.id}`}
+      to="/subject/$subjectId"
+      params={{ subjectId: subject.id }}
       className="group block rounded-bub focus-visible:outline-none"
     >
       <Card className="flex items-center gap-4 p-5 transition group-hover:-translate-y-0.5 group-hover:shadow-bub-lg">

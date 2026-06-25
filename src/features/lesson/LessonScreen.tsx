@@ -1,5 +1,5 @@
+import { Link, useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect, useReducer, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { LearnCardView } from "./LearnCardView";
 import { LessonComplete } from "./LessonComplete";
@@ -58,6 +58,8 @@ interface LessonRunnerProps {
   lesson: Lesson;
   /** The track the lesson belongs to (for navigation). */
   trackId: string;
+  /** The subject the track belongs to (for back navigation). */
+  subjectId: string;
   /** Replays the lesson from the beginning. */
   onReview: () => void;
 }
@@ -76,6 +78,7 @@ interface LessonRunnerProps {
 function LessonRunner({
   lesson,
   trackId,
+  subjectId,
   onReview,
 }: Readonly<LessonRunnerProps>) {
   const navigate = useNavigate();
@@ -140,7 +143,12 @@ function LessonRunner({
           levelUpTo={state.celebration.levelUpTo}
           newBadges={state.celebration.newBadges}
           onReview={onReview}
-          onBackToMap={() => navigate(`/track/${trackId}`)}
+          onBackToMap={() =>
+            navigate({
+              to: "/subject/$subjectId/track/$trackId",
+              params: { subjectId, trackId },
+            })
+          }
         />
       );
     }
@@ -177,7 +185,8 @@ function LessonRunner({
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
       <header className="flex items-center gap-4 px-5 py-4">
         <Link
-          to={`/track/${trackId}`}
+          to="/subject/$subjectId/track/$trackId"
+          params={{ subjectId, trackId }}
           aria-label="Leave lesson"
           className="text-2xl text-muted transition hover:text-ink"
         >
@@ -248,14 +257,13 @@ function LessonRunner({
  * @returns The lesson screen.
  */
 export function LessonScreen() {
-  const { trackId, lessonId } = useParams();
+  const { trackId, lessonId } = useParams({ strict: false });
   const { content } = useProgress();
   const [runKey, setRunKey] = useState(0);
-  const lesson = content.tracks
-    .find((track) => track.id === trackId)
-    ?.lessons.find((candidate) => candidate.id === lessonId);
+  const track = content.tracks.find((candidate) => candidate.id === trackId);
+  const lesson = track?.lessons.find((candidate) => candidate.id === lessonId);
 
-  if (!trackId || !lesson) {
+  if (!trackId || !track || !lesson) {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
         <div className="text-4xl">🔍</div>
@@ -278,6 +286,7 @@ export function LessonScreen() {
       key={runKey}
       lesson={lesson}
       trackId={trackId}
+      subjectId={track.subjectId}
       onReview={() => setRunKey((key) => key + 1)}
     />
   );

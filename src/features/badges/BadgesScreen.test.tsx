@@ -2,7 +2,8 @@ import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { BadgesScreen } from "./BadgesScreen";
-import { STORAGE_KEY } from "../../domain/persistence/schema";
+import { defaultState } from "../../domain/persistence/schema";
+import { clearMockProgress, setMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 import type { AppContent } from "../../domain/content/types";
@@ -29,24 +30,16 @@ const content: AppContent = {
 };
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("BadgesScreen", () => {
-  it("renders earned badges distinctly from unearned ones", () => {
-    globalThis.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        version: 1,
-        lessons: {},
-        challenges: {},
-        xp: 0,
-        streak: { count: 0, lastActiveDate: "" },
-        badges: ["first-steps"],
-        activeDates: [],
-      }),
-    );
-    renderApp(<BadgesScreen />, { content });
+  it("renders earned badges distinctly from unearned ones", async () => {
+    setMockProgress({
+      ...defaultState(),
+      badges: ["first-steps"],
+    });
+    await renderApp(<BadgesScreen />, { content });
 
     expect(screen.getByText(/1 of 2 earned/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/first steps: earned/i)).toBeInTheDocument();

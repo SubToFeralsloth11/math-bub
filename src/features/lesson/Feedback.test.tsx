@@ -1,8 +1,8 @@
-import { screen, render } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { Feedback } from "./Feedback";
+import { renderInRouter } from "../../test/renderApp";
 
 import type { Question } from "../../domain/content/types";
 import type { MarkResult } from "../../domain/marking/markResult";
@@ -20,25 +20,23 @@ function fixtureQ(overrides?: Partial<Question>): Question {
   } as Question;
 }
 
-/** Renders Feedback inside a MemoryRouter so Link components work. */
-function renderFeedback(result: MarkResult, question?: Question) {
-  return render(
-    <MemoryRouter>
-      <Feedback result={result} question={question ?? fixtureQ()} />
-    </MemoryRouter>,
+/** Renders Feedback inside a router context so Link components work. */
+async function renderFeedback(result: MarkResult, question?: Question) {
+  return renderInRouter(
+    <Feedback result={result} question={question ?? fixtureQ()} />,
   );
 }
 
 describe("Feedback", () => {
-  it("renders correct without feedback", () => {
-    renderFeedback({ status: "correct" });
+  it("renders correct without feedback", async () => {
+    await renderFeedback({ status: "correct" });
     expect(screen.getByRole("status")).toHaveTextContent(/correct/i);
     expect(screen.getByRole("status")).toHaveTextContent(/\+10 XP/);
     expect(screen.queryByText(/why:/i)).toBeInTheDocument();
   });
 
-  it("renders correct with feedback", () => {
-    renderFeedback({
+  it("renders correct with feedback", async () => {
+    await renderFeedback({
       status: "correct",
       feedback: "Great job! You identified the answer correctly.",
     });
@@ -49,14 +47,14 @@ describe("Feedback", () => {
     expect(screen.getByText(/why:/i)).toBeInTheDocument();
   });
 
-  it("renders incorrect without feedback", () => {
-    renderFeedback({ status: "incorrect" });
+  it("renders incorrect without feedback", async () => {
+    await renderFeedback({ status: "incorrect" });
     expect(screen.getByRole("status")).toHaveTextContent(/not quite/i);
     expect(screen.getByText(/why:/i)).toBeInTheDocument();
   });
 
-  it("renders incorrect with feedback", () => {
-    renderFeedback({
+  it("renders incorrect with feedback", async () => {
+    await renderFeedback({
       status: "incorrect",
       feedback: "Not quite. The answer is 4, not 5.",
     });
@@ -67,15 +65,15 @@ describe("Feedback", () => {
     expect(screen.getByText(/why:/i)).toBeInTheDocument();
   });
 
-  it("renders unreadable", () => {
-    renderFeedback({ status: "unreadable" });
+  it("renders unreadable", async () => {
+    await renderFeedback({ status: "unreadable" });
     expect(screen.getByText(/couldn't read that/i)).toBeInTheDocument();
     // Unreadable should not show the worked explanation.
     expect(screen.queryByText(/why:/i)).not.toBeInTheDocument();
   });
 
-  it("renders aiNotConfigured with message and settings link", () => {
-    renderFeedback({
+  it("renders aiNotConfigured with message and settings link", async () => {
+    await renderFeedback({
       status: "aiNotConfigured",
       message: "AI marking is not configured.",
     });
@@ -87,19 +85,17 @@ describe("Feedback", () => {
     ).toHaveAttribute("href", "/settings");
   });
 
-  it("renders aiError with message, retry button, and settings link", () => {
+  it("renders aiError with message, retry button, and settings link", async () => {
     const onRetry = vi.fn();
-    render(
-      <MemoryRouter>
-        <Feedback
-          result={{
-            status: "aiError",
-            message: "Could not reach the AI service.",
-          }}
-          question={fixtureQ()}
-          onRetry={onRetry}
-        />
-      </MemoryRouter>,
+    await renderInRouter(
+      <Feedback
+        result={{
+          status: "aiError",
+          message: "Could not reach the AI service.",
+        }}
+        question={fixtureQ()}
+        onRetry={onRetry}
+      />,
     );
     expect(
       screen.getByText(/could not reach the ai service/i),
@@ -113,19 +109,17 @@ describe("Feedback", () => {
     );
   });
 
-  it("does not show retry button for aiNotConfigured", () => {
+  it("does not show retry button for aiNotConfigured", async () => {
     const onRetry = vi.fn();
-    render(
-      <MemoryRouter>
-        <Feedback
-          result={{
-            status: "aiNotConfigured",
-            message: "Configure first.",
-          }}
-          question={fixtureQ()}
-          onRetry={onRetry}
-        />
-      </MemoryRouter>,
+    await renderInRouter(
+      <Feedback
+        result={{
+          status: "aiNotConfigured",
+          message: "Configure first.",
+        }}
+        question={fixtureQ()}
+        onRetry={onRetry}
+      />,
     );
     expect(
       screen.queryByRole("button", { name: /try again/i }),

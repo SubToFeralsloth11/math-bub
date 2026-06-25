@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "@tanstack/react-router";
 
 import { AppHeader } from "../../components/AppHeader";
 import { Card } from "../../components/Card";
@@ -24,7 +24,8 @@ function TrackCard({ track }: Readonly<TrackCardProps>) {
 
   return (
     <Link
-      to={`/subject/${track.subjectId}/track/${track.id}`}
+      to="/subject/$subjectId/track/$trackId"
+      params={{ subjectId: track.subjectId, trackId: track.id }}
       className="group block rounded-bub focus-visible:outline-none"
     >
       <Card className="flex items-center gap-4 p-5 transition group-hover:-translate-y-0.5 group-hover:shadow-bub-lg">
@@ -64,7 +65,7 @@ function TrackCard({ track }: Readonly<TrackCardProps>) {
  *
  */
 export function SubjectScreen() {
-  const { subjectId } = useParams<{ subjectId: string }>();
+  const { subjectId } = useParams({ from: "/subject/$subjectId" });
   const subject = findSubject(subjectId ?? "");
   const tracks = tracksForSubject(subjectId ?? "");
 

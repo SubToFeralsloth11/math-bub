@@ -1,11 +1,12 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { RewardBar } from "./RewardBar";
 import { defaultState, type SavedState } from "../domain/persistence/schema";
 import { ProgressProvider } from "../state/progressContext";
+import { setMockProgress, clearMockProgress } from "../test/mocks";
+import { renderInRouter } from "../test/renderApp";
 
 import type { AppContent } from "../domain/content/types";
 
@@ -40,24 +41,22 @@ function consecutiveDates(days: number): string[] {
   );
 }
 
-/** Seeds localStorage with the given state before the provider hydrates. */
+/** Seeds the mock server response with the given saved state. */
 function seedProgress(saved: SavedState): void {
-  localStorage.setItem("studybub.progress.v1", JSON.stringify(saved));
+  setMockProgress(saved);
 }
 
-function renderRewardBar(content: AppContent = emptyContent) {
-  return render(
-    <MemoryRouter>
-      <ProgressProvider content={content}>
-        <RewardBar />
-      </ProgressProvider>
-    </MemoryRouter>,
+async function renderRewardBar(content: AppContent = emptyContent) {
+  return renderInRouter(
+    <ProgressProvider content={content}>
+      <RewardBar />
+    </ProgressProvider>,
   );
 }
 
 describe("RewardBar streak popover", () => {
   beforeEach(() => {
-    localStorage.clear();
+    clearMockProgress();
   });
 
   it("opens the streak popover on chip click", async () => {
@@ -69,11 +68,12 @@ describe("RewardBar streak popover", () => {
       activeDates: consecutiveDates(7),
     };
     seedProgress(state);
-    // Force the hydrated state to re-read from localStorage.
-    localStorage.setItem("studybub.progress.v1", JSON.stringify(state));
 
-    renderRewardBar();
+    await renderRewardBar();
 
+    await waitFor(() => {
+      expect(screen.getByLabelText("3 day streak")).toBeInTheDocument();
+    });
     const chip = screen.getByLabelText("3 day streak");
     await user.click(chip);
 
@@ -91,8 +91,11 @@ describe("RewardBar streak popover", () => {
       activeDates: consecutiveDates(7),
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
+    await waitFor(() => {
+      expect(screen.getByLabelText("2 day streak")).toBeInTheDocument();
+    });
     const chip = screen.getByLabelText("2 day streak");
     await user.click(chip);
     expect(screen.getByText(/🔥.*2-day streak/)).toBeInTheDocument();
@@ -107,7 +110,7 @@ describe("RewardBar streak popover", () => {
     const user = userEvent.setup();
     seedProgress(defaultState());
 
-    renderRewardBar();
+    await renderRewardBar();
 
     const chip = screen.getByLabelText(/no streak yet/i);
     await user.click(chip);
@@ -125,8 +128,11 @@ describe("RewardBar streak popover", () => {
       activeDates: ["2026-06-16"],
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
+    await waitFor(() => {
+      expect(screen.getByLabelText("1 day streak")).toBeInTheDocument();
+    });
     await user.click(screen.getByLabelText("1 day streak"));
 
     const dayCells = screen.getAllByLabelText(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/);
@@ -136,7 +142,7 @@ describe("RewardBar streak popover", () => {
 
 describe("RewardBar level popover", () => {
   beforeEach(() => {
-    localStorage.clear();
+    clearMockProgress();
   });
 
   it("opens the level popover on badge click", async () => {
@@ -148,7 +154,7 @@ describe("RewardBar level popover", () => {
       activeDates: ["2026-06-16"],
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
     const badge = screen.getByLabelText(/Level/);
     await user.click(badge);
@@ -166,7 +172,7 @@ describe("RewardBar level popover", () => {
       activeDates: ["2026-06-16"],
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
     await user.click(screen.getByLabelText(/Level/));
 
@@ -186,7 +192,7 @@ describe("RewardBar level popover", () => {
       activeDates: ["2026-06-16"],
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
     const badge = screen.getByLabelText(/Level/);
     await user.click(badge);
@@ -201,7 +207,7 @@ describe("RewardBar level popover", () => {
 
 describe("RewardBar mutual exclusion", () => {
   beforeEach(() => {
-    localStorage.clear();
+    clearMockProgress();
   });
 
   it("closes the streak popover when opening the level popover", async () => {
@@ -214,8 +220,12 @@ describe("RewardBar mutual exclusion", () => {
       activeDates: consecutiveDates(7),
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
+    // Wait for hydration before opening streak popover.
+    await waitFor(() => {
+      expect(screen.getByLabelText("3 day streak")).toBeInTheDocument();
+    });
     // Open streak popover.
     await user.click(screen.getByLabelText("3 day streak"));
     expect(screen.getByText(/🔥.*3-day streak/)).toBeInTheDocument();
@@ -240,7 +250,7 @@ describe("RewardBar mutual exclusion", () => {
       activeDates: consecutiveDates(7),
     });
 
-    renderRewardBar();
+    await renderRewardBar();
 
     // Open level popover.
     await user.click(screen.getByLabelText(/Level/));

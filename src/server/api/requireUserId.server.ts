@@ -1,4 +1,4 @@
-import { useAppSession } from "../../server/session";
+import { useAppSession } from "../../server/session.server";
 
 /**
  * Retrieves the authenticated user's ID from the session, throwing an

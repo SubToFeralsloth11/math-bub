@@ -2,15 +2,16 @@ import { screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { HomeScreen } from "./HomeScreen";
+import { clearMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("HomeScreen", () => {
-  it("shows subject cards with correct track counts", () => {
-    renderApp(<HomeScreen />);
+  it("shows subject cards with correct track counts", async () => {
+    await renderApp(<HomeScreen />);
 
     expect(
       screen.getByRole("heading", { name: /choose a subject/i }),
@@ -34,8 +35,8 @@ describe("HomeScreen", () => {
     expect(within(hssLink).getByText(/1 track/)).toBeInTheDocument();
   });
 
-  it("offers links to badges and a reset control", () => {
-    renderApp(<HomeScreen />);
+  it("offers links to badges and a reset control", async () => {
+    await renderApp(<HomeScreen />);
     expect(screen.getByRole("link", { name: /view badges/i })).toHaveAttribute(
       "href",
       "/badges",

@@ -9,9 +9,6 @@
 
 import type { BadgeId } from "../content/types";
 
-/** The localStorage key under which progress is stored (fallback during SSR hydration). */
-export const STORAGE_KEY = "studybub.progress.v1";
-
 /** The current schema version. */
 export const CURRENT_VERSION = 1;
 

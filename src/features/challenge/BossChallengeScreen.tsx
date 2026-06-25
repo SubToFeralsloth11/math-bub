@@ -1,5 +1,5 @@
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
@@ -105,7 +105,12 @@ function ChallengeRunner({ track, challenge }: Readonly<ChallengeRunnerProps>) {
         <div className="flex justify-between">
           <Button
             variant="ghost"
-            onClick={() => navigate(`/track/${track.id}`)}
+            onClick={() =>
+              navigate({
+                to: "/subject/$subjectId/track/$trackId",
+                params: { subjectId: track.subjectId, trackId: track.id },
+              })
+            }
           >
             ← Back to map
           </Button>
@@ -134,7 +139,14 @@ function ChallengeRunner({ track, challenge }: Readonly<ChallengeRunnerProps>) {
               : ""}
           </p>
         </Card>
-        <Button onClick={() => navigate(`/track/${track.id}`)}>
+        <Button
+          onClick={() =>
+            navigate({
+              to: "/subject/$subjectId/track/$trackId",
+              params: { subjectId: track.subjectId, trackId: track.id },
+            })
+          }
+        >
           Back to map →
         </Button>
       </main>
@@ -145,7 +157,8 @@ function ChallengeRunner({ track, challenge }: Readonly<ChallengeRunnerProps>) {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
       <header className="flex items-center gap-4 px-5 py-4">
         <Link
-          to={`/track/${track.id}`}
+          to="/subject/$subjectId/track/$trackId"
+          params={{ subjectId: track.subjectId, trackId: track.id }}
           aria-label="Leave challenge"
           className="text-2xl text-muted transition hover:text-ink"
         >
@@ -257,7 +270,8 @@ export function BossChallengeScreen() {
           Finish every {track.title} lesson to unlock this challenge.
         </p>
         <Link
-          to={`/track/${track.id}`}
+          to="/subject/$subjectId/track/$trackId"
+          params={{ subjectId: track.subjectId, trackId: track.id }}
           className="rounded-pill bg-brand px-6 py-3 font-display font-semibold text-white shadow-bub"
         >
           Back to map

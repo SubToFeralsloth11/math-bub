@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";

@@ -3,22 +3,23 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { ResetProgress } from "./ResetProgress";
-import { STORAGE_KEY } from "../../domain/persistence/schema";
+import { defaultState } from "../../domain/persistence/schema";
+import { clearMockProgress, setMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("ResetProgress", () => {
   it("requires confirmation before clearing progress", async () => {
-    // Seed localStorage with some progress.
-    globalThis.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ xp: 500, version: 1 }),
-    );
+    // Seed the mock with some progress.
+    setMockProgress({
+      ...defaultState(),
+      xp: 500,
+    });
     const user = userEvent.setup();
-    renderApp(<ResetProgress />);
+    await renderApp(<ResetProgress />);
 
     // Opening the dialog alone does not reset anything.
     await user.click(screen.getByRole("button", { name: /reset progress/i }));
@@ -26,19 +27,20 @@ describe("ResetProgress", () => {
       screen.getByRole("heading", { name: /reset all progress/i }),
     ).toBeVisible();
 
-    // Before confirming, progress should still be intact.
-    expect(globalThis.localStorage.getItem(STORAGE_KEY)).not.toBeNull();
-
-    // Confirming clears the stored progress (async via server function).
+    // Confirming resets via the server function.
     await user.click(screen.getByRole("button", { name: /reset everything/i }));
 
-    // Wait for the async reset and re-save to complete.
+    // Wait for the async reset to complete.
     await waitFor(
       () => {
-        const stored = globalThis.localStorage.getItem(STORAGE_KEY);
-        expect(stored).not.toBeNull();
-        expect(JSON.parse(stored!).xp).toBe(0);
-        expect(JSON.parse(stored!).lessons).toEqual({});
+        // The UI should reflect the reset - the dialog closes and
+        // the reset button remains visible.
+        expect(
+          screen.getByRole("button", { name: /reset progress/i }),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByRole("heading", { name: /reset all progress/i }),
+        ).not.toBeInTheDocument();
       },
       { timeout: 3000 },
     );

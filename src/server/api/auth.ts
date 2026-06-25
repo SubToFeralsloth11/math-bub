@@ -2,14 +2,14 @@ import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 
-import { getDatabase } from "../../server/db";
-import { useAppSession } from "../../server/session";
+import { getDatabase } from "../../server/db.server";
+import { useAppSession } from "../../server/session.server";
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
   verifyAuthentication,
   verifyRegistration,
-} from "../../server/webAuthn";
+} from "../../server/webAuthn.server";
 
 import type {
   AuthenticationResponseJSON,

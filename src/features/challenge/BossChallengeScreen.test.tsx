@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BossChallengeScreen } from "./BossChallengeScreen";
-import { STORAGE_KEY } from "../../domain/persistence/schema";
+import { defaultState } from "../../domain/persistence/schema";
+import { clearMockProgress, setMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 import type {
@@ -80,43 +81,35 @@ const content: AppContent = {
   ],
 };
 
-function renderChallenge() {
+async function renderChallenge() {
   return renderApp(<BossChallengeScreen />, {
     route: "/challenge/time",
-    path: "/challenge/:trackId",
+    path: "challenge/$trackId",
     content,
   });
 }
 
 function seedAllLessonsComplete() {
-  globalThis.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      version: 1,
-      lessons: { t1: { completed: true, bestAccuracy: 1 } },
-      challenges: {},
-      xp: 0,
-      streak: { count: 0, lastActiveDate: "" },
-      badges: [],
-      activeDates: [],
-    }),
-  );
+  setMockProgress({
+    ...defaultState(),
+    lessons: { t1: { completed: true, bestAccuracy: 1 } },
+  });
 }
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("BossChallengeScreen", () => {
-  it("shows a locked state until every lesson is complete", () => {
-    renderChallenge();
+  it("shows a locked state until every lesson is complete", async () => {
+    await renderChallenge();
     expect(screen.getByText(/boss challenge locked/i)).toBeInTheDocument();
   });
 
   it("plays through the questions and reports a score with rewards", async () => {
     seedAllLessonsComplete();
     const user = userEvent.setup();
-    renderChallenge();
+    await renderChallenge();
 
     // Intro -> start.
     await user.click(screen.getByRole("button", { name: /start challenge/i }));

@@ -15,11 +15,7 @@ import {
   type ProgressAction,
   type ProgressState,
 } from "./progressReducer";
-import {
-  defaultState,
-  parseSavedState,
-  type SavedState,
-} from "../domain/persistence/schema";
+import { defaultState, type SavedState } from "../domain/persistence/schema";
 import {
   loadProgress as loadProgressServer,
   saveProgress as saveProgressServer,
@@ -55,8 +51,8 @@ interface ProgressProviderProps {
 
 /**
  * Provides StudyBub progress state to its subtree. Loads progress from the
- * server on mount and persists on every state change. Falls back to
- * localStorage when server functions are unavailable.
+ * server on mount and persists on every state change. All progress is stored
+ * server-side in the database.
  *
  * @param props - The provider props.
  * @param props.content - The authored content.
@@ -68,15 +64,9 @@ export function ProgressProvider({
   children,
 }: Readonly<ProgressProviderProps>) {
   const reducer = useMemo(() => createProgressReducer(content), [content]);
-  const [state, dispatch] = useReducer(reducer, undefined, () => {
-    // Try to load from localStorage synchronously for the initial render.
-    try {
-      const raw = localStorage.getItem("studybub.progress.v1");
-      return initProgressState(parseSavedState(raw));
-    } catch {
-      return initProgressState(defaultState());
-    }
-  });
+  const [state, dispatch] = useReducer(reducer, undefined, () =>
+    initProgressState(defaultState()),
+  );
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const [hydrated, setHydrated] = useState(false);
   const saveVersionRef = useRef(0);

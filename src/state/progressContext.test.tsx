@@ -68,8 +68,6 @@ describe("ProgressProvider - server-backed persistence", () => {
     mockLoadProgress.mockReset();
     mockSaveProgress.mockReset();
     mockResetProgress.mockReset();
-    // Clear localStorage to ensure clean state.
-    localStorage.clear();
   });
 
   it("loads progress from server on mount and transitions to saved", async () => {

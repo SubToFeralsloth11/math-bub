@@ -2,7 +2,8 @@ import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { TrackMapScreen } from "./TrackMapScreen";
-import { STORAGE_KEY } from "../../domain/persistence/schema";
+import { defaultState } from "../../domain/persistence/schema";
+import { clearMockProgress, setMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
 import type { AppContent, Subject, Track } from "../../domain/content/types";
@@ -51,21 +52,21 @@ const content: AppContent = {
   badges: [],
 };
 
-function renderMap() {
+async function renderMap() {
   return renderApp(<TrackMapScreen />, {
     route: "/subject/maths/track/geometry",
-    path: "/subject/:subjectId/track/:trackId",
+    path: "subject/$subjectId/track/$trackId",
     content,
   });
 }
 
 beforeEach(() => {
-  globalThis.localStorage.clear();
+  clearMockProgress();
 });
 
 describe("TrackMapScreen", () => {
-  it("shows the first lesson as available and the rest locked in a fresh track", () => {
-    renderMap();
+  it("shows the first lesson as available and the rest locked in a fresh track", async () => {
+    await renderMap();
     expect(
       screen.getByRole("link", { name: /lesson 1: lesson 1 \(available\)/i }),
     ).toBeInTheDocument();
@@ -77,20 +78,15 @@ describe("TrackMapScreen", () => {
     ).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("reflects saved completion by unlocking the next lesson", () => {
-    globalThis.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        version: 1,
-        lessons: { l1: { completed: true, bestAccuracy: 1 } },
-        challenges: {},
-        xp: 50,
-        streak: { count: 1, lastActiveDate: "2026-06-07" },
-        badges: [],
-        activeDates: [],
-      }),
-    );
-    renderMap();
+  it("reflects saved completion by unlocking the next lesson", async () => {
+    setMockProgress({
+      ...defaultState(),
+      lessons: { l1: { completed: true, bestAccuracy: 1 } },
+      xp: 50,
+      streak: { count: 1, lastActiveDate: "2026-06-07" },
+      activeDates: [],
+    });
+    await renderMap();
     expect(
       screen.getByRole("link", { name: /lesson 1: lesson 1 \(complete\)/i }),
     ).toBeInTheDocument();
@@ -99,8 +95,8 @@ describe("TrackMapScreen", () => {
     ).toBeInTheDocument();
   });
 
-  it("keeps the boss challenge locked until all lessons are complete", () => {
-    renderMap();
+  it("keeps the boss challenge locked until all lessons are complete", async () => {
+    await renderMap();
     expect(
       screen.getByLabelText(/boss challenge \(locked\)/i),
     ).toBeInTheDocument();

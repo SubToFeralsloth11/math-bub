@@ -214,7 +214,7 @@ async function importAiConfig(
   aiConfigFile: string,
   displayName: string,
 ): Promise<void> {
-  const { encryptAiConfig } = await import("../src/server/encryption");
+  const { encryptAiConfig } = await import("../src/server/encryption.server");
 
   const raw = readFileSync(aiConfigFile, "utf8");
   if (!raw || raw.trim() === "") {

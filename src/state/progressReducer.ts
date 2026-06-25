@@ -27,7 +27,7 @@ export interface Celebration {
 
 /** The full progress state: persisted data plus transient celebration signals. */
 export interface ProgressState {
-  /** The portion persisted to localStorage. */
+  /** The portion persisted server-side. */
   saved: SavedState;
   /** Transient celebration signals (never persisted). */
   celebration: Celebration;

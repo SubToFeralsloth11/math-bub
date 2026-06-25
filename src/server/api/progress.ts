@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import { requireUserId } from "./requireUserId";
+import { requireUserId } from "./requireUserId.server";
 import {
   defaultState,
   parseSavedState,
   type SavedState,
 } from "../../domain/persistence/schema";
-import { getDatabase } from "../../server/db";
+import { getDatabase } from "../../server/db.server";
 
 /**
  * Loads the authenticated user's progress state from the database.

@@ -8,9 +8,8 @@
  * @author John Grimes
  */
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the AI config server functions.
@@ -26,6 +25,7 @@ vi.mock("../../server/api/aiConfig", () => ({
 
 import { SettingsScreen } from "./SettingsScreen";
 import { AiConfigProvider } from "../../state/aiConfigContext";
+import { renderInRouter } from "../../test/renderApp";
 
 import type { AiConfig } from "../../domain/persistence/aiConfig";
 
@@ -35,15 +35,12 @@ const SAVED_CONFIG: AiConfig = {
   model: "saved-model",
 };
 
-function renderSettings() {
-  return render(
-    <MemoryRouter initialEntries={["/settings"]}>
-      <AiConfigProvider>
-        <Routes>
-          <Route path="/settings" element={<SettingsScreen />} />
-        </Routes>
-      </AiConfigProvider>
-    </MemoryRouter>,
+async function renderSettings() {
+  return renderInRouter(
+    <AiConfigProvider>
+      <SettingsScreen />
+    </AiConfigProvider>,
+    "/settings",
   );
 }
 
@@ -54,8 +51,8 @@ describe("SettingsScreen", () => {
     mockClearAiConfig.mockReset().mockResolvedValue({ ok: true });
   });
 
-  it("renders three labelled fields and a Save button", () => {
-    renderSettings();
+  it("renders three labelled fields and a Save button", async () => {
+    await renderSettings();
     expect(screen.getByLabelText(/api base url/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/api key/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/model/i)).toBeInTheDocument();
@@ -65,7 +62,7 @@ describe("SettingsScreen", () => {
   it("pre-populates from saved config when present", async () => {
     mockLoadAiConfig.mockResolvedValue(SAVED_CONFIG);
 
-    renderSettings();
+    await renderSettings();
 
     await waitFor(() => {
       expect(screen.getByLabelText(/api base url/i)).toHaveValue(
@@ -77,7 +74,7 @@ describe("SettingsScreen", () => {
 
   it("shows confirmation on Save", async () => {
     const user = userEvent.setup();
-    renderSettings();
+    await renderSettings();
 
     await user.type(
       screen.getByLabelText(/api base url/i),
@@ -96,7 +93,7 @@ describe("SettingsScreen", () => {
 
   it("does not save when fields are partially filled", async () => {
     const user = userEvent.setup();
-    renderSettings();
+    await renderSettings();
 
     await user.clear(screen.getByLabelText(/api base url/i));
     await user.clear(screen.getByLabelText(/api key/i));
@@ -111,8 +108,8 @@ describe("SettingsScreen", () => {
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("has a back link to home", () => {
-    renderSettings();
+  it("has a back link to home", async () => {
+    await renderSettings();
     const backLink = screen.getByRole("link", { name: /back/i });
     expect(backLink).toBeInTheDocument();
     expect(backLink).toHaveAttribute("href", "/");
@@ -122,7 +119,7 @@ describe("SettingsScreen", () => {
     const user = userEvent.setup();
     mockLoadAiConfig.mockResolvedValue(SAVED_CONFIG);
 
-    renderSettings();
+    await renderSettings();
 
     const apiKeyField = screen.getByLabelText(/api key/i);
     expect(apiKeyField).toHaveAttribute("type", "password");

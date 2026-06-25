@@ -1,8 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import { requireUserId } from "./requireUserId";
-import { getDatabase } from "../../server/db";
-import { decryptAiConfig, encryptAiConfig } from "../../server/encryption";
+import { requireUserId } from "./requireUserId.server";
+import { getDatabase } from "../../server/db.server";
+import {
+  decryptAiConfig,
+  encryptAiConfig,
+} from "../../server/encryption.server";
 
 import type { AiConfig } from "../../domain/persistence/aiConfig";
 
