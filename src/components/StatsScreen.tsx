@@ -8,7 +8,7 @@
  * @module components/StatsScreen
  */
 
-import { Navigate } from "react-router-dom";
+import { Navigate } from "@tanstack/react-router";
 
 import { Card } from "./Card";
 import { StatsXpBar } from "./StatsXpBar";

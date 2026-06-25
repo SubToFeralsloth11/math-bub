@@ -3,7 +3,7 @@
 
 import { Database } from "bun:sqlite";
 
-import { defaultState } from "../src/domain/persistence/schema";
+import { parseSavedState } from "../src/domain/persistence/schema";
 
 /**
  * Opens the database at the given path (or the default file).
@@ -96,7 +96,15 @@ function inviteUser(
   const userId = crypto.randomUUID();
   const token = generateToken();
   const now = new Date().toISOString();
-  const defaultProgress = JSON.stringify(defaultState());
+  const defaultProgress = JSON.stringify({
+    version: 1,
+    lessons: {},
+    challenges: {},
+    xp: 0,
+    streak: { count: 0, lastActiveDate: "" },
+    badges: [],
+    activeDates: [],
+  });
 
   // Create the user.
   db.run(
@@ -116,6 +124,109 @@ function inviteUser(
 }
 
 /**
+ * Reads a file from disk and returns its contents as a string.
+ *
+ * @param path - The path to the file.
+ * @returns The file contents.
+ */
+function readFile(path: string): string {
+  try {
+    return Bun.file(path).textSync
+      ? (Bun.file(path) as unknown as { textSync: () => string }).textSync
+        ? (() => {
+            const f = Bun.file(path);
+            // Bun.file returns a Blob-like; use the sync API if available.
+            const content = require("node:fs").readFileSync(path, "utf-8");
+            return content;
+          })()
+        : require("node:fs").readFileSync(path, "utf-8")
+      : require("node:fs").readFileSync(path, "utf-8");
+  } catch {
+    console.error(`Error: Could not read file: ${path}`);
+    process.exit(1);
+  }
+}
+
+/**
+ * Imports progress (and optionally AI config) from JSON files into a
+ * specified user's database profile.
+ *
+ * @param db - The database instance.
+ * @param userId - The target user ID.
+ * @param progressFile - Path to the progress JSON file.
+ * @param aiConfigFile - Optional path to the AI config JSON file.
+ */
+function importProgress(
+  db: Database,
+  userId: string,
+  progressFile: string,
+  aiConfigFile?: string,
+): void {
+  // Verify the user exists.
+  const user = db
+    .query("SELECT id, display_name FROM users WHERE id = ?")
+    .get(userId) as { id: string; display_name: string } | undefined;
+
+  if (!user) {
+    console.error(`Error: User not found: ${userId}`);
+    process.exit(1);
+  }
+
+  // Read and validate the progress JSON.
+  const progressRaw = require("node:fs").readFileSync(progressFile, "utf-8");
+  if (!progressRaw || progressRaw.trim() === "") {
+    console.error("Error: Progress file is empty.");
+    process.exit(1);
+  }
+
+  let progressJson: unknown;
+  try {
+    progressJson = JSON.parse(progressRaw);
+  } catch {
+    console.error("Error: Progress file contains malformed JSON.");
+    process.exit(1);
+  }
+
+  const savedState = parseSavedState(
+    typeof progressJson === "object" ? progressRaw : null,
+  );
+
+  // If parseSavedState fell back to default, the input was invalid.
+  if (
+    savedState.xp === 0 &&
+    Object.keys(savedState.lessons).length === 0 &&
+    savedState.badges.length === 0 &&
+    progressRaw.trim() !== "{}"
+  ) {
+    console.error(
+      "Error: Progress file is not a valid StudyBub progress state.",
+    );
+    process.exit(1);
+  }
+
+  const now = new Date().toISOString();
+
+  // Update the user's progress.
+  db.run(
+    "UPDATE users SET progress_json = ?, updated_at = ? WHERE id = ?",
+    [JSON.stringify(savedState), now, userId],
+  );
+
+  const lessonCount = Object.keys(savedState.lessons).length;
+  const challengeCount = Object.keys(savedState.challenges).length;
+  console.log(
+    `Progress imported for ${user.display_name} (${userId}): ` +
+      `${lessonCount} lessons, ${challengeCount} challenges, ` +
+      `${savedState.xp} XP, streak ${savedState.streak.count}.`,
+  );
+
+  // Handle optional AI config file.
+  if (aiConfigFile) {
+    console.log("AI config import is not yet implemented.");
+  }
+}
+
+/**
  * Prints usage instructions.
  */
 function printHelp(): void {
@@ -123,17 +234,32 @@ function printHelp(): void {
 
 Usage:
   bun run scripts/migrate.ts invite --name <name> [--base-url <url>]
+  bun run scripts/migrate.ts import --user-id <id> --progress-file <path> [--ai-config-file <path>]
 
 Commands:
   invite     Create a new user and generate an invitation link.
+  import     Import progress (and optionally AI config) from JSON files.
 
-Options:
-  --name       The learner's display name (required for invite).
+Options for invite:
+  --name       The learner's display name (required).
   --base-url   Base URL for invitation links (default: http://localhost:3000).
+
+Options for import:
+  --user-id          Target user ID in the database (required).
+  --progress-file    Path to the progress JSON file (required).
+  --ai-config-file   Path to the AI config JSON file (optional).
 
 Examples:
   bun run scripts/migrate.ts invite --name "Oscar"
-  bun run scripts/migrate.ts invite --name "Oscar" --base-url "https://studybub.example.com"
+  bun run scripts/migrate.ts import --user-id "abc123" --progress-file progress.json
+  bun run scripts/migrate.ts import --user-id "abc123" --progress-file progress.json --ai-config-file aiConfig.json
+
+Extracting localStorage data from browser DevTools:
+  1. Open the StudyBub app in your browser.
+  2. Open DevTools (F12) and go to the Console tab.
+  3. Run: copy(localStorage.getItem("studybub.progress.v1"))
+  4. Paste into a file (e.g., progress.json).
+  5. (Optional) For AI config: copy(localStorage.getItem("studybub.aiConfig.v1"))
 `);
 }
 
@@ -157,13 +283,40 @@ if (command === "invite") {
   const displayName = args[nameIndex + 1];
 
   const baseUrlIndex = args.indexOf("--base-url");
-  const baseUrl = baseUrlIndex !== -1 && args[baseUrlIndex + 1]
-    ? args[baseUrlIndex + 1]
-    : "http://localhost:3000";
+  const baseUrl =
+    baseUrlIndex !== -1 && args[baseUrlIndex + 1]
+      ? args[baseUrlIndex + 1]
+      : "http://localhost:3000";
 
   const db = openDatabase();
   initSchema(db);
   inviteUser(db, displayName, baseUrl);
+} else if (command === "import") {
+  const userIdIndex = args.indexOf("--user-id");
+  if (userIdIndex === -1 || !args[userIdIndex + 1]) {
+    console.error("Error: --user-id is required for the import command.");
+    process.exit(1);
+  }
+  const userId = args[userIdIndex + 1];
+
+  const progressFileIndex = args.indexOf("--progress-file");
+  if (progressFileIndex === -1 || !args[progressFileIndex + 1]) {
+    console.error(
+      "Error: --progress-file is required for the import command.",
+    );
+    process.exit(1);
+  }
+  const progressFile = args[progressFileIndex + 1];
+
+  const aiConfigFileIndex = args.indexOf("--ai-config-file");
+  const aiConfigFile =
+    aiConfigFileIndex !== -1 && args[aiConfigFileIndex + 1]
+      ? args[aiConfigFileIndex + 1]
+      : undefined;
+
+  const db = openDatabase();
+  initSchema(db);
+  importProgress(db, userId, progressFile, aiConfigFile);
 } else {
   console.error(`Unknown command: ${command}`);
   printHelp();

@@ -7,7 +7,7 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
-import { getCurrentUser } from "./api/auth";
+import { getCurrentUser } from "../server/api/auth";
 
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { appContent } from "../content";

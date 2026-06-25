@@ -1,5 +1,5 @@
 import { screen, render } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "@tanstack/react-router";
 import { describe, expect, it, vi } from "vitest";
 
 import { Feedback } from "./Feedback";

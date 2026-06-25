@@ -1,19 +1,19 @@
-/**
- * React context for AI marking configuration. Provides the current AiConfig
- * and a setter, backed by localStorage.
- *
- * @module state/aiConfigContext
- * @author John Grimes
- */
-
-import { createContext, use, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  use,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 import {
   clearAiConfig,
   loadAiConfig,
   saveAiConfig,
-  type AiConfig,
-} from "../domain/persistence/aiConfig";
+} from "../server/api/aiConfig";
+
+import type { AiConfig } from "../domain/persistence/aiConfig";
 
 /** The shape of the AI config context value. */
 export interface AiConfigContextValue {
@@ -21,6 +21,8 @@ export interface AiConfigContextValue {
   aiConfig: AiConfig | null;
   /** Sets the AI config (null to clear). */
   setAiConfig: (config: AiConfig | null) => void;
+  /** Whether the config is currently loading from the server. */
+  loading: boolean;
 }
 
 const AiConfigContext = createContext<AiConfigContextValue | null>(null);
@@ -31,8 +33,9 @@ interface AiConfigProviderProps {
 }
 
 /**
- * Provides AI config state to the subtree, hydrating from localStorage on
- * mount and persisting on every change.
+ * Provides AI config state to the subtree, loading from the server on mount
+ * and persisting on every change. The AI config is encrypted at rest in the
+ * server-side database.
  *
  * @param props - The provider props.
  * @param props.children - The subtree to provide state to.
@@ -41,22 +44,46 @@ interface AiConfigProviderProps {
 export function AiConfigProvider({
   children,
 }: Readonly<AiConfigProviderProps>) {
-  const [aiConfig, setAiConfigState] = useState<AiConfig | null>(() =>
-    loadAiConfig(),
-  );
+  const [aiConfig, setAiConfigState] = useState<AiConfig | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  function setAiConfig(config: AiConfig | null): void {
+  // Hydrate the AI config from the server on mount.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function hydrate() {
+      try {
+        const config = await loadAiConfig();
+        if (!cancelled) {
+          setAiConfigState(config);
+        }
+      } catch {
+        // If loading fails (e.g., not authenticated), leave as null.
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    hydrate();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function setAiConfig(config: AiConfig | null): Promise<void> {
     setAiConfigState(config);
     if (config) {
-      saveAiConfig(config);
+      await saveAiConfig({ data: { config } });
     } else {
-      clearAiConfig();
+      await clearAiConfig();
     }
   }
 
   const value = useMemo<AiConfigContextValue>(
-    () => ({ aiConfig, setAiConfig }),
-    [aiConfig],
+    () => ({ aiConfig, setAiConfig, loading }),
+    [aiConfig, loading],
   );
 
   return <AiConfigContext value={value}>{children}</AiConfigContext>;

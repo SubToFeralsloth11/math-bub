@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 interface NotFoundProps {
   /** The heading describing what was not found. */

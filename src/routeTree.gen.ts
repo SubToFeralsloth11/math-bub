@@ -9,38 +9,167 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as BadgesRouteImport } from './routes/badges'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubjectSubjectIdRouteImport } from './routes/subject.$subjectId'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
+import { Route as ChallengeTrackIdRouteImport } from './routes/challenge.$trackId'
+import { Route as LessonTrackIdLessonIdRouteImport } from './routes/lesson.$trackId.$lessonId'
+import { Route as SubjectSubjectIdTrackTrackIdRouteImport } from './routes/subject.$subjectId.track.$trackId'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BadgesRoute = BadgesRouteImport.update({
+  id: '/badges',
+  path: '/badges',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubjectSubjectIdRoute = SubjectSubjectIdRouteImport.update({
+  id: '/subject/$subjectId',
+  path: '/subject/$subjectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChallengeTrackIdRoute = ChallengeTrackIdRouteImport.update({
+  id: '/challenge/$trackId',
+  path: '/challenge/$trackId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LessonTrackIdLessonIdRoute = LessonTrackIdLessonIdRouteImport.update({
+  id: '/lesson/$trackId/$lessonId',
+  path: '/lesson/$trackId/$lessonId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubjectSubjectIdTrackTrackIdRoute =
+  SubjectSubjectIdTrackTrackIdRouteImport.update({
+    id: '/track/$trackId',
+    path: '/track/$trackId',
+    getParentRoute: () => SubjectSubjectIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/badges': typeof BadgesRoute
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/challenge/$trackId': typeof ChallengeTrackIdRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/subject/$subjectId': typeof SubjectSubjectIdRouteWithChildren
+  '/lesson/$trackId/$lessonId': typeof LessonTrackIdLessonIdRoute
+  '/subject/$subjectId/track/$trackId': typeof SubjectSubjectIdTrackTrackIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/badges': typeof BadgesRoute
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/challenge/$trackId': typeof ChallengeTrackIdRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/subject/$subjectId': typeof SubjectSubjectIdRouteWithChildren
+  '/lesson/$trackId/$lessonId': typeof LessonTrackIdLessonIdRoute
+  '/subject/$subjectId/track/$trackId': typeof SubjectSubjectIdTrackTrackIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/badges': typeof BadgesRoute
+  '/login': typeof LoginRoute
+  '/settings': typeof SettingsRoute
+  '/challenge/$trackId': typeof ChallengeTrackIdRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/subject/$subjectId': typeof SubjectSubjectIdRouteWithChildren
+  '/lesson/$trackId/$lessonId': typeof LessonTrackIdLessonIdRoute
+  '/subject/$subjectId/track/$trackId': typeof SubjectSubjectIdTrackTrackIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/badges'
+    | '/login'
+    | '/settings'
+    | '/challenge/$trackId'
+    | '/invite/$token'
+    | '/subject/$subjectId'
+    | '/lesson/$trackId/$lessonId'
+    | '/subject/$subjectId/track/$trackId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/badges'
+    | '/login'
+    | '/settings'
+    | '/challenge/$trackId'
+    | '/invite/$token'
+    | '/subject/$subjectId'
+    | '/lesson/$trackId/$lessonId'
+    | '/subject/$subjectId/track/$trackId'
+  id:
+    | '__root__'
+    | '/'
+    | '/badges'
+    | '/login'
+    | '/settings'
+    | '/challenge/$trackId'
+    | '/invite/$token'
+    | '/subject/$subjectId'
+    | '/lesson/$trackId/$lessonId'
+    | '/subject/$subjectId/track/$trackId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BadgesRoute: typeof BadgesRoute
+  LoginRoute: typeof LoginRoute
+  SettingsRoute: typeof SettingsRoute
+  ChallengeTrackIdRoute: typeof ChallengeTrackIdRoute
+  InviteTokenRoute: typeof InviteTokenRoute
+  SubjectSubjectIdRoute: typeof SubjectSubjectIdRouteWithChildren
+  LessonTrackIdLessonIdRoute: typeof LessonTrackIdLessonIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/badges': {
+      id: '/badges'
+      path: '/badges'
+      fullPath: '/badges'
+      preLoaderRoute: typeof BadgesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +177,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subject/$subjectId': {
+      id: '/subject/$subjectId'
+      path: '/subject/$subjectId'
+      fullPath: '/subject/$subjectId'
+      preLoaderRoute: typeof SubjectSubjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenge/$trackId': {
+      id: '/challenge/$trackId'
+      path: '/challenge/$trackId'
+      fullPath: '/challenge/$trackId'
+      preLoaderRoute: typeof ChallengeTrackIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lesson/$trackId/$lessonId': {
+      id: '/lesson/$trackId/$lessonId'
+      path: '/lesson/$trackId/$lessonId'
+      fullPath: '/lesson/$trackId/$lessonId'
+      preLoaderRoute: typeof LessonTrackIdLessonIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subject/$subjectId/track/$trackId': {
+      id: '/subject/$subjectId/track/$trackId'
+      path: '/track/$trackId'
+      fullPath: '/subject/$subjectId/track/$trackId'
+      preLoaderRoute: typeof SubjectSubjectIdTrackTrackIdRouteImport
+      parentRoute: typeof SubjectSubjectIdRoute
+    }
   }
 }
 
+interface SubjectSubjectIdRouteChildren {
+  SubjectSubjectIdTrackTrackIdRoute: typeof SubjectSubjectIdTrackTrackIdRoute
+}
+
+const SubjectSubjectIdRouteChildren: SubjectSubjectIdRouteChildren = {
+  SubjectSubjectIdTrackTrackIdRoute: SubjectSubjectIdTrackTrackIdRoute,
+}
+
+const SubjectSubjectIdRouteWithChildren =
+  SubjectSubjectIdRoute._addFileChildren(SubjectSubjectIdRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BadgesRoute: BadgesRoute,
+  LoginRoute: LoginRoute,
+  SettingsRoute: SettingsRoute,
+  ChallengeTrackIdRoute: ChallengeTrackIdRoute,
+  InviteTokenRoute: InviteTokenRoute,
+  SubjectSubjectIdRoute: SubjectSubjectIdRouteWithChildren,
+  LessonTrackIdLessonIdRoute: LessonTrackIdLessonIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

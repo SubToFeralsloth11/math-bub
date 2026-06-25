@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import {
   getPasskeyRegistrationOptions,
   verifyPasskeyRegistration,
-} from "./api/auth";
+} from "../server/api/auth";
 
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";

@@ -5,7 +5,7 @@
  */
 
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "@tanstack/react-router";
 import { describe, expect, it, beforeEach } from "vitest";
 
 import { StatsScreen } from "./StatsScreen";
