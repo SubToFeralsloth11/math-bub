@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 import { AppHeader } from "../../components/AppHeader";
 import { NotFound } from "../../components/NotFound";

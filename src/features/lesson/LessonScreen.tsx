@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { Link, useNavigate, useParams } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { LearnCardView } from "./LearnCardView";
 import { LessonComplete } from "./LessonComplete";

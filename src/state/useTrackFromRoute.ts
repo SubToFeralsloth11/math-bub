@@ -4,7 +4,7 @@
  * @module state/useTrackFromRoute
  */
 
-import { useParams } from "@tanstack/react-router";
+import { useParams } from "react-router-dom";
 
 import { useProgress } from "./progressContext";
 

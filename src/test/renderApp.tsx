@@ -3,42 +3,52 @@
  * progress provider.
  *
  * @module test/renderApp
- * @author John Grimes
  */
 
 import { render, type RenderResult } from "@testing-library/react";
-import {
-  createRouter,
-  RouterProvider,
-} from "@tanstack/react-router";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { appContent } from "../content";
 import { AiConfigProvider } from "../state/aiConfigContext";
 import { ProgressProvider } from "../state/progressContext";
-import { routeTree } from "../routeTree.gen";
 
+import type { AppContent } from "../domain/content/types";
 import type { ReactElement } from "react";
 
+interface RenderOptions {
+  /** Initial router entry (URL). */
+  route?: string;
+  /** The route path pattern to match `element` against. */
+  path?: string;
+  /** Content to provide; defaults to the real authored content. */
+  content?: AppContent;
+}
+
 /**
- * Creates a test router that can render components within the app's routing
- * and progress context.
+ * Renders an element within a MemoryRouter and ProgressProvider, optionally
+ * mounting it at a specific route path so URL params resolve.
  *
- * @param element - Optional element to render as a route.
- * @returns The testing library render result.
+ * @param element - The element (or route element) to render.
+ * @param options - Routing and content options.
+ * @returns The Testing Library render result.
  */
 export function renderApp(
   element: ReactElement,
+  options: RenderOptions = {},
 ): RenderResult {
-  const router = createRouter({
-    routeTree,
-    scrollRestoration: false,
-  });
-
+  const { route = "/", path, content = appContent } = options;
   return render(
-    <ProgressProvider content={appContent}>
+    <ProgressProvider content={content}>
       <AiConfigProvider>
-        <RouterProvider router={router} />
-        {element}
+        <MemoryRouter initialEntries={[route]}>
+          {path ? (
+            <Routes>
+              <Route path={path} element={element} />
+            </Routes>
+          ) : (
+            element
+          )}
+        </MemoryRouter>
       </AiConfigProvider>
     </ProgressProvider>,
   );

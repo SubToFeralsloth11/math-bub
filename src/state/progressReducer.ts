@@ -36,7 +36,6 @@ export interface ProgressState {
 /** Actions the progress reducer understands. */
 export type ProgressAction =
   | { type: "RESET" }
-  | { type: "HYDRATE"; saved: SavedState }
   | { type: "DISMISS_CELEBRATION" }
   | { type: "ANSWER_CORRECT"; xp: number; today: string }
   | {
@@ -132,10 +131,6 @@ export function createProgressReducer(content: AppContent) {
     switch (action.type) {
       case "RESET": {
         return initProgressState(defaultState());
-      }
-
-      case "HYDRATE": {
-        return initProgressState(action.saved);
       }
 
       case "DISMISS_CELEBRATION": {

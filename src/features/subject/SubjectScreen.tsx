@@ -1,4 +1,4 @@
-import { Link, useParams } from "@tanstack/react-router";
+import { Link, useParams } from "react-router-dom";
 
 import { AppHeader } from "../../components/AppHeader";
 import { Card } from "../../components/Card";

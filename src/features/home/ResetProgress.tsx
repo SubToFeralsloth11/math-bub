@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
 import { Button } from "../../components/Button";
+import { resetProgress } from "../../domain/persistence/storage";
 import { useProgress } from "../../state/progressContext";
 
 /**
@@ -11,11 +12,12 @@ import { useProgress } from "../../state/progressContext";
  * @returns The reset control and its confirmation dialog.
  */
 export function ResetProgress() {
-  const { handleReset } = useProgress();
+  const { dispatch } = useProgress();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  async function confirmReset() {
-    await handleReset();
+  function confirmReset() {
+    resetProgress();
+    dispatch({ type: "RESET" });
     dialogRef.current?.close();
   }
 

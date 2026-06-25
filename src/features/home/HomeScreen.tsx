@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 import { ResetProgress } from "./ResetProgress";
 import { AppHeader } from "../../components/AppHeader";
