@@ -160,7 +160,7 @@ function importProgress(
   }
 
   const savedState = parseSavedState(
-    typeof progressJson === "object" ? progressRaw : undefined,
+    typeof progressJson === "object" ? progressRaw : null,
   );
 
   // If parseSavedState fell back to default, the input was invalid.

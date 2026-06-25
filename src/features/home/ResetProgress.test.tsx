@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -12,16 +12,10 @@ beforeEach(() => {
 
 describe("ResetProgress", () => {
   it("requires confirmation before clearing progress", async () => {
+    // Seed localStorage with some progress.
     globalThis.localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({
-        version: 1,
-        lessons: { l1: { completed: true, bestAccuracy: 1 } },
-        challenges: {},
-        xp: 200,
-        streak: { count: 3, lastActiveDate: "2026-06-07" },
-        badges: ["first-steps"],
-      }),
+      JSON.stringify({ xp: 500, version: 1 }),
     );
     const user = userEvent.setup();
     renderApp(<ResetProgress />);
@@ -32,11 +26,23 @@ describe("ResetProgress", () => {
       screen.getByRole("heading", { name: /reset all progress/i }),
     ).toBeVisible();
 
-    // Confirming clears the stored progress.
-    await user.click(screen.getByRole("button", { name: /reset everything/i }));
-    const stored = globalThis.localStorage.getItem(STORAGE_KEY);
-    expect(stored).not.toBeNull();
-    expect(JSON.parse(stored as string).xp).toBe(0);
-    expect(JSON.parse(stored as string).lessons).toEqual({});
+    // Before confirming, progress should still be intact.
+    expect(globalThis.localStorage.getItem(STORAGE_KEY)).not.toBeNull();
+
+    // Confirming clears the stored progress (async via server function).
+    await user.click(
+      screen.getByRole("button", { name: /reset everything/i }),
+    );
+
+    // Wait for the async reset and re-save to complete.
+    await waitFor(
+      () => {
+        const stored = globalThis.localStorage.getItem(STORAGE_KEY);
+        expect(stored).not.toBeNull();
+        expect(JSON.parse(stored!).xp).toBe(0);
+        expect(JSON.parse(stored!).lessons).toEqual({});
+      },
+      { timeout: 3000 },
+    );
   });
 });

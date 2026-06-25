@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -26,12 +26,14 @@ describe("SettingsScreen", () => {
     expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocument();
   });
 
-  it("pre-populates from saved config when present", () => {
+  it("pre-populates from saved config when present", async () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(SAVED_CONFIG));
     renderApp(<SettingsScreen />, { path: "/settings", route: "/settings" });
-    expect(screen.getByLabelText(/api base url/i)).toHaveValue(
-      "https://saved.example.com/v1",
-    );
+    await waitFor(() => {
+      expect(screen.getByLabelText(/api base url/i)).toHaveValue(
+        "https://saved.example.com/v1",
+      );
+    });
     expect(screen.getByLabelText(/model/i)).toHaveValue("saved-model");
   });
 
@@ -58,14 +60,16 @@ describe("SettingsScreen", () => {
 
     expect(screen.getByRole("status")).toHaveTextContent(/saved/i);
 
-    // Verify the config was persisted to localStorage.
-    const stored = localStorage.getItem(STORAGE_KEY);
-    expect(stored).not.toBeNull();
-    const parsed = JSON.parse(stored!);
-    expect(parsed).toEqual({
-      baseUrl: "https://example.com/v1",
-      apiKey: "sk-test",
-      model: "gpt-4o",
+    // The config is persisted asynchronously - wait for it.
+    await waitFor(() => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      expect(stored).not.toBeNull();
+      const parsed = JSON.parse(stored!);
+      expect(parsed).toEqual({
+        baseUrl: "https://example.com/v1",
+        apiKey: "sk-test",
+        model: "gpt-4o",
+      });
     });
   });
 
@@ -75,10 +79,12 @@ describe("SettingsScreen", () => {
 
     renderApp(<SettingsScreen />, { path: "/settings", route: "/settings" });
 
-    // Fields should be pre-populated.
-    expect(screen.getByLabelText(/api base url/i)).toHaveValue(
-      "https://saved.example.com/v1",
-    );
+    // Wait for async config loading.
+    await waitFor(() => {
+      expect(screen.getByLabelText(/api base url/i)).toHaveValue(
+        "https://saved.example.com/v1",
+      );
+    });
 
     // Clear all fields.
     await user.clear(screen.getByLabelText(/api base url/i));
