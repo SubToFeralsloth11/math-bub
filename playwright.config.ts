@@ -3,9 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * Playwright configuration for StudyBub end-to-end tests.
  *
- * The TanStack Start dev server runs on port 3000 and is started
- * automatically via the webServer config. Tests run against the dev
- * server for fast feedback.
+ * The TanStack Start dev server runs on port 3000 (configured in
+ * vite.config.ts) and is started automatically via the webServer config.
+ * Tests run against the dev server for fast feedback.
  */
 const port = 3000;
 const baseURL = `http://localhost:${port}`;
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `bun run dev --port ${port}`,
+    command: `bun run dev`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

@@ -6,7 +6,7 @@
   "author": "John Grimes",
   "description": "StudyBub - an interactive, gamified multi-subject learning platform for a single learner.",
   "scripts": {
-    "dev": "bun --bun vite dev --port 3000",
+    "dev": "bun --bun vite dev",
     "build": "tsc -b && vite build",
     "start": "bun run scripts/server.ts",
     "preview": "vite preview",

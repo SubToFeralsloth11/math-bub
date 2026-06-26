@@ -13,6 +13,14 @@ import { defineConfig } from "vite";
  */
 export default defineConfig({
   server: {
+    // Pin the dev server to the IPv4 loopback interface. Under `bun --bun
+    // vite dev` Bun's HTTP server binds to the IPv6 loopback (`::1`) only on
+    // Linux, while `localhost` resolves to IPv4 (`127.0.0.1`) there. That
+    // mismatch left the port unreachable to Playwright's webServer probe and
+    // to `curl localhost`, so the E2E job timed out. Binding explicitly to
+    // `127.0.0.1` keeps it reachable on both macOS and Linux without exposing
+    // it on the network.
+    host: "127.0.0.1",
     port: 3000,
   },
   ssr: {
