@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 /**
  * Returns a local-date string (YYYY-MM-DD) offset by the given number of
@@ -48,9 +48,26 @@ async function seedProgress(
   );
 }
 
-test.beforeEach(async () => {
-  // Navigation is handled per-test after seeding progress.
-});
+/**
+ * Clicks a popover trigger and waits for the popover body to appear, retrying
+ * the click until it takes effect.
+ *
+ * The app renders its default (empty) state first and swaps in the seeded
+ * state after the client hydrates from localStorage. A click fired at a
+ * control before React attaches its event handlers is silently lost, so the
+ * click is retried until the popover actually opens. This also covers the
+ * "No streak yet" case where the seeded label is identical to the default and
+ * therefore gives no implicit hydration signal.
+ *
+ * @param trigger - Locator for the clickable trigger control.
+ * @param expected - Locator for content that proves the popover opened.
+ */
+async function openPopover(trigger: Locator, expected: Locator): Promise<void> {
+  await expect(async () => {
+    await trigger.click();
+    await expect(expected).toBeVisible({ timeout: 1000 });
+  }).toPass({ timeout: 10_000 });
+}
 
 test("streak popover opens on chip click and shows the 7-day strip", async ({
   page,
@@ -67,10 +84,10 @@ test("streak popover opens on chip click and shows the 7-day strip", async ({
   });
   await page.goto("/");
 
-  const chip = page.getByLabel("3 day streak");
-  await chip.click();
-
-  await expect(page.getByText("🔥 3-day streak")).toBeVisible();
+  await openPopover(
+    page.getByLabel("3 day streak"),
+    page.getByText("🔥 3-day streak"),
+  );
   await expect(page.getByText("Recent activity")).toBeVisible();
   await expect(page.getByLabel(/Mon/)).toBeVisible();
   await expect(page.getByLabel(/Sun/)).toBeVisible();
@@ -91,7 +108,10 @@ test("streak popover shows contextual message for active today", async ({
   });
   await page.goto("/");
 
-  await page.getByLabel("5 day streak").click();
+  await openPopover(
+    page.getByLabel("5 day streak"),
+    page.getByText("🔥 5-day streak"),
+  );
   await expect(
     page.getByText("Active today — come back tomorrow to keep it going!"),
   ).toBeVisible();
@@ -109,10 +129,12 @@ test("streak popover shows start prompt for no streak", async ({ page }) => {
   });
   await page.goto("/");
 
-  await page.getByLabel("No streak yet").click();
-  await expect(
+  // The "No streak yet" label is identical before and after hydration, so the
+  // retrying openPopover helper is essential here to avoid a lost click.
+  await openPopover(
+    page.getByLabel("No streak yet"),
     page.getByText("Complete a lesson to start your streak!"),
-  ).toBeVisible();
+  );
 });
 
 test("level popover opens on badge click and shows XP progress", async ({
@@ -129,17 +151,16 @@ test("level popover opens on badge click and shows XP progress", async ({
   });
   await page.goto("/");
 
-  const badge = page.getByLabel(/Level/);
-  await badge.click();
-
-  // At 120 XP, level 2: span = 100, intoLevel = 70, toNext = 30.
-  // Wait for the popover to appear, then verify the heading text.
-  await page.waitForTimeout(500);
-  await expect(page.getByText(/Level 2/).first()).toBeVisible({
-    timeout: 10_000,
-  });
-  await expect(page.getByText("70 / 100 XP")).toBeVisible();
-  await expect(page.getByText(/30 XP to Level 3/)).toBeVisible();
+  // The server renders the default "Level 1" badge; the seeded "Level 2" only
+  // appears after hydration. The exact label avoids matching the default, and
+  // openPopover retries past any hydration click race.
+  await openPopover(
+    page.getByLabel("Level 2", { exact: true }),
+    page.getByText("70 / 100 XP"),
+  );
+  // At 120 XP: level 2, span 100, intoLevel 70, toNext 30.
+  await expect(page.getByText(/Level 2/)).toBeVisible();
+  await expect(page.getByText("30 XP to Level 3")).toBeVisible();
 });
 
 test("streak popover dismisses on click outside", async ({ page }) => {
@@ -155,10 +176,14 @@ test("streak popover dismisses on click outside", async ({ page }) => {
   });
   await page.goto("/");
 
-  await page.getByLabel("3 day streak").click();
-  await expect(page.getByText("🔥 3-day streak")).toBeVisible();
+  await openPopover(
+    page.getByLabel("3 day streak"),
+    page.getByText("🔥 3-day streak"),
+  );
 
-  await page.getByText("StudyBub").click();
+  // Click the header banner's empty area to trigger outside-press dismissal
+  // without navigating or hitting another interactive control.
+  await page.getByRole("banner").click();
   await expect(page.getByText("🔥 3-day streak")).not.toBeVisible();
 });
 
@@ -175,8 +200,10 @@ test("streak popover dismisses on Escape key", async ({ page }) => {
   });
   await page.goto("/");
 
-  await page.getByLabel("3 day streak").click();
-  await expect(page.getByText("🔥 3-day streak")).toBeVisible();
+  await openPopover(
+    page.getByLabel("3 day streak"),
+    page.getByText("🔥 3-day streak"),
+  );
 
   await page.keyboard.press("Escape");
   await expect(page.getByText("🔥 3-day streak")).not.toBeVisible();
@@ -197,10 +224,14 @@ test("mutual exclusion: opening level popover closes streak popover", async ({
   });
   await page.goto("/");
 
-  await page.getByLabel("3 day streak").click();
-  await expect(page.getByText("🔥 3-day streak")).toBeVisible();
+  await openPopover(
+    page.getByLabel("3 day streak"),
+    page.getByText("🔥 3-day streak"),
+  );
 
-  await page.getByLabel(/Level/).click();
+  // 50 XP is also level 2. The exact label avoids matching the pre-hydration
+  // "Level 1" default rendered by the server.
+  await page.getByLabel("Level 2", { exact: true }).click();
   await expect(page.getByText("🔥 3-day streak")).not.toBeVisible();
   await expect(page.getByText(/XP to Level/)).toBeVisible();
 });
@@ -219,16 +250,21 @@ test("popovers remain visible at 320 px viewport width", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 600 });
   await page.goto("/");
 
-  await page.getByLabel("3 day streak").click();
+  await openPopover(
+    page.getByLabel("3 day streak"),
+    page.getByText("🔥 3-day streak"),
+  );
 
   const popover = page.getByText("🔥 3-day streak");
-  await expect(popover).toBeVisible();
 
-  const box = await popover.boundingBox();
-  expect(box).not.toBeNull();
-  if (box) {
-    expect(box.x).toBeGreaterThanOrEqual(0);
-    expect(box.y).toBeGreaterThanOrEqual(0);
-    expect(box.x + box.width).toBeLessThanOrEqual(320);
-  }
+  // floating-ui repositions asynchronously (flip/shift) after the popover
+  // mounts, so poll until it has settled fully inside the narrow viewport
+  // rather than snapshotting a pre-shift position.
+  await expect
+    .poll(async () => {
+      const box = await popover.boundingBox();
+      if (!box) return false;
+      return box.x >= -0.5 && box.y >= -0.5 && box.x + box.width <= 320.5;
+    })
+    .toBe(true);
 });
