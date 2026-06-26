@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import { unlinkSync } from "fs";
+import { unlinkSync } from "node:fs";
 
 import { getDatabase, initSchema, resetDatabase } from "./db.server";
 

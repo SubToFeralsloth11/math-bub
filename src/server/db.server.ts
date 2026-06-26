@@ -22,8 +22,7 @@ let schemaInitialised = false;
  */
 export function getDatabase(path?: string): Database {
   if (!dbInstance) {
-    const resolvedPath =
-      path ?? process.env.STUDYBUB_DB_PATH ?? "studybub.db";
+    const resolvedPath = path ?? process.env.STUDYBUB_DB_PATH ?? "studybub.db";
     dbInstance = new Database(resolvedPath);
     dbInstance.run("PRAGMA journal_mode = WAL");
     dbInstance.run("PRAGMA foreign_keys = ON");
