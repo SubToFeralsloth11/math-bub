@@ -214,9 +214,9 @@ describe("InviteScreen", () => {
     );
     vi.mocked(startRegistration).mockResolvedValueOnce(mockCredential as any);
     // Server returns a redirect response rather than throwing.
-    (
-      vi.mocked(verifyPasskeyRegistration) as any
-    ).mockResolvedValueOnce(new Error("redirect to /"));
+    (vi.mocked(verifyPasskeyRegistration) as any).mockResolvedValueOnce(
+      new Error("redirect to /"),
+    );
 
     render(<InviteComponent />);
 
