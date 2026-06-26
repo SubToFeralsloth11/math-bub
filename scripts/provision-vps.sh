@@ -189,7 +189,11 @@ NGINX_ENABLED="/etc/nginx/sites-enabled/studybub"
 sudo tee "$NGINX_SITE" > /dev/null <<EOF
 # StudyBub nginx site - reverse proxy to the Bun server.
 server {
+    # Listen on both IPv4 and IPv6 so the ACME HTTP-01 challenge is reachable
+    # over both address families. Without the [::] listener, IPv6 connections
+    # fall through to another server block and the challenge fails.
     listen 80;
+    listen [::]:80;
     server_name $DOMAIN;
 
     location / {
