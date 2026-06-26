@@ -95,6 +95,10 @@ jobs:
         with:
           name: build-output
           path: .output/
+          # Nitro emits to .output/, which upload-artifact@v5 treats as hidden
+          # by default (include-hidden-files: false) and silently uploads
+          # nothing. Opt in so the deploy job can download the bundle.
+          include-hidden-files: true
           retention-days: 1
 
   e2e-tests:
