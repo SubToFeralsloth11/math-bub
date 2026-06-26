@@ -68,6 +68,67 @@ The `build` script type-checks and builds the client and server bundles (Nitro
 with the Bun preset). The `start` script runs the production server on
 `http://localhost:3000`.
 
+## Deployment
+
+StudyBub is deployed to a VPS (`vps-80cc1cc4.vps.ovh.ca`) via GitHub Actions.
+Pushes to `main` that pass all quality gates trigger an automatic deploy.
+
+### Provisioning a new VPS
+
+Run the provisioning script on a fresh Ubuntu VPS (22.04 or 24.04):
+
+```bash
+# Copy the script to the VPS.
+scp scripts/provision-vps.sh root@<vps-host>:/tmp/
+
+# Execute it.
+ssh root@<vps-host> sudo bash /tmp/provision-vps.sh
+```
+
+The script installs Bun, creates the `studybub` system user, generates
+secrets, configures the systemd unit and nginx reverse proxy, and obtains
+a TLS certificate. After provisioning, the VPS is ready to receive deploys.
+
+### GitHub Actions environment
+
+Before the first deploy, create a `production` environment in the repository
+settings with these variables and secrets:
+
+```bash
+gh api /repos/:owner/:repo/environments/production -X PUT
+
+# Secret: SSH private key for VPS access.
+gh secret set VPS_SSH_KEY --env production --body "$(cat ~/.ssh/studybub-deploy)"
+
+# Variables: VPS connection details.
+gh variable set VPS_HOST --env production --body "vps-80cc1cc4.vps.ovh.ca"
+gh variable set VPS_USER --env production --body "root"
+gh variable set VPS_PATH --env production --body "/opt/studybub"
+```
+
+### Deploy lifecycle
+
+1. Push to `main` triggers the full CI pipeline.
+2. All quality gates must pass (static analysis, unit tests, build, e2e).
+3. The deploy job stops the systemd service, rsyncs the build to the VPS,
+   runs `bun install --production`, and restarts the service.
+4. The database at `/var/lib/studybub/data.db` is outside the application
+   directory and is never touched by rsync.
+
+### Rollback on deploy failure
+
+If the deploy job fails, the service may be left in a stopped state. To
+recover, SSH to the VPS and restart the previous version:
+
+```bash
+ssh root@<vps-host>
+systemctl start studybub
+```
+
+The previous `.output/` directory and dependencies remain on disk because
+rsync replaced them before the restart step failed. The service will start
+with the pre-deploy version.
+
 ## Scripts
 
 | Script                     | Purpose                                                                                      |
