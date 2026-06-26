@@ -1,4 +1,5 @@
 import { Database } from "bun:sqlite";
+import { unlinkSync } from "fs";
 
 import { getDatabase, initSchema, resetDatabase } from "./db.server";
 
@@ -81,6 +82,54 @@ describe("initSchema", () => {
       )
       .all();
     expect(indexes).toHaveLength(1);
+  });
+});
+
+describe("getDatabase with STUDYBUB_DB_PATH", () => {
+  const original = process.env.STUDYBUB_DB_PATH;
+
+  afterEach(() => {
+    resetDatabase();
+    if (original === undefined) {
+      delete process.env.STUDYBUB_DB_PATH;
+    } else {
+      process.env.STUDYBUB_DB_PATH = original;
+    }
+  });
+
+  it("uses STUDYBUB_DB_PATH when set and no path argument is given", () => {
+    resetDatabase();
+    process.env.STUDYBUB_DB_PATH = ":memory:";
+    const db = getDatabase();
+    const result = db.query("PRAGMA journal_mode").get() as {
+      journal_mode: string;
+    };
+    // In-memory databases report "memory" as the journal mode.
+    expect(result.journal_mode).toBe("memory");
+  });
+
+  it("falls back to default path when STUDYBUB_DB_PATH is unset", () => {
+    resetDatabase();
+    delete process.env.STUDYBUB_DB_PATH;
+    // Should not throw; uses the default path "studybub.db".
+    const db = getDatabase();
+    expect(db).toBeInstanceOf(Database);
+    // Clean up files created by the default path.
+    try {
+      unlinkSync("studybub.db");
+    } catch {
+      /* ok */
+    }
+    try {
+      unlinkSync("studybub.db-wal");
+    } catch {
+      /* ok */
+    }
+    try {
+      unlinkSync("studybub.db-shm");
+    } catch {
+      /* ok */
+    }
   });
 });
 
