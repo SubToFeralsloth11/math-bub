@@ -160,12 +160,6 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-      - name: Stop service on VPS
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key \
-            "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" \
-            sudo systemctl stop studybub.service || true
-
       - name: Rsync build to VPS
         run: |
           rsync -avz --delete \
@@ -186,12 +180,12 @@ jobs:
             "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" \
             "cd ${{ vars.VPS_PATH }} && bun install --production"
 
-      - name: Start service on VPS
+      - name: Restart service on VPS
         if: success()
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key \
             "${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}" \
-            sudo systemctl start studybub.service
+            sudo systemctl restart studybub.service
 
       - name: Clean up SSH key
         if: always()

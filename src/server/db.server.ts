@@ -93,4 +93,5 @@ export function initSchema(db?: Database): void {
  */
 export function resetDatabase(): void {
   dbInstance = null;
+  schemaInitialised = false;
 }
