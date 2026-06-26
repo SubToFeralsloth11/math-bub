@@ -110,8 +110,9 @@ gh variable set VPS_PATH --env production --body "/opt/studybub"
 
 1. Push to `main` triggers the full CI pipeline.
 2. All quality gates must pass (static analysis, unit tests, build, e2e).
-3. The deploy job stops the systemd service, rsyncs the build to the VPS,
-   runs `bun install --production`, and restarts the service.
+3. The deploy job rsyncs the build to the VPS while the service continues
+   serving the previous version, runs `bun install --production`, then
+   restarts the service with `systemctl restart`.
 4. The database at `/var/lib/studybub/data.db` is outside the application
    directory and is never touched by rsync.
 
@@ -125,9 +126,11 @@ ssh root@<vps-host>
 systemctl start studybub
 ```
 
-The previous `.output/` directory and dependencies remain on disk because
-rsync replaced them before the restart step failed. The service will start
-with the pre-deploy version.
+The old service continues serving until the restart step. If rsync or
+`bun install` fails before the restart, the old version remains running
+uninterrupted. If restart fails, systemd's `Restart=on-failure` retries
+the new version. To manually revert, restore a previous `.output/` from
+backup and run `systemctl start studybub`.
 
 ## Scripts
 
