@@ -9,7 +9,6 @@ import {
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { SaveErrorBanner } from "../components/SaveErrorBanner";
 import { appContent } from "../content";
-import { getCurrentUser } from "../server/api/auth";
 import { AiConfigProvider } from "../state/aiConfigContext";
 import { ProgressProvider } from "../state/progressContext";
 
@@ -32,6 +31,21 @@ export interface RouterContext {
  */
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async ({ location }) => {
+    // In E2E test mode, bypass authentication entirely and supply a
+    // static test user so Playwright tests can exercise the full app
+    // without a real passkey session. Vite exposes VITE_* variables
+    // in both SSR and client contexts.
+    if (import.meta.env.VITE_BYPASS_AUTH === "true") {
+      return {
+        user: { id: "test-user", displayName: "Test User" },
+      };
+    }
+
+    // Dynamic import prevents the bun:sqlite import chain from being
+    // loaded during SSR module evaluation in dev mode. Vite's SSR
+    // runner uses Node.js ESM resolution which does not support the
+    // `bun:` protocol.
+    const { getCurrentUser } = await import("../server/api/auth");
     const user = await getCurrentUser();
 
     // Allow unauthenticated access to login and invite pages.

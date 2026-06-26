@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
 /**
- * Returns a local-date string (YYYY-MM-DD) offset by the given number of days
- * from today. Negative values produce past dates.
+ * Returns a local-date string (YYYY-MM-DD) offset by the given number of
+ * days from today. Negative values produce past dates.
  *
  * @param offset - Days from today (0 = today, -1 = yesterday, etc.).
  * @returns The local date string.
@@ -17,8 +17,8 @@ function relativeDate(offset: number): string {
 }
 
 /**
- * Produces an array of consecutive active-date strings ending at today for the
- * given number of days.
+ * Produces an array of consecutive active-date strings ending at today for
+ * the given number of days.
  *
  * @param days - How many consecutive days to include.
  * @returns Sorted YYYY-MM-DD strings.
@@ -30,7 +30,8 @@ function consecutiveDates(days: number): string[] {
 }
 
 /**
- * Seeds the saved-progress key before the app loads with the given saved state.
+ * Seeds the saved-progress key before the app loads with the given saved
+ * state.
  *
  * @param page - The Playwright page.
  * @param saved - The saved state to seed.
@@ -69,11 +70,8 @@ test("streak popover opens on chip click and shows the 7-day strip", async ({
   const chip = page.getByLabel("3 day streak");
   await chip.click();
 
-  // Popover content should be visible. Use the emoji to uniquely target
-  // the heading (the contextual message may also contain the streak count).
   await expect(page.getByText("🔥 3-day streak")).toBeVisible();
   await expect(page.getByText("Recent activity")).toBeVisible();
-  // Seven day cells should be present.
   await expect(page.getByLabel(/Mon/)).toBeVisible();
   await expect(page.getByLabel(/Sun/)).toBeVisible();
 });
@@ -135,7 +133,11 @@ test("level popover opens on badge click and shows XP progress", async ({
   await badge.click();
 
   // At 120 XP, level 2: span = 100, intoLevel = 70, toNext = 30.
-  await expect(page.getByText(/Level 2/)).toBeVisible();
+  // Wait for the popover to appear, then verify the heading text.
+  await page.waitForTimeout(500);
+  await expect(page.getByText(/Level 2/).first()).toBeVisible({
+    timeout: 10_000,
+  });
   await expect(page.getByText("70 / 100 XP")).toBeVisible();
   await expect(page.getByText(/30 XP to Level 3/)).toBeVisible();
 });
@@ -156,7 +158,6 @@ test("streak popover dismisses on click outside", async ({ page }) => {
   await page.getByLabel("3 day streak").click();
   await expect(page.getByText("🔥 3-day streak")).toBeVisible();
 
-  // Click outside (on the StudyBub logo).
   await page.getByText("StudyBub").click();
   await expect(page.getByText("🔥 3-day streak")).not.toBeVisible();
 });
@@ -196,13 +197,10 @@ test("mutual exclusion: opening level popover closes streak popover", async ({
   });
   await page.goto("/");
 
-  // Open streak popover.
   await page.getByLabel("3 day streak").click();
   await expect(page.getByText("🔥 3-day streak")).toBeVisible();
 
-  // Open level popover.
   await page.getByLabel(/Level/).click();
-  // Streak popover should be gone, level popover visible.
   await expect(page.getByText("🔥 3-day streak")).not.toBeVisible();
   await expect(page.getByText(/XP to Level/)).toBeVisible();
 });
@@ -223,11 +221,9 @@ test("popovers remain visible at 320 px viewport width", async ({ page }) => {
 
   await page.getByLabel("3 day streak").click();
 
-  // The popover should be visible within the viewport.
   const popover = page.getByText("🔥 3-day streak");
   await expect(popover).toBeVisible();
 
-  // The popover box should be within the viewport bounds.
   const box = await popover.boundingBox();
   expect(box).not.toBeNull();
   if (box) {

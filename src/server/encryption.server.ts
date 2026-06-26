@@ -22,7 +22,7 @@ export function resetEncryptionKey(): void {
 function getKeyBytes(): Uint8Array {
   if (keyBytes) return keyBytes;
 
-  const hexKey = Bun.env.ENCRYPTION_KEY;
+  const hexKey = process.env.ENCRYPTION_KEY;
   if (!hexKey) {
     throw new Error(
       "ENCRYPTION_KEY environment variable is not set. " +

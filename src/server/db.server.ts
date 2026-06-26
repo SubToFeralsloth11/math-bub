@@ -6,9 +6,16 @@ import { Database } from "bun:sqlite";
  */
 let dbInstance: Database | null = null;
 
+/** Whether the database schema has been initialised. */
+let schemaInitialised = false;
+
 /**
  * Gets or creates the SQLite database instance. When `path` is omitted the
  * default file `studybub.db` is used in the current working directory.
+ *
+ * The database schema is lazily initialised on the first call so that
+ * tables exist before any query is executed. This avoids importing the
+ * native database module during SSR module evaluation.
  *
  * @param path - Optional path to the database file.
  * @returns The database instance.
@@ -18,6 +25,10 @@ export function getDatabase(path?: string): Database {
     dbInstance = new Database(path ?? "studybub.db");
     dbInstance.run("PRAGMA journal_mode = WAL");
     dbInstance.run("PRAGMA foreign_keys = ON");
+  }
+  if (!schemaInitialised) {
+    schemaInitialised = true;
+    initSchema(dbInstance);
   }
   return dbInstance;
 }

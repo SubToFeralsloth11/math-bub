@@ -19,7 +19,7 @@ export interface SessionData {
  * @throws If SESSION_SECRET is not set.
  */
 export function useAppSession(): ReturnType<typeof useSession<SessionData>> {
-  const secret = Bun.env.SESSION_SECRET;
+  const secret = process.env.SESSION_SECRET;
   if (!secret) {
     throw new Error(
       "SESSION_SECRET environment variable is not set. " +
@@ -33,7 +33,7 @@ export function useAppSession(): ReturnType<typeof useSession<SessionData>> {
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      secure: Bun.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60, // 7 days.
     },
   });

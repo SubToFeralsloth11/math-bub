@@ -1,4 +1,9 @@
-import { Link, useParams } from "@tanstack/react-router";
+import {
+  Link,
+  Outlet,
+  useParams,
+  useRouterState,
+} from "@tanstack/react-router";
 
 import { AppHeader } from "../../components/AppHeader";
 import { Card } from "../../components/Card";
@@ -69,8 +74,17 @@ export function SubjectScreen() {
   const subject = findSubject(subjectId ?? "");
   const tracks = tracksForSubject(subjectId ?? "");
 
+  // When a child route (track, lesson, etc.) is active, render the
+  // Outlet instead of the subject's track list.
+  const matches = useRouterState({ select: (s) => s.matches });
+  const hasChildRoute = matches.length > 2;
+
   if (!subject) {
     return <NotFound title="Subject not found" />;
+  }
+
+  if (hasChildRoute) {
+    return <Outlet />;
   }
 
   return (

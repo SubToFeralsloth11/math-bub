@@ -16,11 +16,6 @@ import {
   type ProgressState,
 } from "./progressReducer";
 import { defaultState, type SavedState } from "../domain/persistence/schema";
-import {
-  loadProgress as loadProgressServer,
-  saveProgress as saveProgressServer,
-  resetProgress as resetProgressServer,
-} from "../server/api/progress";
 
 import type { AppContent } from "../domain/content/types";
 
@@ -71,13 +66,36 @@ export function ProgressProvider({
   const [hydrated, setHydrated] = useState(false);
   const saveVersionRef = useRef(0);
 
-  // Hydrate progress from the server on mount.
+  // In E2E test mode the dev server cannot reach the database (Nitro's
+  // SSR runner uses Node.js module resolution which does not support
+  // Bun-native modules like bun:sqlite). Progress is stored in
+  // localStorage so Playwright can seed and verify state.
+  const isE2e = import.meta.env.VITE_BYPASS_AUTH === "true";
+
+  // Hydrate progress from the server on mount. Falls back to
+  // localStorage in E2E mode so tests can seed state via addInitScript.
   useEffect(() => {
     let cancelled = false;
 
     async function hydrate() {
+      if (isE2e) {
+        const raw = localStorage.getItem("studybub.progress.v1");
+        let saved: SavedState;
+        try {
+          saved = raw ? (JSON.parse(raw) as SavedState) : defaultState();
+        } catch {
+          saved = defaultState();
+        }
+        if (!cancelled) {
+          dispatch({ type: "HYDRATE", saved });
+          setHydrated(true);
+        }
+        return;
+      }
+
       try {
-        const saved = await loadProgressServer();
+        const { loadProgress } = await import("../server/api/progress");
+        const saved = await loadProgress();
         if (!cancelled) {
           dispatch({ type: "HYDRATE", saved });
           setHydrated(true);
@@ -94,7 +112,7 @@ export function ProgressProvider({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isE2e]);
 
   // Persist the saved portion whenever it changes (after hydration).
   const lastSavedRef = useRef<SavedState | null>(null);
@@ -109,8 +127,15 @@ export function ProgressProvider({
     setSaveStatus("loading");
 
     async function persist() {
+      if (isE2e) {
+        localStorage.setItem("studybub.progress.v1", JSON.stringify(saved));
+        setSaveStatus("saved");
+        return;
+      }
+
       try {
-        await saveProgressServer({ data: { state: saved } });
+        const { saveProgress } = await import("../server/api/progress");
+        await saveProgress({ data: { state: saved } });
         if (version === saveVersionRef.current) {
           setSaveStatus("saved");
         }
@@ -122,11 +147,20 @@ export function ProgressProvider({
     }
 
     persist();
-  }, [state.saved, hydrated]);
+  }, [state.saved, hydrated, isE2e]);
 
   const handleReset = async () => {
+    if (isE2e) {
+      const fresh = defaultState();
+      localStorage.removeItem("studybub.progress.v1");
+      dispatch({ type: "HYDRATE", saved: fresh });
+      setSaveStatus("saved");
+      return;
+    }
+
     try {
-      const fresh = await resetProgressServer();
+      const { resetProgress } = await import("../server/api/progress");
+      const fresh = await resetProgress();
       dispatch({ type: "HYDRATE", saved: fresh });
       setSaveStatus("saved");
     } catch {

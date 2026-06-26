@@ -1,7 +1,7 @@
 /**
  * Test mocks for server API modules. These replace server function calls with
  * in-memory equivalents during vitest runs, preventing the bundler from
- * trying to resolve `bun:sqlite` and other server-only imports.
+ * trying to resolve server-only imports like the database module.
  *
  * Tests seed mock state via {@link setMockProgress} and
  * {@link setMockAiConfig} before rendering components.

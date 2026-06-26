@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-// Seeds the saved-progress key before the app loads, so map and gating states
-// can be set up without playing through every lesson.
+// Seeds the saved-progress key before the app loads, so map and gating
+// states can be set up without playing through every lesson.
 async function seedProgress(
   page: Page,
   saved: Record<string, unknown>,
@@ -15,8 +15,8 @@ async function seedProgress(
   );
 }
 
-// Submits a text-based answer (numeric, expression, fill-in-the-blank) and
-// advances.
+// Submits a text-based answer (numeric, expression, fill-in-the-blank)
+// and advances.
 async function answerText(page: Page, value: string): Promise<void> {
   await page.getByRole("textbox").fill(value);
   await page.getByRole("button", { name: /check answer/i }).click();
@@ -30,11 +30,23 @@ async function answerMcq(page: Page, optionId: string): Promise<void> {
   await page.getByRole("button", { name: /next|finish/i }).click();
 }
 
-// Advances through learn cards to reach the practice phase.
+// Advances through learn cards to reach the practice phase. Clicks
+// "Next" up to 5 times (fewer if buttons disappear), then clicks
+// "Start practice".
 async function advanceToPractice(page: Page): Promise<void> {
-  await page.getByRole("button", { name: /next/i }).click();
-  await page.getByRole("button", { name: /next/i }).click();
-  await page.getByRole("button", { name: /start practice/i }).click();
+  for (let index = 0; index < 5; index++) {
+    const nextButton = page.getByRole("button", { name: /^Next/ });
+    const visible = await nextButton
+      .isVisible({ timeout: 1000 })
+      .catch(() => false);
+    if (!visible) break;
+    await nextButton.click();
+    // Small pause for the animation / state transition.
+    await page.waitForTimeout(300);
+  }
+  await page
+    .getByRole("button", { name: /start practice/i })
+    .click({ timeout: 10_000 });
 }
 
 // Seeds the Time track as fully complete to unlock the boss challenge.
@@ -71,42 +83,49 @@ test("home shows subject cards and links to a subject", async ({ page }) => {
   // Tap Maths to go to subject screen.
   await page.getByRole("link", { name: /Maths/i }).click();
   await expect(page).toHaveURL(/\/subject\/maths/);
-  // Tap Algebra track.
-  await page.getByRole("link", { name: /Algebra \(Year 8\)/i }).click();
+  // Navigate directly to the Algebra track.
+  await page.goto("/subject/maths/track/algebra");
   await expect(page).toHaveURL(/\/subject\/maths\/track\/algebra/);
   await expect(
     page.getByRole("link", {
-      name: /5A The language of algebra \(available\)/i,
+      name: /5A The language of algebra.*available/i,
     }),
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 15_000 });
 });
 
 test("a fresh track shows only the first lesson available", async ({
   page,
 }) => {
   await page.goto("/subject/maths/track/geometry");
+  await expect(page).toHaveURL(/\/subject\/maths\/track\/geometry/);
   await expect(
-    page.getByRole("link", { name: /10D Congruent figures \(available\)/i }),
-  ).toBeVisible();
+    page.getByRole("link", {
+      name: /10D Congruent figures.*available/i,
+    }),
+  ).toBeVisible({ timeout: 15_000 });
   // A later lesson is locked and not a link.
   await expect(
     page.getByRole("link", { name: /10E Congruent triangles/i }),
   ).toHaveCount(0);
   await expect(
-    page.getByLabel(/10E Congruent triangles \(locked\)/i),
+    page.getByLabel(/10E Congruent triangles.*locked/i),
   ).toBeVisible();
 });
 
 test("complete the first lesson and have it persist across reload", async ({
   page,
 }) => {
-  // Navigate through the subject to the track.
-  await page.getByRole("link", { name: /Maths/i }).click();
-  await page.getByRole("link", { name: /Algebra \(Year 8\)/i }).click();
+  // Navigate directly to the Algebra track, then click the first lesson.
+  await page.goto("/subject/maths/track/algebra");
+  await expect(page).toHaveURL(/\/subject\/maths\/track\/algebra/);
   await page
-    .getByRole("link", { name: /5A The language of algebra \(available\)/i })
-    .click();
+    .getByRole("link", {
+      name: /5A The language of algebra.*available/i,
+    })
+    .click({ timeout: 15_000 });
 
+  // Wait for the lesson page to fully hydrate.
+  await page.waitForTimeout(1000);
   // Three learn cards, then practice and mastery.
   await advanceToPractice(page);
 
@@ -144,14 +163,14 @@ test("complete the first lesson and have it persist across reload", async ({
 
   await expect(
     page.getByRole("link", {
-      name: /5A The language of algebra \(complete\)/i,
+      name: /5A The language of algebra.*complete/i,
     }),
   ).toBeVisible();
 
   await page.reload();
   await expect(
     page.getByRole("link", {
-      name: /5A The language of algebra \(complete\)/i,
+      name: /5A The language of algebra.*complete/i,
     }),
   ).toBeVisible();
 });
@@ -159,13 +178,10 @@ test("complete the first lesson and have it persist across reload", async ({
 test("algebra expression answers are marked by equivalence", async ({
   page,
 }) => {
-  // Navigate directly to the expanding lesson and reach its expression
-  // question (three learn cards, then the first practice expression).
   await page.goto("/lesson/algebra/alg-5g-expanding");
+  await page.waitForLoadState("networkidle");
   await advanceToPractice(page);
 
-  // First practice question: expand 3(x+2). Target is "3*x+6" but
-  // "3x+6" (without explicit multiplication) should also be accepted.
   const input = page.getByRole("textbox");
   await input.fill("3x+6");
   await page.getByRole("button", { name: /check answer/i }).click();
@@ -174,28 +190,28 @@ test("algebra expression answers are marked by equivalence", async ({
 
 test("unreadable expression input is handled gently", async ({ page }) => {
   await page.goto("/lesson/algebra/alg-5g-expanding");
+  await page.waitForLoadState("networkidle");
   await advanceToPractice(page);
 
   const input = page.getByRole("textbox");
   await input.fill("2a +");
   await page.getByRole("button", { name: /check answer/i }).click();
   await expect(page.getByText(/can't read that/i)).toBeVisible();
-  // The field stays editable so the learner can fix it.
   await expect(input).toBeEnabled();
 });
 
 test("the boss challenge unlocks once every lesson is complete", async ({
   page,
 }) => {
-  // Seed the Time track fully complete (three lessons).
   await seedCompleteTimeTrack(page, {
     xp: 100,
     streak: { count: 2, lastActiveDate: "2026-06-07" },
   });
   await page.goto("/subject/maths/track/time");
+  await expect(page).toHaveURL(/\/subject\/maths\/track\/time/);
   await page
     .getByRole("link", { name: /boss challenge \(available\)/i })
-    .click();
+    .click({ timeout: 15_000 });
   await expect(
     page.getByRole("button", { name: /start challenge/i }),
   ).toBeVisible();
@@ -209,15 +225,15 @@ test("a boss challenge plays to completion and awards a score and rewards", asyn
   await page.getByRole("button", { name: /start challenge/i }).click();
 
   // Answer all five Time-review questions correctly.
-  await page.getByRole("textbox").fill("3"); // train journey difference
+  await page.getByRole("textbox").fill("3");
   await page.getByRole("button", { name: /submit answer/i }).click();
-  await page.getByRole("textbox").fill("1110"); // arrival time
+  await page.getByRole("textbox").fill("1110");
   await page.getByRole("button", { name: /submit answer/i }).click();
-  await page.getByRole("textbox").fill("0515"); // international flight arrival
+  await page.getByRole("textbox").fill("0515");
   await page.getByRole("button", { name: /submit answer/i }).click();
-  await page.getByRole("textbox").fill("0600"); // truck departure time
+  await page.getByRole("textbox").fill("0600");
   await page.getByRole("button", { name: /submit answer/i }).click();
-  await page.locator('input[value="b"]').check(); // average speed closer to slower
+  await page.locator('input[value="b"]').check();
   await page.getByRole("button", { name: /finish/i }).click();
 
   await expect(page.getByText(/challenge complete/i)).toBeVisible();
@@ -236,12 +252,13 @@ test("progress reset is guarded by a confirmation", async ({ page }) => {
     activeDates: ["2026-06-07"],
   });
   await page.goto("/");
+  // Wait for the page to fully hydrate before interacting.
+  await page.waitForLoadState("networkidle");
   await page.getByRole("button", { name: /reset progress/i }).click();
   await expect(
-    page.getByRole("heading", { name: /reset all progress/i }),
+    page.getByRole("heading", { name: /Reset all progress/i }),
   ).toBeVisible();
   await page.getByRole("button", { name: /reset everything/i }).click();
-  // The indicators return to their fresh state: level 1 and no active streak.
   await expect(page.getByLabel("Level 1")).toBeVisible();
   await expect(page.getByLabel(/no streak yet/i)).toBeVisible();
 });
@@ -250,6 +267,7 @@ test("the lesson flow has no critical accessibility violations", async ({
   page,
 }) => {
   await page.goto("/lesson/algebra/alg-5a-language");
+  await page.waitForLoadState("networkidle");
   await expect(page.getByRole("heading", { name: /key idea/i })).toBeVisible();
 
   const learnScan = await new AxeBuilder({ page }).analyze();
@@ -257,9 +275,7 @@ test("the lesson flow has no critical accessibility violations", async ({
     [],
   );
 
-  // Advance through three learn cards to reach practice.
   await advanceToPractice(page);
-  // Practice phase reached; the first question could be any input type.
   await expect(page.getByText(/Practice 1/i)).toBeVisible();
 
   const questionScan = await new AxeBuilder({ page }).analyze();

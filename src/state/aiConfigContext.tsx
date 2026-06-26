@@ -7,12 +7,6 @@ import {
   type ReactNode,
 } from "react";
 
-import {
-  clearAiConfig as clearAiConfigServer,
-  loadAiConfig as loadAiConfigServer,
-  saveAiConfig as saveAiConfigServer,
-} from "../server/api/aiConfig";
-
 import type { AiConfig } from "../domain/persistence/aiConfig";
 
 /** The shape of the AI config context value. */
@@ -53,7 +47,8 @@ export function AiConfigProvider({
 
     async function hydrate() {
       try {
-        const config = await loadAiConfigServer();
+        const { loadAiConfig } = await import("../server/api/aiConfig");
+        const config = await loadAiConfig();
         if (!cancelled) {
           setAiConfigState(config);
         }
@@ -75,9 +70,9 @@ export function AiConfigProvider({
   async function setAiConfig(config: AiConfig | null): Promise<void> {
     setAiConfigState(config);
     try {
-      await (config
-        ? saveAiConfigServer({ data: { config } })
-        : clearAiConfigServer());
+      const { saveAiConfig, clearAiConfig } =
+        await import("../server/api/aiConfig");
+      await (config ? saveAiConfig({ data: { config } }) : clearAiConfig());
     } catch {
       // Persistence failed silently.
     }
