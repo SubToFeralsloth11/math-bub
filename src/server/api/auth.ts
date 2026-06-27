@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 
 import { getDatabase } from "../../server/db.server";
+import { resolveRpInfo } from "../../server/rpInfo";
 import { useAppSession } from "../../server/session.server";
 import {
   generateAuthenticationOptions,
@@ -24,11 +25,7 @@ import type {
  */
 function getRpInfo(): { rpId: string; origin: string } {
   const request = getRequest();
-  const url = new URL(request.url);
-  return {
-    rpId: url.hostname,
-    origin: url.origin,
-  };
+  return resolveRpInfo(request.url, request.headers.get("x-forwarded-proto"));
 }
 
 /**
