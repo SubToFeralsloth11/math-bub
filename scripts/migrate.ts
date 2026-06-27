@@ -16,8 +16,15 @@ import { readFileSync } from "node:fs";
  * @param path - Optional path to the database file.
  * @returns The database instance.
  */
-function openDatabase(path = "studybub.db"): Database {
-  const db = new Database(path);
+// Resolves the database path with the same precedence as the server
+// (`src/server/db.server.ts`): an explicit argument wins, then the
+// `STUDYBUB_DB_PATH` env var, then `studybub.db` in the CWD. This keeps the
+// CLI pointed at the same database the running server uses - crucial on a
+// VPS where systemd sets `STUDYBUB_DB_PATH` to a separate data directory.
+function openDatabase(path?: string): Database {
+  const resolvedPath = path ?? process.env.STUDYBUB_DB_PATH ?? "studybub.db";
+  console.log(`Using database: ${resolvedPath}`);
+  const db = new Database(resolvedPath);
   db.run("PRAGMA journal_mode = WAL");
   db.run("PRAGMA foreign_keys = ON");
   return db;
