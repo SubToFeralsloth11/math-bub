@@ -99,13 +99,13 @@ describe("shuffleMcqOptions", () => {
     expect(shuffled.options[2].id).toBe("a");
   });
 
-  it("returns options in a different order with random", () => {
+  it("returns options in a different order with a seeded random", () => {
+    // A deterministic sequence that produces a non-identity permutation, so
+    // the assertion never depends on Math.random coincidentally preserving the
+    // original order (which would fail roughly 1 in 120 runs).
     const q = makeMcq(["a", "b", "c", "d", "e"]);
-    const shuffled = shuffleMcqOptions(q);
-    // Extremely unlikely to match original order with 5 options (1/120).
-    const originalIds = q.options.map((o) => o.id).join(",");
-    const shuffledIds = shuffled.options.map((o) => o.id).join(",");
-    expect(originalIds).not.toBe(shuffledIds);
+    const shuffled = shuffleMcqOptions(q, sequenceRandom([0.1, 0.2, 0.3, 0.4]));
+    expect(shuffled.options.map((o) => o.id).join(",")).toBe("b,c,d,e,a");
   });
 
   it("returns all the same option ids", () => {
