@@ -24,7 +24,7 @@ import type { LearnCard } from "../../domain/content/types";
  *
  * @returns Whether the surface should suppress its entrance animation.
  */
-function useReducedMotion(): boolean {
+function prefersReducedMotion(): boolean {
   const win = globalThis.window;
   if (win === undefined || typeof win.matchMedia !== "function") {
     return false;
@@ -63,7 +63,7 @@ export function ReferenceDrawer({
   referenceControlRef,
 }: Readonly<ReferenceDrawerProps>) {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = prefersReducedMotion();
 
   // Resolve the current card; default to the first when the carried id is null.
   const currentIndex =

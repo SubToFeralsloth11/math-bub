@@ -292,6 +292,27 @@ describe("LessonScreen - question-driven default (US3)", () => {
       screen.getByText(referenceLesson.learnCards[1].heading),
     ).toBeInTheDocument();
   });
+
+  it("opens Reference on the mastery question's refersTo during mastery", async () => {
+    // Regression guard (FR-011): the default card must come from the CURRENT
+    // (mastery) question, not the practice question at the same index.
+    const user = userEvent.setup();
+    await renderApp(<LessonScreen />, {
+      route: `/lesson/${MINIMAL_TRACK_ID}/${MINIMAL_LESSON_ID}`,
+      path: "lesson/$trackId/$lessonId",
+      content: minimalContentWithMasteryRefersTo(),
+    });
+    // The fixture has two learn cards: advance past both into practice.
+    await user.click(screen.getByRole("button", { name: "Next →" }));
+    await user.click(screen.getByRole("button", { name: /start practice/i }));
+    // Answer the single practice question to reach the mastery phase.
+    await answerMinimalMcq(user);
+    await user.click(screen.getByRole("button", { name: /reference/i }));
+    // The mastery question links to the second learn card.
+    expect(
+      screen.getByRole("heading", { name: /second card/i }),
+    ).toBeInTheDocument();
+  });
 });
 
 // Builds a copy of the real content with the first algebra lesson's first
@@ -390,6 +411,27 @@ async function renderMinimalLesson(): Promise<void> {
     path: "lesson/$trackId/$lessonId",
     content: minimalContent(),
   });
+}
+
+// A two-learn-card variant whose single mastery question links to the second
+// card, used to assert mastery-phase refersTo resolution (FR-011).
+function minimalContentWithMasteryRefersTo(): AppContent {
+  const content = minimalContent();
+  const lesson = content.tracks[0].lessons[0];
+  lesson.learnCards = [
+    {
+      id: "mini-c1",
+      heading: "First card",
+      body: [{ kind: "text", text: "first" }],
+    },
+    {
+      id: "mini-c2",
+      heading: "Second card",
+      body: [{ kind: "text", text: "second" }],
+    },
+  ];
+  lesson.mastery[0].refersTo = "mini-c2";
+  return content;
 }
 
 // The minimal lesson has a single learn card, so its learn phase exposes

@@ -188,16 +188,20 @@ function LessonRunner({
   // resolution itself is the React layer's responsibility (it is the only
   // content-aware wiring here).
   const referenceOpen = flow.reference.open;
+  const currentQuestion =
+    flow.phase === "learn"
+      ? undefined
+      : isMastery
+        ? lesson.mastery[flow.index]
+        : lesson.practice[flow.index];
   const referenceDefaultCardId =
     flow.phase === "learn"
       ? lesson.learnCards[flow.index].id
-      : (lesson.practice[flow.index]?.refersTo ?? lesson.learnCards[0].id);
+      : (currentQuestion?.refersTo ?? lesson.learnCards[0].id);
   const referenceSourceId =
     flow.phase === "learn"
       ? lesson.learnCards[flow.index].id
-      : ((isMastery
-          ? lesson.mastery[flow.index]?.id
-          : lesson.practice[flow.index]?.id) ?? "");
+      : (currentQuestion?.id ?? "");
 
   function handleBrowse(cardId: string) {
     flowDispatch({
