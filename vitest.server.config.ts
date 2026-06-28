@@ -10,16 +10,15 @@ import { defineConfig } from "vitest/config";
 //
 // The Istanbul coverage provider instruments source at Vite transform time, so
 // it works under Bun (where the V8 provider cannot collect coverage). Coverage
-// is scoped to `src/server/**` and reported, but the 80% threshold is NOT yet
-// enforced here: several server modules (`api/auth.ts`, `webAuthn.server.ts`,
-// `api/progress.ts`, `api/aiConfig.ts`, `session.server.ts`,
-// `api/requireUserId.server.ts`) currently have no tests, so the server slice
-// sits well below 80%. Enabling the gate would block all deploys until those
-// modules gain coverage, which is a separate TDD effort.
+// is scoped to `src/server/**` and the project-mandated 80% thresholds are
+// enforced over that slice, matching `vitest.config.ts`. Each server module is
+// covered: the pure helpers (`db.server.ts`, `rpInfo.ts`,
+// `encryption.server.ts`, `webAuthn.server.ts`, `session.server.ts`) by direct
+// unit tests, and the `createServerFn`-backed handlers (`api/auth.ts`,
+// `api/progress.ts`, `api/aiConfig.ts`, `api/requireUserId.server.ts`) via
+// tests that stub the framework factory and session so the real handlers run
+// against an in-memory database.
 //
-// TODO: write tests for the untested server modules, then restore the
-// `thresholds` block below (lines/functions/branches/statements: 80) to make
-// the server slice's 80% gate non-negotiable, matching `vitest.config.ts`.
 // `bun:sqlite` itself is a built-in external module and is never matched by
 // `coverage.include`, so it is excluded automatically.
 export default defineConfig({
@@ -35,6 +34,12 @@ export default defineConfig({
       reportsDirectory: "coverage/server",
       include: ["src/server/**/*.{ts,tsx}"],
       exclude: ["src/server/**/*.test.ts", "src/server/**/*.d.ts"],
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
+      },
     },
   },
 });

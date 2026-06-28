@@ -9,9 +9,58 @@
  * @author John Grimes
  */
 
+// The handler-level tests ("AI config handlers") run the real server functions.
+// createServerFn is replaced with a shim that calls the handler with the
+// `{ data }` payload, and the session is mocked so requireUserId resolves to a
+// controlled user id. Both live in vi.hoisted so the hoisted vi.mock factories
+// can reference them.
+const mocks = vi.hoisted(() => {
+  const session = { data: {} as Record<string, unknown> };
+  const createServerFn = () => {
+    const api = {
+      validator() {
+        return api;
+      },
+      inputValidator() {
+        return api;
+      },
+      middleware() {
+        return api;
+      },
+    } as Record<string, (...args: any[]) => unknown>;
+    api.handler =
+      (fn: (ctx: { data: unknown }) => unknown) =>
+      async (opts?: { data?: unknown }) =>
+        fn({ data: opts?.data });
+    return api;
+  };
+  return { session, createServerFn };
+});
+
+vi.mock("@tanstack/react-start", () => ({
+  createServerFn: mocks.createServerFn,
+}));
+vi.mock("@tanstack/react-start/server", () => ({
+  useSession: vi.fn(async () => mocks.session),
+}));
+const session = mocks.session;
+
 import { Database } from "bun:sqlite";
 
 import { getDatabase, initSchema, resetDatabase } from "../db.server";
+import { resetEncryptionKey } from "../encryption.server";
+import { clearAiConfig, loadAiConfig, saveAiConfig } from "./aiConfig";
+
+import type { AiConfig } from "../../domain/persistence/aiConfig";
+
+const VALID_KEY =
+  "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
+const validConfig: AiConfig = {
+  baseUrl: "https://api.openai.com/v1/chat/completions",
+  apiKey: "sk-test-key-12345",
+  model: "gpt-4o",
+};
 
 const TEST_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -41,7 +90,7 @@ describe("AI config server functions - integration", () => {
   });
 
   describe("saveAiConfig", () => {
-    it("persists encrypted AI config fields", () => {
+    it("persists encrypted AI config fields via raw SQL", () => {
       const now = new Date().toISOString();
       db.run(
         "UPDATE users SET ai_config_encrypted = ?, ai_config_iv = ?, " +
@@ -213,5 +262,141 @@ describe("AI config server functions - integration", () => {
       expect(row1.ai_config_encrypted).toBe("user1-enc");
       expect(row2.ai_config_encrypted).toBe("user2-enc");
     });
+  });
+});
+
+// These tests exercise the real createServerFn handlers end-to-end. Encryption
+// is real (round-tripped through AES-256-GCM) so the isValidAiConfig branch and
+// the decrypt path are both covered.
+describe("AI config handlers", () => {
+  let originalKey: string | undefined;
+  let originalSecret: string | undefined;
+  let db: Database;
+
+  beforeEach(() => {
+    originalKey = process.env.ENCRYPTION_KEY;
+    originalSecret = process.env.SESSION_SECRET;
+    process.env.ENCRYPTION_KEY = VALID_KEY;
+    process.env.SESSION_SECRET = "s".repeat(40);
+    resetEncryptionKey();
+    session.data = { userId: TEST_USER_ID };
+
+    db = setupDb();
+  });
+
+  afterEach(() => {
+    resetDatabase();
+    resetEncryptionKey();
+    if (originalKey === undefined) {
+      delete process.env.ENCRYPTION_KEY;
+    } else {
+      process.env.ENCRYPTION_KEY = originalKey;
+    }
+    if (originalSecret === undefined) {
+      delete process.env.SESSION_SECRET;
+    } else {
+      process.env.SESSION_SECRET = originalSecret;
+    }
+  });
+
+  it("loadAiConfig returns null when no config is stored", async () => {
+    await expect(loadAiConfig()).resolves.toBeNull();
+  });
+
+  it("loadAiConfig round-trips a saved config", async () => {
+    await saveAiConfig({ data: { config: validConfig } });
+
+    const loaded = await loadAiConfig();
+    expect(loaded).toEqual(validConfig);
+  });
+
+  it("saveAiConfig encrypts the config before persisting", async () => {
+    await saveAiConfig({ data: { config: validConfig } });
+
+    const row = db
+      .query(
+        "SELECT ai_config_encrypted, ai_config_iv, ai_config_auth_tag " +
+          "FROM users WHERE id = ?",
+      )
+      .get(TEST_USER_ID) as {
+      ai_config_encrypted: string;
+      ai_config_iv: string;
+      ai_config_auth_tag: string;
+    };
+
+    // The persisted ciphertext must not contain the plaintext key.
+    expect(row.ai_config_encrypted).not.toContain("sk-test-key-12345");
+    expect(row.ai_config_iv).toHaveLength(24);
+    expect(row.ai_config_auth_tag).toHaveLength(32);
+  });
+
+  it("saveAiConfig rejects an invalid config shape", async () => {
+    // Object is intentionally missing `model`; cast through unknown so it can
+    // be passed while still being invalid at runtime.
+    const invalidConfig = {
+      baseUrl: "x",
+      apiKey: "y",
+    } as unknown as AiConfig;
+    await expect(
+      saveAiConfig({
+        data: { config: invalidConfig },
+      }),
+    ).rejects.toThrow("Invalid AI config.");
+  });
+
+  it("loadAiConfig returns null when the stored config is not a valid shape", async () => {
+    // Reset to a fresh encryption key identity, then encrypt a non-AiConfig
+    // object and persist it directly so the decrypt succeeds but shape
+    // validation fails.
+    const { encryptAiConfig } = await import("../encryption.server");
+    const enc = await encryptAiConfig({
+      baseUrl: "x",
+      apiKey: "y",
+      // model intentionally missing.
+    } as unknown as AiConfig);
+    const now = new Date().toISOString();
+    db.run(
+      "UPDATE users SET ai_config_encrypted = ?, ai_config_iv = ?, " +
+        "ai_config_auth_tag = ?, updated_at = ? WHERE id = ?",
+      [enc.ciphertext, enc.iv, enc.authTag, now, TEST_USER_ID],
+    );
+
+    await expect(loadAiConfig()).resolves.toBeNull();
+  });
+
+  it("loadAiConfig returns null for a user with no row", async () => {
+    session.data = { userId: "no-such-user" };
+
+    await expect(loadAiConfig()).resolves.toBeNull();
+  });
+
+  it("clearAiConfig nulls all config fields", async () => {
+    await saveAiConfig({ data: { config: validConfig } });
+
+    await clearAiConfig();
+
+    const row = db
+      .query(
+        "SELECT ai_config_encrypted, ai_config_iv, ai_config_auth_tag " +
+          "FROM users WHERE id = ?",
+      )
+      .get(TEST_USER_ID) as {
+      ai_config_encrypted: string | null;
+      ai_config_iv: string | null;
+      ai_config_auth_tag: string | null;
+    };
+    expect(row.ai_config_encrypted).toBeNull();
+    expect(row.ai_config_iv).toBeNull();
+    expect(row.ai_config_auth_tag).toBeNull();
+  });
+
+  it("clearAiConfig returns ok", async () => {
+    await expect(clearAiConfig()).resolves.toEqual({ ok: true });
+  });
+
+  it("loadAiConfig rejects when the session has no userId", async () => {
+    session.data = {};
+
+    await expect(loadAiConfig()).rejects.toThrow("Sign in required.");
   });
 });

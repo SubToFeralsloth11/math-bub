@@ -9,6 +9,43 @@
  * @author John Grimes
  */
 
+// The handler-level tests ("progress handlers") invoke the real server
+// functions. TanStack Start's createServerFn needs a request runtime, so the
+// factory is replaced with a thin shim that calls the handler directly with
+// the `{ data }` payload. The session is mocked so requireUserId resolves to a
+// controlled user id. Both are declared with vi.hoisted so the vi.mock
+// factories (which are hoisted above the imports) can reference them safely.
+const mocks = vi.hoisted(() => {
+  const session = { data: {} as Record<string, unknown> };
+  const createServerFn = () => {
+    const api = {
+      validator() {
+        return api;
+      },
+      inputValidator() {
+        return api;
+      },
+      middleware() {
+        return api;
+      },
+    } as Record<string, (...args: any[]) => unknown>;
+    api.handler =
+      (fn: (ctx: { data: unknown }) => unknown) =>
+      async (opts?: { data?: unknown }) =>
+        fn({ data: opts?.data });
+    return api;
+  };
+  return { session, createServerFn };
+});
+
+vi.mock("@tanstack/react-start", () => ({
+  createServerFn: mocks.createServerFn,
+}));
+vi.mock("@tanstack/react-start/server", () => ({
+  useSession: vi.fn(async () => mocks.session),
+}));
+const session = mocks.session;
+
 import { Database } from "bun:sqlite";
 
 import {
@@ -17,6 +54,7 @@ import {
   type SavedState,
 } from "../../domain/persistence/schema";
 import { getDatabase, initSchema, resetDatabase } from "../db.server";
+import { loadProgress, resetProgress, saveProgress } from "./progress";
 
 const TEST_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -253,5 +291,107 @@ describe("progress server functions - integration", () => {
       expect(Object.keys(loaded2.lessons)).toEqual(["b"]);
       expect(loaded2.badges).toEqual(["first-steps"]);
     });
+  });
+});
+
+// These tests exercise the actual createServerFn handlers end-to-end through a
+// mocked framework so that the handler code is covered. They share the same
+// in-memory database as the SQL-level tests above.
+describe("progress handlers", () => {
+  let originalSecret: string | undefined;
+  let db: Database;
+
+  beforeEach(() => {
+    // requireUserId -> useAppSession needs a configured session secret.
+    originalSecret = process.env.SESSION_SECRET;
+    process.env.SESSION_SECRET = "s".repeat(40);
+    session.data = { userId: TEST_USER_ID };
+    db = setupDb();
+  });
+
+  afterEach(() => {
+    resetDatabase();
+    if (originalSecret === undefined) {
+      delete process.env.SESSION_SECRET;
+    } else {
+      process.env.SESSION_SECRET = originalSecret;
+    }
+  });
+
+  it("loadProgress returns the default state for a fresh user", async () => {
+    // setupDb inserted the user with progress_json = defaultState().
+    const state = await loadProgress();
+    expect(state.xp).toBe(0);
+    expect(state.lessons).toEqual({});
+  });
+
+  it("ensureUserExists inserts a user when none is present on load", async () => {
+    // Remove the seeded user so the handler must create it.
+    db.run("DELETE FROM users WHERE id = ?", [TEST_USER_ID]);
+
+    const state = await loadProgress();
+    expect(state.xp).toBe(0);
+
+    // The handler should have inserted the missing row.
+    const count = db
+      .query("SELECT COUNT(*) as cnt FROM users WHERE id = ?")
+      .get(TEST_USER_ID) as { cnt: number };
+    expect(count.cnt).toBe(1);
+  });
+
+  it("saveProgress persists the state and returns ok", async () => {
+    const newState: SavedState = {
+      ...defaultState(),
+      xp: 250,
+      lessons: { "lesson-9": { completed: true, bestAccuracy: 0.8 } },
+    };
+
+    const result = await saveProgress({ data: { state: newState } });
+    expect(result).toEqual({ ok: true });
+
+    const loaded = loadUserProgress(db, TEST_USER_ID);
+    expect(loaded.xp).toBe(250);
+    expect(loaded.lessons["lesson-9"]).toEqual({
+      completed: true,
+      bestAccuracy: 0.8,
+    });
+  });
+
+  it("saveProgress ensures the user row exists before updating", async () => {
+    db.run("DELETE FROM users WHERE id = ?", [TEST_USER_ID]);
+
+    await saveProgress({
+      data: { state: { ...defaultState(), xp: 30 } },
+    });
+
+    const loaded = loadUserProgress(db, TEST_USER_ID);
+    expect(loaded.xp).toBe(30);
+  });
+
+  it("resetProgress overwrites progress with the default state", async () => {
+    await saveProgress({
+      data: { state: { ...defaultState(), xp: 400 } },
+    });
+
+    const fresh = await resetProgress();
+    expect(fresh.xp).toBe(0);
+    expect(fresh.lessons).toEqual({});
+
+    const loaded = loadUserProgress(db, TEST_USER_ID);
+    expect(loaded.xp).toBe(0);
+  });
+
+  it("loadProgress rejects when the session has no userId", async () => {
+    session.data = {};
+
+    await expect(loadProgress()).rejects.toThrow("Sign in required.");
+  });
+
+  it("saveProgress rejects when the session has no userId", async () => {
+    session.data = {};
+
+    await expect(
+      saveProgress({ data: { state: defaultState() } }),
+    ).rejects.toThrow("Sign in required.");
   });
 });
