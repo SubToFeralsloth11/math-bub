@@ -1,13 +1,11 @@
-import { resolveRpInfo } from "../../server/rpInfo";
+import { resolveRpInfo } from "./rpInfo";
 
 /**
  * Unit tests for {@link resolveRpInfo}.
  *
- * This test lives under src/test/ (rather than co-located with the module
- * under src/server/) because the project's main Vitest config excludes the
- * server test directory - those server tests are intended to run in a separate
- * bun-pool Vitest project that is not yet wired up. Keeping this test under
- * src/test/ ensures it actually runs as part of `bun run test`.
+ * This test is co-located with the module under `src/server/` and runs in the
+ * server Vitest project (see `vitest.server.config.ts`), which executes under
+ * Bun's runtime.
  */
 describe("resolveRpInfo", () => {
   it("returns the hostname and origin from a direct request URL", () => {

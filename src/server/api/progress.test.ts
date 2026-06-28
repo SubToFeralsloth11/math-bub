@@ -10,7 +10,6 @@
  */
 
 import { Database } from "bun:sqlite";
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
 import {
   defaultState,
@@ -139,7 +138,7 @@ describe("progress server functions - integration", () => {
       expect(parsed.badges).toEqual(["first-steps"]);
 
       // The updated_at field should be a valid ISO date string.
-      expect(row.updated_at).toBeString();
+      expect(typeof row.updated_at).toBe("string");
       expect(() => new Date(row.updated_at)).not.toThrow();
     });
 
