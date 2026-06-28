@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 import { LearnCardView } from "./LearnCardView";
 import { LessonComplete } from "./LessonComplete";
@@ -9,6 +9,7 @@ import {
   masteryAccuracy,
 } from "./lessonFlow";
 import { QuestionView } from "./QuestionView";
+import { ReferenceDrawer } from "./ReferenceDrawer";
 import { Button } from "../../components/Button";
 import { Card } from "../../components/Card";
 import { localDateIso } from "../../domain/progress/dates";
@@ -88,6 +89,7 @@ function LessonRunner({
     lesson,
     initLessonFlow,
   );
+  const referenceControlRef = useRef<HTMLButtonElement>(null);
 
   // Clear any celebration left over from a previous lesson so this run's
   // level-up and badge banners reflect only what is earned here.
@@ -181,71 +183,126 @@ function LessonRunner({
       ? `Learn ${flow.index + 1} / ${flow.learnTotal}`
       : `${isMastery ? "Mastery" : "Practice"} ${flow.index + 1} / ${stepTotal}`;
 
+  // Resolve the default card and open-context id the Reference surface opens
+  // from. The reducer applies the remembered-position rule against these; the
+  // resolution itself is the React layer's responsibility (it is the only
+  // content-aware wiring here).
+  const referenceOpen = flow.reference.open;
+  const referenceDefaultCardId =
+    flow.phase === "learn"
+      ? lesson.learnCards[flow.index].id
+      : (lesson.practice[flow.index]?.refersTo ?? lesson.learnCards[0].id);
+  const referenceSourceId =
+    flow.phase === "learn"
+      ? lesson.learnCards[flow.index].id
+      : ((isMastery
+          ? lesson.mastery[flow.index]?.id
+          : lesson.practice[flow.index]?.id) ?? "");
+
+  function handleBrowse(cardId: string) {
+    flowDispatch({
+      type: "BROWSE_REFERENCE",
+      cardId,
+      sourceId: referenceSourceId,
+    });
+  }
+
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
-      <header className="flex items-center gap-4 px-5 py-4">
-        <Link
-          to="/subject/$subjectId/track/$trackId"
-          params={{ subjectId, trackId }}
-          aria-label="Leave lesson"
-          className="text-2xl text-muted transition hover:text-ink"
-        >
-          ✕
-        </Link>
-        <div
-          className="h-3 flex-1 overflow-hidden rounded-pill bg-cream-deep"
-          role="progressbar"
-          aria-label="Lesson progress"
-          aria-valuenow={Math.round(fraction * 100)}
-          aria-valuemin={0}
-          aria-valuemax={100}
-        >
+      <div
+        inert={referenceOpen ? true : undefined}
+        aria-hidden={referenceOpen ? true : undefined}
+        className="min-h-screen"
+      >
+        <header className="flex items-center gap-4 px-5 py-4">
+          <Link
+            to="/subject/$subjectId/track/$trackId"
+            params={{ subjectId, trackId }}
+            aria-label="Leave lesson"
+            className="text-2xl text-muted transition hover:text-ink"
+          >
+            ✕
+          </Link>
           <div
-            className="h-full rounded-pill bg-brand transition-[width] duration-500"
-            style={{ width: `${fraction * 100}%` }}
-          />
-        </div>
-        <span className="whitespace-nowrap text-sm text-muted">
-          {stepLabel}
-        </span>
-      </header>
-
-      <main className="flex flex-1 flex-col gap-5 px-5 py-6">
-        <p className="font-display text-sm font-semibold uppercase tracking-wide text-brand">
-          {lesson.title}
-        </p>
-
-        {flow.phase === "learn" ? (
-          <>
-            <LearnCardView card={lesson.learnCards[flow.index]} />
-            <div className="flex justify-end">
-              <Button onClick={() => flowDispatch({ type: "ADVANCE_LEARN" })}>
-                {flow.index + 1 >= flow.learnTotal
-                  ? "Start practice →"
-                  : "Next →"}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <Card className="p-6 md:p-8">
-            <QuestionView
-              key={`${flow.phase}-${flow.index}`}
-              question={
-                isMastery
-                  ? lesson.mastery[flow.index]
-                  : lesson.practice[flow.index]
-              }
-              onAnswered={handleAnswered}
-              onContinue={handleContinue}
-              continueLabel={
-                isMastery && flow.index + 1 >= flow.masteryTotal
-                  ? "Finish"
-                  : "Next"
-              }
+            className="h-3 flex-1 overflow-hidden rounded-pill bg-cream-deep"
+            role="progressbar"
+            aria-label="Lesson progress"
+            aria-valuenow={Math.round(fraction * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div
+              className="h-full rounded-pill bg-brand transition-[width] duration-500"
+              style={{ width: `${fraction * 100}%` }}
             />
-          </Card>
-        )}
-      </main>
+          </div>
+          <span className="whitespace-nowrap text-sm text-muted">
+            {stepLabel}
+          </span>
+          <button
+            ref={referenceControlRef}
+            type="button"
+            aria-label="Reference"
+            onClick={() =>
+              flowDispatch({
+                type: "OPEN_REFERENCE",
+                defaultCardId: referenceDefaultCardId,
+                sourceId: referenceSourceId,
+              })
+            }
+            className="inline-flex items-center gap-1 rounded-pill bg-brand-soft px-3 py-1.5 text-sm font-semibold text-brand ring-1 ring-brand/20 transition hover:bg-brand-soft/70"
+          >
+            📖 <span className="hidden sm:inline">Reference</span>
+          </button>
+        </header>
+
+        <main className="flex flex-1 flex-col gap-5 px-5 py-6">
+          <p className="font-display text-sm font-semibold uppercase tracking-wide text-brand">
+            {lesson.title}
+          </p>
+
+          {flow.phase === "learn" ? (
+            <>
+              <LearnCardView card={lesson.learnCards[flow.index]} />
+              <div className="flex justify-end">
+                <Button onClick={() => flowDispatch({ type: "ADVANCE_LEARN" })}>
+                  {flow.index + 1 >= flow.learnTotal
+                    ? "Start practice →"
+                    : "Next →"}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <Card className="p-6 md:p-8">
+              <QuestionView
+                key={`${flow.phase}-${flow.index}`}
+                question={
+                  isMastery
+                    ? lesson.mastery[flow.index]
+                    : lesson.practice[flow.index]
+                }
+                onAnswered={handleAnswered}
+                onContinue={handleContinue}
+                continueLabel={
+                  isMastery && flow.index + 1 >= flow.masteryTotal
+                    ? "Finish"
+                    : "Next"
+                }
+              />
+            </Card>
+          )}
+        </main>
+      </div>
+
+      {referenceOpen ? (
+        <ReferenceDrawer
+          cards={lesson.learnCards}
+          currentCardId={flow.reference.currentCardId}
+          onBrowse={handleBrowse}
+          onClose={() => flowDispatch({ type: "CLOSE_REFERENCE" })}
+          referenceControlRef={referenceControlRef}
+        />
+      ) : null}
     </div>
   );
 }

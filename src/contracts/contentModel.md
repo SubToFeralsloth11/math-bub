@@ -164,7 +164,7 @@ interface QuestionBase {
 
 - `explanation` must be non-empty for every question type.
 - `refersTo`, when present, must resolve to a `learnCards[].id` within the
-  *same* lesson. Cross-lesson links are rejected by `validateContent`. It
+  _same_ lesson. Cross-lesson links are rejected by `validateContent`. It
   names the card the Reference surface opens on when the learner peeks from
   this question; omit it for lesson-wide questions (Reference then opens on
   the first learn card).

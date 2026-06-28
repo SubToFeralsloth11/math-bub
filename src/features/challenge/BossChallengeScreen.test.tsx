@@ -128,4 +128,14 @@ describe("BossChallengeScreen", () => {
     expect(screen.getByText("2 / 2")).toBeInTheDocument();
     expect(screen.getByText(/\+80 bonus XP/i)).toBeInTheDocument();
   });
+
+  it("does not render a Reference control on the boss challenge screen", async () => {
+    seedAllLessonsComplete();
+    const user = userEvent.setup();
+    await renderChallenge();
+    await user.click(screen.getByRole("button", { name: /start challenge/i }));
+    expect(
+      screen.queryByRole("button", { name: /reference/i }),
+    ).not.toBeInTheDocument();
+  });
 });

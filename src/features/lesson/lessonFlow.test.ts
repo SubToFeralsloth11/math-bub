@@ -372,6 +372,24 @@ describe("reference state - FR-007 identity invariant", () => {
     expect(after.outcome).toBe(before.outcome);
   });
 
+  it("browsing a different card during the learn phase does not change phase or index", () => {
+    let state = initLessonFlow(lesson());
+    expect(state.phase).toBe("learn");
+    expect(state.index).toBe(0);
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "c1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "c1",
+    });
+    expect(state.phase).toBe("learn");
+    expect(state.index).toBe(0);
+  });
+
   it("CLOSE_REFERENCE does not alter phase, index, masteryCorrect, xpEarned, or outcome", () => {
     const before: LessonFlowState = {
       ...initLessonFlow(lesson()),
