@@ -147,3 +147,250 @@ describe("lesson flow - mastery outcome", () => {
     expect(state.outcome).toBeNull();
   });
 });
+
+// --- Reference surface state (T006-T012) ---
+
+describe("reference state - initialisation", () => {
+  it("starts closed with a null current card id", () => {
+    const state = initLessonFlow(lesson());
+    expect(state.reference).toEqual({
+      open: false,
+      currentCardId: null,
+      rememberedCardId: null,
+      rememberedForId: null,
+    });
+  });
+});
+
+describe("reference state - OPEN_REFERENCE", () => {
+  it("opens on the carried defaultCardId", () => {
+    let state = initLessonFlow(lesson());
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    expect(state.reference.open).toBe(true);
+    expect(state.reference.currentCardId).toBe("c1");
+  });
+
+  it("reopens on the remembered card when rememberedForId matches sourceId", () => {
+    let state = initLessonFlow(lesson());
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, { type: "CLOSE_REFERENCE" });
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    expect(state.reference.currentCardId).toBe("c2");
+  });
+
+  it("opens on defaultCardId when rememberedForId does not match sourceId", () => {
+    let state = initLessonFlow(lesson());
+    // Remember a position for p1.
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, { type: "CLOSE_REFERENCE" });
+    // Reopen from a different source.
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p2",
+    });
+    expect(state.reference.currentCardId).toBe("c1");
+  });
+});
+
+describe("reference state - BROWSE_REFERENCE", () => {
+  it("updates currentCardId and records the remembered position keyed to sourceId", () => {
+    let state = initLessonFlow(lesson());
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "p1",
+    });
+    expect(state.reference.currentCardId).toBe("c2");
+    expect(state.reference.rememberedCardId).toBe("c2");
+    expect(state.reference.rememberedForId).toBe("p1");
+  });
+});
+
+describe("reference state - CLOSE_REFERENCE", () => {
+  it("closes the surface and preserves the remembered position", () => {
+    let state = initLessonFlow(lesson());
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "p1",
+    });
+    state = lessonFlowReducer(state, { type: "CLOSE_REFERENCE" });
+    expect(state.reference.open).toBe(false);
+    expect(state.reference.rememberedCardId).toBe("c2");
+    expect(state.reference.rememberedForId).toBe("p1");
+  });
+});
+
+describe("reference state - advancing clears the remembered position", () => {
+  it("ADVANCE_LEARN clears rememberedCardId and rememberedForId", () => {
+    let state = initLessonFlow(lesson());
+    state = lessonFlowReducer(state, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "c1",
+    });
+    state = lessonFlowReducer(state, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "c1",
+    });
+    state = lessonFlowReducer(state, { type: "ADVANCE_LEARN" });
+    expect(state.reference.rememberedCardId).toBeNull();
+    expect(state.reference.rememberedForId).toBeNull();
+  });
+
+  it("NEXT clears rememberedCardId and rememberedForId", () => {
+    let state: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "practice",
+      reference: {
+        open: false,
+        currentCardId: null,
+        rememberedCardId: "c2",
+        rememberedForId: "p1",
+      },
+    };
+    state = lessonFlowReducer(state, { type: "NEXT" });
+    expect(state.reference.rememberedCardId).toBeNull();
+    expect(state.reference.rememberedForId).toBeNull();
+  });
+
+  it("RETRY_MASTERY clears rememberedCardId and rememberedForId", () => {
+    let state: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "outcome",
+      outcome: "failed",
+      reference: {
+        open: false,
+        currentCardId: null,
+        rememberedCardId: "c2",
+        rememberedForId: "m1",
+      },
+    };
+    state = lessonFlowReducer(state, { type: "RETRY_MASTERY" });
+    expect(state.reference.rememberedCardId).toBeNull();
+    expect(state.reference.rememberedForId).toBeNull();
+  });
+
+  it("advancing only clears the remembered fields and nothing else", () => {
+    let state: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "practice",
+      index: 0,
+      masteryCorrect: 0,
+      xpEarned: 20,
+      reference: {
+        open: false,
+        currentCardId: null,
+        rememberedCardId: "c2",
+        rememberedForId: "p1",
+      },
+    };
+    state = lessonFlowReducer(state, { type: "NEXT" });
+    expect(state.phase).toBe("practice");
+    expect(state.index).toBe(1);
+    expect(state.masteryCorrect).toBe(0);
+    expect(state.xpEarned).toBe(20);
+  });
+});
+
+describe("reference state - FR-007 identity invariant", () => {
+  it("OPEN_REFERENCE does not alter phase, index, masteryCorrect, xpEarned, or outcome", () => {
+    const before: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "practice",
+      index: 1,
+      masteryCorrect: 0,
+      xpEarned: 30,
+    };
+    const after = lessonFlowReducer(before, {
+      type: "OPEN_REFERENCE",
+      defaultCardId: "c1",
+      sourceId: "p1",
+    });
+    expect(after.phase).toBe(before.phase);
+    expect(after.index).toBe(before.index);
+    expect(after.masteryCorrect).toBe(before.masteryCorrect);
+    expect(after.xpEarned).toBe(before.xpEarned);
+    expect(after.outcome).toBe(before.outcome);
+  });
+
+  it("BROWSE_REFERENCE does not alter phase, index, masteryCorrect, xpEarned, or outcome", () => {
+    const before: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "mastery",
+      index: 0,
+      masteryCorrect: 1,
+      xpEarned: 40,
+    };
+    const after = lessonFlowReducer(before, {
+      type: "BROWSE_REFERENCE",
+      cardId: "c2",
+      sourceId: "m1",
+    });
+    expect(after.phase).toBe(before.phase);
+    expect(after.index).toBe(before.index);
+    expect(after.masteryCorrect).toBe(before.masteryCorrect);
+    expect(after.xpEarned).toBe(before.xpEarned);
+    expect(after.outcome).toBe(before.outcome);
+  });
+
+  it("CLOSE_REFERENCE does not alter phase, index, masteryCorrect, xpEarned, or outcome", () => {
+    const before: LessonFlowState = {
+      ...initLessonFlow(lesson()),
+      phase: "practice",
+      index: 1,
+      masteryCorrect: 0,
+      xpEarned: 30,
+      reference: {
+        open: true,
+        currentCardId: "c1",
+        rememberedCardId: "c1",
+        rememberedForId: "p1",
+      },
+    };
+    const after = lessonFlowReducer(before, { type: "CLOSE_REFERENCE" });
+    expect(after.phase).toBe(before.phase);
+    expect(after.index).toBe(before.index);
+    expect(after.masteryCorrect).toBe(before.masteryCorrect);
+    expect(after.xpEarned).toBe(before.xpEarned);
+    expect(after.outcome).toBe(before.outcome);
+  });
+});

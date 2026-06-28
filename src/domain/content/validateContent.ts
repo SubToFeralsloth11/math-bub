@@ -288,6 +288,16 @@ function validateTrack(track: Track, issues: ValidationIssue[]): void {
     if (new Set(cardIds).size !== cardIds.length) {
       issues.push(`${where}: duplicate learn-card ids.`);
     }
+    // A question's refersTo, when present, must resolve to a learn-card id
+    // in the same lesson. Cross-lesson links are not supported.
+    const cardIdSet = new Set(cardIds);
+    for (const question of allQuestions) {
+      if (question.refersTo && !cardIdSet.has(question.refersTo)) {
+        issues.push(
+          `${where}: question ${question.id} refersTo unresolvable card id "${question.refersTo}".`,
+        );
+      }
+    }
 
     validateAiProvenance(lesson.aiProvenance, where, issues);
 

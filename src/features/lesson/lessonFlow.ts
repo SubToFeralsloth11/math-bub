@@ -22,6 +22,32 @@ export type LessonPhase = "learn" | "practice" | "mastery" | "outcome";
 /** The resolved outcome of the mastery check. */
 export type LessonOutcome = "passed" | "failed" | null;
 
+/**
+ * The transient reference-surface sub-state. Not persisted; reset on every
+ * {@link initLessonFlow} and lesson remount.
+ */
+export interface ReferenceState {
+  /** Whether the Reference surface is currently open. */
+  open: boolean;
+  /** The learn-card id currently shown in the surface. */
+  currentCardId: string | null;
+  /** The last card browsed in the current open context, if any. */
+  rememberedCardId: string | null;
+  /**
+   * The question or learn-card id the remembered position applies to.
+   * Cleared on advancing so the next open is question/study-driven.
+   */
+  rememberedForId: string | null;
+}
+
+/** The initial (closed) reference sub-state. */
+export const initialReferenceState: ReferenceState = {
+  open: false,
+  currentCardId: null,
+  rememberedCardId: null,
+  rememberedForId: null,
+};
+
 /** The lesson-flow state. */
 export interface LessonFlowState {
   /** Number of learn cards. */
@@ -42,6 +68,8 @@ export interface LessonFlowState {
   xpEarned: number;
   /** The mastery outcome once the lesson resolves. */
   outcome: LessonOutcome;
+  /** The reference-surface sub-state. */
+  reference: ReferenceState;
 }
 
 /** Actions driving the lesson flow. */
@@ -49,7 +77,10 @@ export type LessonFlowAction =
   | { type: "ADVANCE_LEARN" }
   | { type: "SUBMIT"; correct: boolean; xp: number }
   | { type: "NEXT" }
-  | { type: "RETRY_MASTERY" };
+  | { type: "RETRY_MASTERY" }
+  | { type: "OPEN_REFERENCE"; defaultCardId: string; sourceId: string }
+  | { type: "BROWSE_REFERENCE"; cardId: string; sourceId: string }
+  | { type: "CLOSE_REFERENCE" };
 
 /**
  * Builds the initial flow state for a lesson.
@@ -69,6 +100,7 @@ export function initLessonFlow(lesson: Lesson): LessonFlowState {
     masteryCorrect: 0,
     xpEarned: 0,
     outcome: null,
+    reference: { ...initialReferenceState },
   };
 }
 
@@ -95,10 +127,15 @@ export function lessonFlowReducer(
 ): LessonFlowState {
   switch (action.type) {
     case "ADVANCE_LEARN": {
+      const reference = {
+        ...state.reference,
+        rememberedCardId: null,
+        rememberedForId: null,
+      };
       if (state.index + 1 < state.learnTotal) {
-        return { ...state, index: state.index + 1 };
+        return { ...state, index: state.index + 1, reference };
       }
-      return { ...state, phase: "practice", index: 0 };
+      return { ...state, phase: "practice", index: 0, reference };
     }
 
     case "SUBMIT": {
@@ -111,15 +148,20 @@ export function lessonFlowReducer(
     }
 
     case "NEXT": {
+      const reference = {
+        ...state.reference,
+        rememberedCardId: null,
+        rememberedForId: null,
+      };
       if (state.phase === "practice") {
         if (state.index + 1 < state.practiceTotal) {
-          return { ...state, index: state.index + 1 };
+          return { ...state, index: state.index + 1, reference };
         }
-        return { ...state, phase: "mastery", index: 0 };
+        return { ...state, phase: "mastery", index: 0, reference };
       }
       if (state.phase === "mastery") {
         if (state.index + 1 < state.masteryTotal) {
-          return { ...state, index: state.index + 1 };
+          return { ...state, index: state.index + 1, reference };
         }
         const passed =
           accuracy(state.masteryCorrect, state.masteryTotal) >=
@@ -128,6 +170,7 @@ export function lessonFlowReducer(
           ...state,
           phase: "outcome",
           outcome: passed ? "passed" : "failed",
+          reference,
         };
       }
       return state;
@@ -140,6 +183,46 @@ export function lessonFlowReducer(
         index: 0,
         masteryCorrect: 0,
         outcome: null,
+        reference: {
+          ...state.reference,
+          rememberedCardId: null,
+          rememberedForId: null,
+        },
+      };
+    }
+
+    case "OPEN_REFERENCE": {
+      const remembered =
+        state.reference.rememberedForId === action.sourceId &&
+        state.reference.rememberedCardId !== null
+          ? state.reference.rememberedCardId
+          : action.defaultCardId;
+      return {
+        ...state,
+        reference: {
+          ...state.reference,
+          open: true,
+          currentCardId: remembered,
+        },
+      };
+    }
+
+    case "BROWSE_REFERENCE": {
+      return {
+        ...state,
+        reference: {
+          ...state.reference,
+          currentCardId: action.cardId,
+          rememberedCardId: action.cardId,
+          rememberedForId: action.sourceId,
+        },
+      };
+    }
+
+    case "CLOSE_REFERENCE": {
+      return {
+        ...state,
+        reference: { ...state.reference, open: false },
       };
     }
 

@@ -156,10 +156,21 @@ interface QuestionBase {
   figure?: Figure | null; // Optional figure shown with the question
   explanation: RichBlock[]; // Worked explanation shown on wrong answer
   xp: number; // XP awarded for a correct answer
+  refersTo?: string; // Optional learn-card id in the same lesson
 }
 ```
 
-**Constraint**: `explanation` must be non-empty for every question type.
+**Constraints**:
+
+- `explanation` must be non-empty for every question type.
+- `refersTo`, when present, must resolve to a `learnCards[].id` within the
+  *same* lesson. Cross-lesson links are rejected by `validateContent`. It
+  names the card the Reference surface opens on when the learner peeks from
+  this question; omit it for lesson-wide questions (Reference then opens on
+  the first learn card).
+
+Boss-challenge questions never carry `refersTo` (the Reference control does
+not appear on the boss screen), so they are unaffected by this rule.
 
 ### McqQuestion
 

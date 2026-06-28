@@ -851,3 +851,34 @@ describe("validateContent - duplicate badge ids", () => {
     expect(validateContent(content).join("\n")).toMatch(/Duplicate badge ids/);
   });
 });
+
+// --- T003-T005: refersTo learn-card link validation ---
+
+describe("validateContent - refersTo learn-card link", () => {
+  it("accepts a question whose refersTo points at a same-lesson card", () => {
+    const content = validContent();
+    (content.tracks[0].lessons[0].practice[0] as McqQuestion).refersTo =
+      "algebra-l1-c1";
+    expect(validateContent(content)).toEqual([]);
+  });
+
+  it("rejects a refersTo that does not resolve to a card id in the lesson", () => {
+    const content = validContent();
+    (content.tracks[0].lessons[0].practice[0] as McqQuestion).refersTo =
+      "no-such-card";
+    expect(validateContent(content).join("\n")).toMatch(
+      /algebra-l1-p1 refersTo unresolvable card id "no-such-card"/,
+    );
+  });
+
+  it("rejects a refersTo that resolves to a card in a different lesson", () => {
+    const content = validContent();
+    // lesson 2 has its first card "algebra-l2-c1"; using it from lesson 1's
+    // question must be rejected because resolution is same-lesson only.
+    (content.tracks[0].lessons[0].practice[0] as McqQuestion).refersTo =
+      "algebra-l2-c1";
+    expect(validateContent(content).join("\n")).toMatch(
+      /algebra-l1-p1 refersTo unresolvable card id "algebra-l2-c1"/,
+    );
+  });
+});

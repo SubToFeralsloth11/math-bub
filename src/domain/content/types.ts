@@ -70,6 +70,15 @@ interface QuestionBase {
   explanation: RichBlock[];
   /** XP awarded for a correct answer. */
   xp: number;
+  /**
+   * Optional id of the learn card in the same lesson that teaches the idea
+   * this question tests. The Reference surface opens on this card when the
+   * learner peeks from this question. When absent, Reference opens on the
+   * first learn card of the lesson (or the card being studied in the learn
+   * phase). Must resolve to a learn-card id within the same lesson; enforced
+   * by validateContent.
+   */
+  refersTo?: string;
 }
 
 /** A multiple-choice question with exactly one correct option. */
