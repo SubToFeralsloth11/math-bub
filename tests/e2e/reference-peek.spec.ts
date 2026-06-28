@@ -2,22 +2,31 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 // E2E flows for the Reference peek surface (feature 009-reference-peek).
+//
+// These tests run serially in a single worker. Each navigates to the heavy
+// lesson route (full app + mathjs bundle), and running them one at a time
+// avoids spiking dev-server cold-start load enough to trip hydration races in
+// the sibling spec files that share the server.
+test.describe.configure({ mode: "serial" });
 
 const LESSON = "/lesson/algebra/alg-5a-language";
 
 // The algebra "language of algebra" lesson has three learn cards, so two
-// "Next" presses reach the final card and expose "Start practice".
+// "Next" presses reach the final card and expose "Start practice". The React
+// app hydrates after first paint, so each activation is retried until the
+// expected next state actually appears.
 async function advanceToPractice(page: Page): Promise<void> {
-  for (let index = 0; index < 5; index++) {
+  const startPractice = page.getByRole("button", { name: /start practice/i });
+  for (let guard = 0; guard < 15; guard++) {
+    if (await startPractice.isVisible({ timeout: 500 }).catch(() => false))
+      break;
     const next = page.getByRole("button", { name: /^Next/ });
-    const visible = await next.isVisible({ timeout: 1000 }).catch(() => false);
-    if (!visible) break;
-    await next.click();
-    await page.waitForTimeout(200);
+    if (await next.isVisible({ timeout: 500 }).catch(() => false)) {
+      await next.click();
+    }
+    await page.waitForTimeout(150);
   }
-  await page
-    .getByRole("button", { name: /start practice/i })
-    .click({ timeout: 10_000 });
+  await startPractice.click({ timeout: 10_000 });
 }
 
 async function openReference(page: Page): Promise<void> {
@@ -31,10 +40,6 @@ async function openReference(page: Page): Promise<void> {
   }
   await expect(dialog).toBeVisible();
 }
-
-test.beforeEach(async ({ page }) => {
-  await page.goto("/");
-});
 
 test("peek from a practice question, browse, close, and answer with no state lost", async ({
   page,
