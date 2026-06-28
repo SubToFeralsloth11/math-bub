@@ -21,10 +21,15 @@ async function advanceToPractice(page: Page): Promise<void> {
 }
 
 async function openReference(page: Page): Promise<void> {
-  await page.getByRole("button", { name: "Reference" }).click();
-  await expect(
-    page.getByRole("dialog", { name: "Reference cards" }),
-  ).toBeVisible();
+  // The React app hydrates after first paint, so an immediate click can land
+  // on un-hydrated markup. Retry the activation until the surface appears.
+  const dialog = page.getByRole("dialog", { name: "Reference cards" });
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await page.getByRole("button", { name: "Reference" }).click();
+    if (await dialog.isVisible().catch(() => false)) break;
+    await page.waitForTimeout(300);
+  }
+  await expect(dialog).toBeVisible();
 }
 
 test.beforeEach(async ({ page }) => {

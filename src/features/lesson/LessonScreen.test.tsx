@@ -10,7 +10,11 @@ import { appContent, findLesson } from "../../content";
 import { clearMockProgress } from "../../test/mocks";
 import { renderApp } from "../../test/renderApp";
 
-import type { AppContent, Question } from "../../domain/content/types";
+import type {
+  AppContent,
+  McqQuestion,
+  Question,
+} from "../../domain/content/types";
 
 const LESSON_ID = "alg-5g-expanding";
 const lesson = findLesson("algebra", LESSON_ID)!;
@@ -123,7 +127,8 @@ describe("LessonScreen", () => {
 
     expect(screen.getByText(/lesson mastered/i)).toBeInTheDocument();
     expect(screen.getByText(/100%/)).toBeInTheDocument();
-  });
+    // This traversal is heavy under coverage instrumentation; give it headroom.
+  }, 40_000);
 });
 
 // --- Reference surface (US1/US2/US3) ---
@@ -149,13 +154,12 @@ describe("LessonScreen - Reference control", () => {
   });
 
   it("renders the Reference control during mastery", async () => {
+    // Use a minimal fixture (1 learn card, 1 practice, 1 mastery) so reaching
+    // the mastery phase is one answer rather than a full lesson traversal.
     const user = userEvent.setup();
-    await renderReferenceLesson();
-    await advanceToPractice(user);
-    // Answer through every practice question to reach the mastery phase.
-    for (const question of referenceLesson.practice) {
-      await answerCorrectly(user, question);
-    }
+    await renderMinimalLesson();
+    await startMinimalPractice(user);
+    await answerMinimalMcq(user);
     expect(
       screen.getByRole("button", { name: /reference/i }),
     ).toBeInTheDocument();
@@ -227,21 +231,13 @@ describe("LessonScreen - Reference control", () => {
   });
 
   it("does not render the Reference control on the outcome screen", async () => {
-    // Drive the algebra expanding lesson (proven completable end-to-end) to
-    // its passed outcome and confirm the header control disappears there.
+    // Use the minimal fixture so reaching the passed outcome is two answers,
+    // not a full lesson traversal (keeps the test fast under coverage).
     const user = userEvent.setup();
-    await renderApp(<LessonScreen />, {
-      route: `/lesson/algebra/${LESSON_ID}`,
-      path: "lesson/$trackId/$lessonId",
-    });
-    await advanceToPractice(user);
-    // The expanding lesson is fully completable via the shared answer helper
-    // (no matching question); duplicating that proven loop reaches the passed
-    // outcome so the header control absence can be asserted there.
-    for (const question of [...lesson.practice, ...lesson.mastery]) {
-      await answerCorrectly(user, question);
-    }
-
+    await renderMinimalLesson();
+    await startMinimalPractice(user);
+    await answerMinimalMcq(user);
+    await answerMinimalMcq(user);
     expect(screen.getByText(/lesson mastered/i)).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /reference/i }),
@@ -310,4 +306,108 @@ function referenceContentWithRefersTo(): AppContent {
   )!;
   lesson.practice[0].refersTo = referenceLesson.learnCards[1].id;
   return clone;
+}
+
+// --- Minimal fixture for fast phase-reach tests (mastery/outcome) ---
+
+const MINIMAL_TRACK_ID = "mini";
+const MINIMAL_LESSON_ID = "mini-l1";
+
+function minimalMcq(id: string): McqQuestion {
+  return {
+    id,
+    type: "mcq",
+    prompt: [{ kind: "text", text: "Pick one" }],
+    explanation: [{ kind: "text", text: "Because." }],
+    xp: 10,
+    options: [
+      { id: "a", label: [{ kind: "text", text: "A" }] },
+      { id: "b", label: [{ kind: "text", text: "B" }] },
+    ],
+    correctOptionId: "a",
+  };
+}
+
+function minimalContent(): AppContent {
+  return {
+    subjects: [
+      {
+        id: "maths",
+        title: "Maths",
+        description: "d",
+        icon: "📘",
+        accent: "#6D4AFF",
+      },
+    ],
+    tracks: [
+      {
+        id: MINIMAL_TRACK_ID,
+        subjectId: "maths",
+        title: "Mini",
+        description: "d",
+        lessons: [
+          {
+            id: MINIMAL_LESSON_ID,
+            order: 1,
+            title: "Mini lesson",
+            sourceRef: "X",
+            learnCards: [
+              {
+                id: "mini-c1",
+                heading: "Mini idea",
+                body: [{ kind: "text", text: "x" }],
+              },
+            ],
+            practice: [minimalMcq("mini-p1")],
+            mastery: [minimalMcq("mini-m1")],
+          },
+        ],
+        challenge: {
+          id: "mini-boss",
+          title: "Boss",
+          sourceRef: "P",
+          questions: [minimalMcq("mini-q1")],
+          bonusXp: 10,
+          passBadgeId: "mini-badge",
+        },
+      },
+    ],
+    badges: [
+      {
+        id: "mini-badge",
+        title: "Badge",
+        description: "d",
+        criterion: "boss-pass:mini",
+        icon: "🏆",
+      },
+    ],
+  };
+}
+
+async function renderMinimalLesson(): Promise<void> {
+  await renderApp(<LessonScreen />, {
+    route: `/lesson/${MINIMAL_TRACK_ID}/${MINIMAL_LESSON_ID}`,
+    path: "lesson/$trackId/$lessonId",
+    content: minimalContent(),
+  });
+}
+
+// The minimal lesson has a single learn card, so its learn phase exposes
+// "Start practice" immediately.
+async function startMinimalPractice(
+  user: ReturnType<typeof userEvent.setup>,
+): Promise<void> {
+  await user.click(screen.getByRole("button", { name: /start practice/i }));
+}
+
+// Answers the current minimal MCQ correctly and advances.
+async function answerMinimalMcq(
+  user: ReturnType<typeof userEvent.setup>,
+): Promise<void> {
+  const radios = screen.getAllByRole("radio");
+  await user.click(
+    radios.find((radio) => radio.getAttribute("value") === "a")!,
+  );
+  await user.click(screen.getByRole("button", { name: /check answer/i }));
+  await user.click(screen.getByRole("button", { name: /next|finish/i }));
 }
