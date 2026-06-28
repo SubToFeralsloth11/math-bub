@@ -101,6 +101,7 @@ const languageOfAlgebra: Lesson = {
   practice: [
     {
       id: "5a-p1",
+      refersTo: "5a-key",
       type: "mcq",
       prompt: [
         t("What is the coefficient of x in the expression"),
@@ -123,6 +124,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p2",
+      refersTo: "5a-key",
       type: "numeric",
       prompt: [
         t("How many terms are in the expression"),
@@ -139,6 +141,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p3",
+      refersTo: "5a-key",
       type: "fillInTheBlank",
       prompt: [t("Identify the constant term.")],
       template: [
@@ -156,6 +159,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p4",
+      refersTo: "5a-worked",
       type: "expression",
       prompt: [t("Write an expression for 'the sum of x and 8'.")],
       explanation: [
@@ -169,6 +173,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p5",
+      refersTo: "5a-worked",
       type: "expression",
       prompt: [t("Write an expression for 'the product of m and 6'.")],
       explanation: [
@@ -182,6 +187,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p6",
+      refersTo: "5a-worked",
       type: "numeric",
       prompt: [t("Evaluate"), m("4a - 3"), t("when"), m("a = 5"), t(".")],
       explanation: [
@@ -194,6 +200,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p7",
+      refersTo: "5a-worked",
       type: "numeric",
       prompt: [
         t("Evaluate"),
@@ -214,6 +221,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p8",
+      refersTo: "5a-mistake",
       type: "mcq",
       prompt: [t("Which of these is an equation rather than an expression?")],
       explanation: [
@@ -232,6 +240,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p9",
+      refersTo: "5a-mistake",
       type: "expression",
       prompt: [t("Write an expression for '5 less than twice a number n'.")],
       explanation: [
@@ -245,6 +254,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-p10",
+      refersTo: "5a-worked",
       type: "numeric",
       prompt: [
         t("Evaluate"),
@@ -267,6 +277,7 @@ const languageOfAlgebra: Lesson = {
   mastery: [
     {
       id: "5a-m1",
+      refersTo: "5a-worked",
       type: "expression",
       prompt: [
         t(
@@ -284,6 +295,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-m2",
+      refersTo: "5a-worked",
       type: "numeric",
       prompt: [
         t("Evaluate"),
@@ -304,6 +316,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-m3",
+      refersTo: "5a-key",
       type: "matching",
       prompt: [t("Match each term to its correct description.")],
       explanation: [
@@ -333,6 +346,7 @@ const languageOfAlgebra: Lesson = {
     },
     {
       id: "5a-m4",
+      refersTo: "5a-worked",
       type: "numeric",
       prompt: [
         t("Evaluate"),
@@ -420,6 +434,7 @@ const addingSubtractingTerms: Lesson = {
   practice: [
     {
       id: "5c-p1",
+      refersTo: "5c-key",
       type: "mcq",
       prompt: [t("Which pair are like terms?")],
       explanation: [
@@ -438,6 +453,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p2",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("3x + 5x"), t(".")],
       explanation: [
@@ -451,6 +467,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p3",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("7y - 2y"), t(".")],
       explanation: [
@@ -464,6 +481,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p4",
+      refersTo: "5c-key",
       type: "fillInTheBlank",
       prompt: [t("Complete the sentence.")],
       template: [
@@ -483,6 +501,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p5",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("4a + 2b + 3a + b"), t(".")],
       explanation: [
@@ -496,6 +515,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p6",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("6m - m + 4n - 2n"), t(".")],
       explanation: [
@@ -509,6 +529,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p7",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("5x^2 + 3x - x^2 + 2x"), t(".")],
       explanation: [
@@ -522,6 +543,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p8",
+      refersTo: "5c-worked",
       type: "mcq",
       prompt: [
         t("Simplify"),
@@ -544,6 +566,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p9",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("3ab + 5ab - 2ab"), t(".")],
       explanation: [
@@ -557,6 +580,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-p10",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("2xy - 5xy + 3x + x - 2xy"), t(".")],
       explanation: [
@@ -572,6 +596,7 @@ const addingSubtractingTerms: Lesson = {
   mastery: [
     {
       id: "5c-m1",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("4a + 2b - a + 3b - 2a"), t(".")],
       explanation: [
@@ -585,6 +610,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-m2",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("3m^2 + 2m - 5m^2 + 4m - m"), t(".")],
       explanation: [
@@ -598,6 +624,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-m3",
+      refersTo: "5c-mistake",
       type: "mcq",
       prompt: [
         t("A student simplified"),
@@ -625,6 +652,7 @@ const addingSubtractingTerms: Lesson = {
     },
     {
       id: "5c-m4",
+      refersTo: "5c-worked",
       type: "expression",
       prompt: [t("Simplify"), m("5pq + 3p + 2pq - p - 4pq"), t(".")],
       explanation: [
@@ -712,6 +740,7 @@ const multiplyingDividingTerms: Lesson = {
   practice: [
     {
       id: "5d-p1",
+      refersTo: "5d-key",
       type: "mcq",
       prompt: [t("What is"), m(String.raw`2a \times 3b`), t("?")],
       explanation: [
@@ -730,6 +759,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p2",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`4x \times 2x`), t(".")],
       explanation: [
@@ -743,6 +773,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p3",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`(-3a) \times 5b`), t(".")],
       explanation: [
@@ -756,6 +787,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p4",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`15xy \div 5x`), t(".")],
       explanation: [
@@ -769,6 +801,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p5",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`3m \times 4m \times 2n`), t(".")],
       explanation: [
@@ -782,6 +815,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p6",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`(-2x) \times (-3x)`), t(".")],
       explanation: [
@@ -795,6 +829,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p7",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`8x^2 \div 2x`), t(".")],
       explanation: [
@@ -808,6 +843,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p8",
+      refersTo: "5d-worked",
       type: "mcq",
       prompt: [
         t("Simplify"),
@@ -830,6 +866,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p9",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`2x \times 3y \div xy`), t(".")],
       explanation: [
@@ -843,6 +880,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-p10",
+      refersTo: "5d-key",
       type: "fillInTheBlank",
       prompt: [t("Complete the rule for multiplying algebraic terms.")],
       template: [
@@ -862,6 +900,7 @@ const multiplyingDividingTerms: Lesson = {
   mastery: [
     {
       id: "5d-m1",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`5a^2b \times 3ab^2`), t(".")],
       explanation: [
@@ -875,6 +914,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-m2",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`\frac{18x^3y^2}{6x^2y}`), t(".")],
       explanation: [
@@ -888,6 +928,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-m3",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [
         t("Simplify"),
@@ -905,6 +946,7 @@ const multiplyingDividingTerms: Lesson = {
     },
     {
       id: "5d-m4",
+      refersTo: "5d-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`3a \times 4b \times 0`), t(".")],
       explanation: [
@@ -985,6 +1027,7 @@ const expandingBrackets: Lesson = {
   practice: [
     {
       id: "5g-p1",
+      refersTo: "5g-key",
       type: "expression",
       prompt: [t("Expand"), m("3(x + 2)"), t(".")],
       explanation: [
@@ -998,6 +1041,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p2",
+      refersTo: "5g-key",
       type: "expression",
       prompt: [t("Expand"), m("5(2y - 3)"), t(".")],
       explanation: [
@@ -1011,6 +1055,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p3",
+      refersTo: "5g-key",
       type: "expression",
       prompt: [t("Expand"), m("x(x + 4)"), t(".")],
       explanation: [
@@ -1024,6 +1069,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p4",
+      refersTo: "5g-key",
       type: "mcq",
       prompt: [t("Expand"), m("-2(3x - 4)"), t(". Which is correct?")],
       explanation: [
@@ -1042,6 +1088,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p5",
+      refersTo: "5g-key",
       type: "fillInTheBlank",
       prompt: [t("State the distributive law.")],
       template: [
@@ -1059,6 +1106,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p6",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("2(x + 3) + 3(x + 1)"), t(".")],
       explanation: [
@@ -1071,6 +1119,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p7",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("4(2a - 1) - 3(a - 2)"), t(".")],
       explanation: [
@@ -1085,6 +1134,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p8",
+      refersTo: "5g-mistake",
       type: "mcq",
       prompt: [
         t("A student expanded"),
@@ -1109,6 +1159,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p9",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("2x(3x + 1) - x(x - 4)"), t(".")],
       explanation: [
@@ -1121,6 +1172,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-p10",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("3(a + 2b) - 2(2a - b)"), t(".")],
       explanation: [
@@ -1135,6 +1187,7 @@ const expandingBrackets: Lesson = {
   mastery: [
     {
       id: "5g-m1",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("5(2x - 3) + 4(3x + 2)"), t(".")],
       explanation: [
@@ -1147,6 +1200,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-m2",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("3(y - 4) - 2(5 - y)"), t(".")],
       explanation: [
@@ -1161,6 +1215,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-m3",
+      refersTo: "5g-mistake",
       type: "mcq",
       prompt: [
         t("Which is the correct expansion of"),
@@ -1183,6 +1238,7 @@ const expandingBrackets: Lesson = {
     },
     {
       id: "5g-m4",
+      refersTo: "5g-worked",
       type: "expression",
       prompt: [t("Expand and simplify"), m("4m(2m - 3) + 5m(1 - m)"), t(".")],
       explanation: [
@@ -1268,6 +1324,7 @@ const factorisingExpressions: Lesson = {
   practice: [
     {
       id: "5h-p1",
+      refersTo: "5h-key",
       type: "numeric",
       prompt: [t("What is the highest common factor of 12 and 18?")],
       explanation: [
@@ -1280,6 +1337,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p2",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [
         t("Factorise"),
@@ -1297,6 +1355,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p3",
+      refersTo: "5h-key",
       type: "expression",
       prompt: [t("Factorise"), m("6x + 9"), t(".")],
       explanation: [
@@ -1310,6 +1369,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p4",
+      refersTo: "5h-worked",
       type: "mcq",
       prompt: [
         t("Which is the correct factorisation of"),
@@ -1332,6 +1392,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p5",
+      refersTo: "5h-key",
       type: "fillInTheBlank",
       prompt: [t("Complete the sentence about factorising.")],
       template: [t("Factorising is the ___ of expanding brackets.")],
@@ -1345,6 +1406,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p6",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("10x^2 + 5x"), t(".")],
       explanation: [
@@ -1358,6 +1420,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p7",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("12ab - 8a"), t(".")],
       explanation: [
@@ -1371,6 +1434,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p8",
+      refersTo: "5h-mistake",
       type: "mcq",
       prompt: [
         t("A student factorised"),
@@ -1398,6 +1462,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p9",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("14x^2 - 21x"), t(".")],
       explanation: [
@@ -1411,6 +1476,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-p10",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("9p^2q + 6pq"), t(".")],
       explanation: [
@@ -1426,6 +1492,7 @@ const factorisingExpressions: Lesson = {
   mastery: [
     {
       id: "5h-m1",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("18x + 24"), t(".")],
       explanation: [
@@ -1439,6 +1506,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-m2",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("16x^3 + 8x^2"), t(".")],
       explanation: [
@@ -1452,6 +1520,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-m3",
+      refersTo: "5h-worked",
       type: "expression",
       prompt: [t("Factorise"), m("20a^2b - 15ab^2"), t(".")],
       explanation: [
@@ -1465,6 +1534,7 @@ const factorisingExpressions: Lesson = {
     },
     {
       id: "5h-m4",
+      refersTo: "5h-mistake",
       type: "expression",
       prompt: [t("Factorise"), m("7x + 7"), t(".")],
       explanation: [
@@ -1550,6 +1620,7 @@ const indexLawsMultiplyDivide: Lesson = {
   practice: [
     {
       id: "5j-p1",
+      refersTo: "5j-key",
       type: "numeric",
       prompt: [
         t("Simplify"),
@@ -1564,6 +1635,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p2",
+      refersTo: "5j-key",
       type: "numeric",
       prompt: [
         t("Simplify"),
@@ -1578,6 +1650,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p3",
+      refersTo: "5j-key",
       type: "expression",
       prompt: [
         t("Simplify"),
@@ -1591,6 +1664,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p4",
+      refersTo: "5j-key",
       type: "mcq",
       prompt: [
         t("Simplify"),
@@ -1611,6 +1685,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p5",
+      refersTo: "5j-key",
       type: "fillInTheBlank",
       prompt: [t("Complete the index law for multiplication.")],
       template: [
@@ -1626,6 +1701,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p6",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`3x^2 \times 4x^5`), t(".")],
       explanation: [
@@ -1639,6 +1715,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p7",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`15a^6 \div 5a^2`), t(".")],
       explanation: [
@@ -1652,6 +1729,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p8",
+      refersTo: "5j-mistake",
       type: "mcq",
       prompt: [
         t("Can"),
@@ -1674,6 +1752,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p9",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`4a^3b \times 2a^2b^4`), t(".")],
       explanation: [
@@ -1688,6 +1767,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-p10",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`\frac{24x^5y^3}{6x^2y}`), t(".")],
       explanation: [
@@ -1704,6 +1784,7 @@ const indexLawsMultiplyDivide: Lesson = {
   mastery: [
     {
       id: "5j-m1",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`5p^4q^2 \times 3p^3q^5`), t(".")],
       explanation: [
@@ -1717,6 +1798,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-m2",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`\frac{30a^8b^6}{10a^3b^2}`), t(".")],
       explanation: [
@@ -1730,6 +1812,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-m3",
+      refersTo: "5j-mistake",
       type: "mcq",
       prompt: [
         t("A student wrote"),
@@ -1755,6 +1838,7 @@ const indexLawsMultiplyDivide: Lesson = {
     },
     {
       id: "5j-m4",
+      refersTo: "5j-worked",
       type: "expression",
       prompt: [
         t("Simplify"),
@@ -1844,6 +1928,7 @@ const zeroIndexAndPower: Lesson = {
   practice: [
     {
       id: "5k-p1",
+      refersTo: "5k-key",
       type: "numeric",
       prompt: [t("Evaluate"), m("7^0"), t(".")],
       explanation: [
@@ -1856,6 +1941,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p2",
+      refersTo: "5k-key",
       type: "numeric",
       prompt: [t("Simplify"), m("(x^2)^3"), t(". What is the index of x?")],
       explanation: [
@@ -1866,6 +1952,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p3",
+      refersTo: "5k-key",
       type: "expression",
       prompt: [
         t("Simplify"),
@@ -1879,6 +1966,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p4",
+      refersTo: "5k-key",
       type: "mcq",
       prompt: [
         t("Evaluate"),
@@ -1903,6 +1991,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p5",
+      refersTo: "5k-key",
       type: "fillInTheBlank",
       prompt: [t("Complete the rule for power of a power.")],
       template: [t("When raising a power to another power, ___ the indices.")],
@@ -1916,6 +2005,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p6",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m("(2a^3)^2"), t(".")],
       explanation: [
@@ -1929,6 +2019,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p7",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m("(3x^2y)^3"), t(".")],
       explanation: [
@@ -1942,6 +2033,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p8",
+      refersTo: "5k-worked",
       type: "mcq",
       prompt: [
         t("Simplify"),
@@ -1963,6 +2055,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p9",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m("5x^0 + 2x^0"), t(".")],
       explanation: [t("x⁰ = 1, so 5x⁰ + 2x⁰ = 5 × 1 + 2 × 1 = 5 + 2 = 7.")],
@@ -1972,6 +2065,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-p10",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`(2p^3)^2 \times p^4`), t(".")],
       explanation: [
@@ -1987,6 +2081,7 @@ const zeroIndexAndPower: Lesson = {
   mastery: [
     {
       id: "5k-m1",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`(4x^2y^3)^2 \times (xy)^0`), t(".")],
       explanation: [
@@ -2000,6 +2095,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-m2",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [
         t("Simplify"),
@@ -2017,6 +2113,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-m3",
+      refersTo: "5k-key",
       type: "mcq",
       prompt: [
         t("Which expression is equal to 1 for all"),
@@ -2042,6 +2139,7 @@ const zeroIndexAndPower: Lesson = {
     },
     {
       id: "5k-m4",
+      refersTo: "5k-worked",
       type: "expression",
       prompt: [t("Simplify"), m(String.raw`(3m^2n)^3 \div (3mn)^2`), t(".")],
       explanation: [
