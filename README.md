@@ -4,8 +4,9 @@ StudyBub is a single-learner, full-stack learning platform built with TanStack
 Start and Bun. It teaches maths, science, languages, and humanities through a
 gamified learn → practise → master loop laid out on per-track progress maps,
 with XP, levels, daily streaks, milestone badges, and end-of-track boss
-challenges. Progress is stored server-side in SQLite; authentication uses
-passkeys (WebAuthn).
+challenges. A Reference control in the lesson header lets the learner re-read
+any learn card mid-question without losing their place in the run. Progress is
+stored server-side in SQLite; authentication uses passkeys (WebAuthn).
 
 ## Getting started
 
@@ -230,7 +231,11 @@ development time by `validateContent` (and in the test suite). To add a lesson:
      and an optional unit);
    - `expression` for algebraic answers marked by equivalence to a `target`
      (declare every symbol the target uses in `variables`).
-4. Run `bun run test` - content validation will flag any structural problems.
+4. Optionally set a question's `refersTo` to the id of the learn card in the
+   same lesson that teaches its idea; the Reference surface then opens on
+   that card. Omit it for lesson-wide questions. `validateContent` rejects
+   any `refersTo` that does not resolve to a learn card in the same lesson.
+5. Run `bun run test` - content validation will flag any structural problems.
 
 ## Geometry figures
 
